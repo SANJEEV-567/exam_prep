@@ -1,0 +1,2866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Examination Portal | Semester 1</title>
+  <style>
+/* Modern Exam Portal CSS */
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-light: #eff6ff;
+  --success: #16a34a;
+  --success-light: #f0fdf4;
+  --danger: #dc2626;
+  --danger-light: #fef2f2;
+  --warning: #d97706;
+  --warning-light: #fffbeb;
+  --review: #7c3aed;
+  --review-light: #f5f3ff;
+  --not-visited: #94a3b8;
+  --not-visited-light: #f1f5f9;
+  
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-sidebar: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --border-focus: #3b82f6;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --code-bg: #1e293b;
+  --code-text: #f8fafc;
+}
+
+[data-theme="dark"] {
+  --bg-main: #0b1120;
+  --bg-card: #1e293b;
+  --bg-sidebar: #131d31;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border: #334155;
+  --border-focus: #60a5fa;
+  --primary-light: #1e3a8a33;
+  --success-light: #14532d33;
+  --danger-light: #7f1d1d33;
+  --warning-light: #78350f33;
+  --review-light: #581c8733;
+  --not-visited-light: #334155;
+  --code-bg: #090e17;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* Header */
+.portal-header {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-logo {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.brand-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.brand-sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.timer-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--primary-light);
+  padding: 0.4rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid var(--primary);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--primary);
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+}
+
+.timer-container.warning {
+  background: var(--warning-light);
+  border-color: var(--warning);
+  color: var(--warning);
+}
+
+.timer-container.danger {
+  background: var(--danger-light);
+  border-color: var(--danger);
+  color: var(--danger);
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.03); }
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.candidate-badge {
+  background: var(--bg-main);
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.icon-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  padding: 0.45rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s;
+}
+
+.icon-btn:hover {
+  background: var(--bg-main);
+}
+
+/* Container */
+.main-wrapper {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 1.25rem;
+}
+
+/* Welcome / Setup Screen */
+.welcome-screen {
+  max-width: 800px;
+  margin: 2rem auto;
+  background: var(--bg-card);
+  padding: 2.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+}
+
+.welcome-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+}
+
+.welcome-desc {
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+.exam-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.meta-card {
+  background: var(--bg-main);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.meta-card .label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.meta-card .val {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 0.25rem;
+  color: var(--text-main);
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-control:focus {
+  border-color: var(--border-focus);
+}
+
+.instructions-card {
+  background: var(--primary-light);
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.instructions-card h4 {
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.instructions-card ul {
+  padding-left: 1.25rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+/* Exam Layout */
+.exam-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 1.5rem;
+  min-height: calc(100vh - 110px);
+}
+
+@media (max-width: 1024px) {
+  .exam-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Left / Main Question Area */
+.question-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+}
+
+.q-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.q-badge-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-topic {
+  background: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.badge-difficulty-medium {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.badge-difficulty-high {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.badge-marks {
+  background: var(--bg-main);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.q-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  color: var(--text-main);
+}
+
+.code-container {
+  background: var(--code-bg);
+  color: var(--code-text);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  white-space: pre;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  position: relative;
+  border: 1px solid var(--border);
+}
+
+/* Options */
+.options-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 2rem;
+}
+
+.option-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: var(--bg-main);
+  border: 1.5px solid var(--border);
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.option-card:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+.option-card.selected {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.option-marker {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  background: var(--bg-card);
+  transition: all 0.2s;
+}
+
+.option-card.selected .option-marker {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.option-text {
+  font-size: 1rem;
+  color: var(--text-main);
+  flex-grow: 1;
+  padding-top: 2px;
+  line-height: 1.4;
+}
+
+/* Question Action Footer */
+.q-footer {
+  margin-top: auto;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-secondary {
+  background: var(--bg-main);
+  color: var(--text-main);
+  border: 1px solid var(--border);
+  padding: 0.65rem 1.15rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+  background: var(--border);
+}
+
+.btn-review {
+  background: var(--review-light);
+  color: var(--review);
+  border: 1px solid var(--review);
+  padding: 0.65rem 1.15rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-review:hover {
+  background: var(--review);
+  color: white;
+}
+
+.btn-clear {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid transparent;
+  padding: 0.65rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-clear:hover {
+  color: var(--danger);
+  background: var(--danger-light);
+}
+
+/* Practice explanation box */
+.practice-explanation {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  background: var(--success-light);
+  border: 1px solid var(--success);
+  border-radius: 8px;
+  display: none;
+}
+
+.practice-explanation.active {
+  display: block;
+}
+
+.practice-explanation h5 {
+  color: var(--success);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.practice-explanation p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Right Column / Question Palette */
+.palette-panel {
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  max-height: calc(100vh - 110px);
+  position: sticky;
+  top: 80px;
+}
+
+.palette-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.palette-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.75rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-muted);
+}
+
+.status-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.dot-answered { background: var(--success); }
+.dot-not-answered { background: var(--danger); }
+.dot-review { background: var(--review); }
+.dot-review-answered { 
+  background: var(--review); 
+  position: relative;
+}
+.dot-review-answered::after {
+  content: "";
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 5px;
+  height: 5px;
+  background: #22c55e;
+  border-radius: 50%;
+}
+.dot-not-visited { background: var(--not-visited); }
+
+.palette-filters {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.filter-btn {
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  flex: 1;
+  text-align: center;
+}
+
+.filter-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.45rem;
+  overflow-y: auto;
+  max-height: 380px;
+  padding-right: 0.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.q-btn {
+  height: 38px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.q-btn.current {
+  box-shadow: 0 0 0 2px var(--primary), 0 0 0 4px var(--primary-light);
+  transform: scale(1.05);
+  z-index: 2;
+}
+
+.q-btn.not-visited {
+  background: var(--not-visited-light);
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+
+.q-btn.not-answered {
+  background: var(--danger);
+  color: white;
+}
+
+.q-btn.answered {
+  background: var(--success);
+  color: white;
+}
+
+.q-btn.review {
+  background: var(--review);
+  color: white;
+}
+
+.q-btn.review-answered {
+  background: var(--review);
+  color: white;
+}
+
+.q-btn.review-answered::after {
+  content: "✔";
+  position: absolute;
+  top: 1px;
+  right: 2px;
+  font-size: 9px;
+  color: #86efac;
+}
+
+.btn-submit-exam {
+  width: 100%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.85rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: auto;
+  transition: background 0.2s;
+}
+
+.btn-submit-exam:hover {
+  background: var(--primary-hover);
+}
+
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1.5rem;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 520px;
+  padding: 2rem;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  animation: modalIn 0.2s ease-out;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+
+.summary-stats-box {
+  background: var(--bg-main);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin: 1.25rem 0;
+}
+
+.summary-stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-stat-item .stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.summary-stat-item .stat-val {
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+/* Results Dashboard */
+.results-screen {
+  max-width: 1000px;
+  margin: 1.5rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.result-hero {
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  color: white;
+  border-radius: 12px;
+  padding: 2.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.result-hero-text h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.result-score-circle {
+  background: rgba(255, 255, 255, 0.15);
+  border: 4px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  width: 130px;
+  height: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.result-score-circle .score-num {
+  font-size: 2.4rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.result-score-circle .score-total {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.topic-breakdown-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.75rem;
+}
+
+.topic-bar-item {
+  margin-bottom: 1rem;
+}
+
+.topic-bar-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.progress-track {
+  background: var(--bg-main);
+  border-radius: 9999px;
+  height: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.5s ease-out;
+}
+
+/* Solutions Review List */
+.solutions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.review-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.review-item.is-correct {
+  border-left: 5px solid var(--success);
+}
+
+.review-item.is-incorrect {
+  border-left: 5px solid var(--danger);
+}
+
+.review-item.is-skipped {
+  border-left: 5px solid var(--warning);
+}
+
+.explanation-callout {
+  margin-top: 1rem;
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.opt-review-card {
+  padding: 0.6rem 0.9rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  margin-top: 0.4rem;
+  font-size: 0.92rem;
+}
+
+.opt-review-card.correct {
+  background: var(--success-light);
+  border-color: var(--success);
+  color: var(--success);
+  font-weight: 700;
+}
+
+.opt-review-card.wrong-selected {
+  background: var(--danger-light);
+  border-color: var(--danger);
+  color: var(--danger);
+  font-weight: 700;
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  .portal-header, .btn-submit-exam, .icon-btn, .footer-left, .btn-primary {
+    display: none !important;
+  }
+  .exam-layout {
+    display: block;
+  }
+  .palette-panel {
+    display: none !important;
+  }
+}
+
+</style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="portal-header">
+    <div class="brand-section">
+      <div class="brand-logo">Py</div>
+      <div>
+        <div class="brand-title">Python Semester 1 Examination Portal</div>
+        <div class="brand-sub">Comprehensive Assessment &bull; Medium to High Difficulty &bull; 64 Questions</div>
+      </div>
+    </div>
+
+    <!-- Live Timer -->
+    <div class="timer-container" id="timerBadge">
+      <span>⏱</span>
+      <span id="timerDisplay">90:00</span>
+    </div>
+
+    <!-- Header Actions -->
+    <div class="header-actions">
+      <div class="candidate-badge">
+        <span id="badgeCandidateName">Candidate</span> &bull; <span id="badgeRoll">Roll No</span>
+      </div>
+      <button class="icon-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌓 Theme</button>
+      <button class="icon-btn" onclick="toggleFullScreen()" title="Fullscreen Mode">⛶ Fullscreen</button>
+    </div>
+  </header>
+
+  <main class="main-wrapper">
+
+    <!-- 1. WELCOME & REGISTRATION SCREEN -->
+    <section class="welcome-screen" id="welcomeScreen">
+      <h1 class="welcome-title">Welcome to Python Examination Portal</h1>
+      <p class="welcome-desc">
+        This portal evaluates comprehensive understanding across all Semester 1 Python topics from the course notes. The examination features rigorous medium to advanced level questions designed to test algorithmic tracing, Python internals, type casting nuances, operator precedence, string manipulations, and loop constructs.
+      </p>
+
+      <!-- Exam Meta Cards -->
+      <div class="exam-meta-grid">
+        <div class="meta-card">
+          <div class="label">Total Questions</div>
+          <div class="val">64 Questions</div>
+        </div>
+        <div class="meta-card">
+          <div class="label">Duration</div>
+          <div class="val">90 Minutes</div>
+        </div>
+        <div class="meta-card">
+          <div class="label">Total Marks</div>
+          <div class="val">64 Marks (+1, 0)</div>
+        </div>
+        <div class="meta-card">
+          <div class="label">Difficulty</div>
+          <div class="val">Medium – High</div>
+        </div>
+      </div>
+
+      <!-- Candidate Details -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <label for="inputName">Candidate Name</label>
+          <input type="text" id="inputName" class="form-control" value="Sanjeev" placeholder="Enter your full name">
+        </div>
+        <div class="form-group">
+          <label for="inputRoll">Roll / Student ID</label>
+          <input type="text" id="inputRoll" class="form-control" value="PY-SEM1-2026" placeholder="Enter roll number">
+        </div>
+      </div>
+
+      <!-- Mode Selection -->
+      <div class="form-group" style="margin-top: 0.5rem; margin-bottom: 1.5rem;">
+        <label>Select Examination Mode:</label>
+        <div style="display: flex; gap: 1.5rem; margin-top: 0.4rem;">
+          <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+            <input type="radio" name="examMode" value="timed" checked>
+            <strong>Timed Exam Mode</strong> (Standard 90-min strict exam conditions)
+          </label>
+          <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+            <input type="radio" name="examMode" value="practice">
+            <strong>Practice / Learning Mode</strong> (Instant explanation button enabled)
+          </label>
+        </div>
+      </div>
+
+      <!-- Syllabus Topics Covered -->
+      <div class="instructions-card" style="background: var(--bg-main); border-color: var(--border);">
+        <h4 style="color: var(--text-main);">Syllabus Topics Covered (64 Questions):</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem; margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">
+          <div>&bull; 01. Intro to Python & Execution Model</div>
+          <div>&bull; 02. Variables & Memory Reference</div>
+          <div>&bull; 03. Data Types & Type Casting</div>
+          <div>&bull; 04. Arithmetic Operators & Precedence</div>
+          <div>&bull; 05. Python String Operations & Slicing</div>
+          <div>&bull; 06. Boolean & Logical Expressions</div>
+          <div>&bull; 07. Input & Output Functions</div>
+          <div>&bull; 08. Conditional Statements</div>
+          <div>&bull; 09. Problem Solving, Flowcharts & IPO</div>
+          <div>&bull; 10. For Loop & Nested Patterns</div>
+          <div>&bull; 11. While Loop & Number Logic</div>
+        </div>
+      </div>
+
+      <!-- Rules & Shortcuts -->
+      <div class="instructions-card">
+        <h4>Important Examination Guidelines:</h4>
+        <ul>
+          <li>The countdown timer starts as soon as you click <strong>Start Examination</strong>.</li>
+          <li>The exam will auto-submit when the 90 minutes expire.</li>
+          <li>Use the right-side question palette to monitor status and jump directly to any question.</li>
+          <li><strong>Keyboard Shortcuts:</strong> Press <code>1</code>, <code>2</code>, <code>3</code>, <code>4</code> (or <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code>) to select options, <code>N</code> or <code>Right Arrow</code> for Next, <code>P</code> or <code>Left Arrow</code> for Previous, <code>M</code> to Mark for Review, and <code>Backspace</code> to Clear.</li>
+          <li>Upon submission, an in-depth scorecard with topic breakdowns and detailed step-by-step solutions will be generated.</li>
+        </ul>
+      </div>
+
+      <button class="btn-primary" onclick="startExam()" style="width: 100%; justify-content: center; padding: 1rem; font-size: 1.1rem;">
+        🚀 Start Examination (90 Minutes)
+      </button>
+    </section>
+
+
+    <!-- 2. ACTIVE EXAM INTERFACE -->
+    <section class="exam-layout" id="examInterface" style="display: none;">
+      
+      <!-- Left / Center: Question Panel -->
+      <div class="question-panel">
+        <div class="q-header">
+          <div class="q-badge-group">
+            <span id="qNumberText" style="font-weight: 800; font-size: 1.1rem; color: var(--primary);">Question 1 of 64</span>
+            <span class="badge badge-topic" id="qTopicBadge">Topic</span>
+            <span class="badge" id="qDiffBadge">Difficulty</span>
+          </div>
+          <div class="badge badge-marks">+1.0 Mark | 0 Negative</div>
+        </div>
+
+        <!-- Question text -->
+        <h2 class="q-title" id="qQuestionText">Question text loading...</h2>
+
+        <!-- Code block (if present) -->
+        <div class="code-container" id="qCodeContainer" style="display: none;"></div>
+
+        <!-- Options list -->
+        <div class="options-group" id="qOptionsList"></div>
+
+        <!-- Practice Mode instant explanation -->
+        <div class="practice-explanation" id="practiceExplanationBox">
+          <h5>💡 Explanation:</h5>
+          <p id="practiceExplainContent"></p>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="q-footer">
+          <div class="footer-left">
+            <button class="btn-secondary" id="btnPrev" onclick="prevQuestion()">← Previous</button>
+            <button class="btn-clear" onclick="clearResponse()">Clear Response</button>
+            <button class="btn-review" onclick="markForReview()">⭐ Mark for Review & Next</button>
+            <button class="btn-secondary" id="btnPracticeExplain" onclick="togglePracticeExplanation()" style="display: none; color: #16a34a; border-color: #16a34a;">💡 Show Explanation</button>
+          </div>
+          <button class="btn-primary" id="btnNext" onclick="nextQuestion()">Save & Next →</button>
+        </div>
+      </div>
+
+      <!-- Right Column: Question Palette -->
+      <aside class="palette-panel">
+        <div class="palette-title">Question Palette (64)</div>
+
+        <!-- Status Legend & Counters -->
+        <div class="palette-legend">
+          <div class="legend-item"><div class="status-dot dot-answered"></div> Answered: <strong id="statAnswered">0</strong></div>
+          <div class="legend-item"><div class="status-dot dot-not-answered"></div> Not Answered: <strong id="statNotAnswered">0</strong></div>
+          <div class="legend-item"><div class="status-dot dot-review"></div> Marked Review: <strong id="statReview">0</strong></div>
+          <div class="legend-item"><div class="status-dot dot-not-visited"></div> Not Visited: <strong id="statNotVisited">64</strong></div>
+        </div>
+
+        <!-- Filters -->
+        <div class="palette-filters">
+          <button class="filter-btn active" id="filter-all" onclick="filterPalette('all')">All (64)</button>
+          <button class="filter-btn" id="filter-answered" onclick="filterPalette('answered')">Answered</button>
+          <button class="filter-btn" id="filter-unanswered" onclick="filterPalette('unanswered')">Pending</button>
+          <button class="filter-btn" id="filter-review" onclick="filterPalette('review')">Marked</button>
+        </div>
+
+        <!-- 64 Buttons Grid -->
+        <div class="palette-grid" id="paletteGrid"></div>
+
+        <!-- Submit Button -->
+        <button class="btn-submit-exam" onclick="openSubmitModal()">🏁 Submit Examination</button>
+      </aside>
+    </section>
+
+
+    <!-- 3. SUBMISSION CONFIRMATION MODAL -->
+    <div class="modal-overlay" id="submitModal">
+      <div class="modal-card">
+        <h2 class="modal-title">Confirm Final Submission</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+          Are you sure you want to conclude the examination? You will not be able to change your answers once submitted.
+        </p>
+
+        <div class="summary-stats-box">
+          <div class="summary-stat-item">
+            <span class="stat-label">Total Questions</span>
+            <span class="stat-val" id="modalTotalQ">64</span>
+          </div>
+          <div class="summary-stat-item">
+            <span class="stat-label">Attempted / Answered</span>
+            <span class="stat-val" id="modalAnsweredQ" style="color: var(--success);">0</span>
+          </div>
+          <div class="summary-stat-item">
+            <span class="stat-label">Unanswered / Skipped</span>
+            <span class="stat-val" id="modalUnansweredQ" style="color: var(--danger);">64</span>
+          </div>
+          <div class="summary-stat-item">
+            <span class="stat-label">Marked for Review</span>
+            <span class="stat-val" id="modalMarkedQ" style="color: var(--review);">0</span>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-secondary" onclick="closeSubmitModal()">Resume Exam</button>
+          <button class="btn-primary" style="background: var(--success);" onclick="submitExam()">Yes, Submit Exam</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- 4. RESULTS & ANALYTICS DASHBOARD -->
+    <section class="results-screen" id="resultsScreen" style="display: none;">
+      
+      <!-- Result Hero -->
+      <div class="result-hero">
+        <div class="result-hero-text">
+          <div style="text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.1em; opacity: 0.85;">Semester 1 Examination Scorecard</div>
+          <h2>Python Assessment Results</h2>
+          <p id="resCandidate" style="font-size: 1.1rem; opacity: 0.95; margin-bottom: 0.5rem;">Candidate Name</p>
+          <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.75rem;">
+            <span id="resBandBadge" class="badge" style="background: white; color: black; font-size: 0.85rem; padding: 0.4rem 0.8rem;">Performance</span>
+            <span class="badge" style="background: rgba(255,255,255,0.2); color: white;">Time Spent: <strong id="resTimeTaken">--</strong></span>
+          </div>
+        </div>
+
+        <div class="result-score-circle">
+          <div class="score-num" id="resScore">0</div>
+          <div class="score-total">out of 64</div>
+          <div style="font-weight: 700; font-size: 0.9rem; margin-top: 2px;" id="resPercent">0%</div>
+        </div>
+      </div>
+
+      <!-- Quick Summary Row -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        <div class="meta-card">
+          <div class="label">Correct Answers</div>
+          <div class="val" id="resCorrect" style="color: var(--success);">0</div>
+        </div>
+        <div class="meta-card">
+          <div class="label">Incorrect Answers</div>
+          <div class="val" id="resIncorrect" style="color: var(--danger);">0</div>
+        </div>
+        <div class="meta-card">
+          <div class="label">Unattempted</div>
+          <div class="val" id="resSkipped" style="color: var(--warning);">0</div>
+        </div>
+      </div>
+
+      <!-- Topic-wise Breakdown Card -->
+      <div class="topic-breakdown-card">
+        <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 1.25rem;">Topic-Wise Performance Analysis</h3>
+        <div id="topicBarsContainer"></div>
+      </div>
+
+      <!-- Review Section Header & Filters -->
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;">
+        <h3 style="font-size: 1.35rem; font-weight: 800;">Question-by-Question Solution & Explanations</h3>
+        
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button class="icon-btn" onclick="window.print()">🖨️ Print Scorecard</button>
+          <button class="icon-btn" onclick="downloadResultJSON()">📥 Export JSON</button>
+          <button class="btn-primary" onclick="retakeExam()">🔄 Retake Exam</button>
+        </div>
+      </div>
+
+      <!-- Review Filters -->
+      <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+        <button class="filter-btn review-filter-btn active" id="review-filter-all" onclick="filterReviewSolutions('all')">All Questions (64)</button>
+        <button class="filter-btn review-filter-btn" id="review-filter-correct" onclick="filterReviewSolutions('correct')">Correct</button>
+        <button class="filter-btn review-filter-btn" id="review-filter-incorrect" onclick="filterReviewSolutions('incorrect')">Incorrect</button>
+        <button class="filter-btn review-filter-btn" id="review-filter-skipped" onclick="filterReviewSolutions('skipped')">Skipped</button>
+      </div>
+
+      <!-- List of 64 Questions with Explanations -->
+      <div class="solutions-container" id="reviewSolutionsList"></div>
+
+    </section>
+
+  </main>
+
+  <!-- Fullscreen helper -->
+  <script>
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn("Fullscreen request error", err);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+  </script>
+
+  <!-- Load Data and App Engine -->
+  
+  
+<script>
+// Python Semester 1 Exam Questions Dataset (64 Questions)
+const EXAM_QUESTIONS = [
+  {
+    "id": 1,
+    "topic": "Python Fundamentals & Execution Model",
+    "difficulty": "Medium",
+    "question": "Which of the following correctly describes the execution workflow of a standard Python program (CPython)?",
+    "code": "",
+    "options": [
+      "Source Code (.py) is converted directly into C code, which is then compiled by a C compiler into an executable binary",
+      "Source Code (.py) is compiled into intermediate Bytecode (.pyc), which is then interpreted by the Python Virtual Machine (PVM)",
+      "Python does not perform any compilation; the CPU directly executes the text lines of the .py file",
+      "Source Code (.py) is directly translated into native Machine Code by the operating system kernel"
+    ],
+    "correctIndex": 1,
+    "explanation": "CPython is a two-stage execution system: first, the source code (.py) is compiled into platform-independent intermediate instructions called bytecode (often cached in __pycache__ as .pyc files). Next, the Python Virtual Machine (PVM) interprets and executes this bytecode."
+  },
+  {
+    "id": 2,
+    "topic": "Python Fundamentals & Execution Model",
+    "difficulty": "Medium",
+    "question": "Consider the following code snippet. Why does Python execute this without throwing a compilation or type declaration error?",
+    "code": "val = 42\nval = \"Hello Python\"\nval = [1, 2, 3]",
+    "options": [
+      "Line 2 actually causes a compile-time TypeError unless explicit typecast is provided",
+      "The compiler declares all variables as void pointers before execution",
+      "Python automatically converts all variables to string type under the hood",
+      "Python is dynamically typed; data types are associated with objects/values in memory, not with the variable names themselves"
+    ],
+    "correctIndex": 3,
+    "explanation": "In Python, variable names are simply symbolic references (pointers) bound to objects stored in memory. Because Python is dynamically typed, a variable name can refer to an integer object, and then subsequently be rebound to a string or list object without any declaration."
+  },
+  {
+    "id": 3,
+    "topic": "Python Fundamentals & Execution Model",
+    "difficulty": "High",
+    "question": "What will be printed when the following code is executed?",
+    "code": "def calculate():\n    \"\"\"Docstring Alpha\"\"\"\n    x = 100\n    \"\"\"Docstring Beta\"\"\"\n    return x\n\nprint(calculate.__doc__)",
+    "options": [
+      "Docstring Beta",
+      "None",
+      "Docstring Alpha\\nDocstring Beta",
+      "Docstring Alpha"
+    ],
+    "correctIndex": 3,
+    "explanation": "Python defines a function's docstring (__doc__) strictly as the first statement in the function body if it is an unassigned string literal. The second string literal after `x = 100` is simply an unassigned expression statement and is ignored by Python's docstring mechanism."
+  },
+  {
+    "id": 4,
+    "topic": "Python Fundamentals & Execution Model",
+    "difficulty": "High",
+    "question": "Which of the following statements regarding Python comments and execution is FALSE?",
+    "code": "",
+    "options": [
+      "Multi-line comments using /* ... */ are standard syntax in Python 3",
+      "An unassigned multi-line string ('''...''') inside code is a valid string literal that evaluates and gets discarded at runtime if not bound",
+      "Comments starting with '#' are ignored by the Python lexical analyzer and do not generate bytecode",
+      "Python was created by Guido van Rossum and first released in 1991"
+    ],
+    "correctIndex": 0,
+    "explanation": "Python does NOT support C/Java style `/* ... */` multi-line comments. Python only has single-line comments starting with `#`. For multi-line documentation, triple-quoted string literals are used as docstrings or discarded expressions."
+  },
+  {
+    "id": 5,
+    "topic": "Variables & Memory References",
+    "difficulty": "Medium",
+    "question": "Which of the following identifier names is valid according to Python's lexical naming rules?",
+    "code": "",
+    "options": [
+      "_valid_total_9",
+      "student-name",
+      "pass",
+      "2nd_variable"
+    ],
+    "correctIndex": 0,
+    "explanation": "Python identifier rules: must begin with a letter (a-z, A-Z) or an underscore (_); cannot start with a digit (eliminates '2nd_variable'); cannot contain hyphens or spaces (eliminates 'student-name'); and cannot be a reserved keyword (eliminates 'pass'). Therefore, '_valid_total_9' is the only valid identifier."
+  },
+  {
+    "id": 6,
+    "topic": "Variables & Memory References",
+    "difficulty": "High",
+    "question": "What will be the output of the following simultaneous assignment?",
+    "code": "a, b = 4, 9\na, b = b, a + b\nprint(a, b)",
+    "options": [
+      "9 18",
+      "4 13",
+      "13 13",
+      "9 13"
+    ],
+    "correctIndex": 3,
+    "explanation": "In Python, during simultaneous assignment (`a, b = b, a + b`), the entire right-hand side is evaluated first before any binding occurs: `(b, a + b)` evaluates to `(9, 4 + 9)` = `(9, 13)`. Then unpacking assigns `a = 9` and `b = 13`."
+  },
+  {
+    "id": 7,
+    "topic": "Variables & Memory References",
+    "difficulty": "High",
+    "question": "What is the output of the following code snippet?",
+    "code": "x = y = 50\nx += 15\nprint(x, y)",
+    "options": [
+      "50 50",
+      "65 50",
+      "65 65",
+      "TypeError: chained assignment target cannot be modified"
+    ],
+    "correctIndex": 1,
+    "explanation": "Integers are immutable in Python. Initially, both `x` and `y` reference the integer object 50. When `x += 15` is executed, Python computes `50 + 15 = 65` and rebinds `x` to a new integer object 65. `y` continues referencing the original integer object 50."
+  },
+  {
+    "id": 8,
+    "topic": "Variables & Memory References",
+    "difficulty": "Medium",
+    "question": "What will be printed by the following code?",
+    "code": "m = 100\nn = m\nm = 300\nn = n + 50\nprint(m, n)",
+    "options": [
+      "300 150",
+      "100 150",
+      "300 350",
+      "350 150"
+    ],
+    "correctIndex": 0,
+    "explanation": "`m` is assigned 100. `n` references the same value (100). Then `m` is reassigned to 300. `n` is reassigned to `100 + 50 = 150`. Therefore, `m` is 300 and `n` is 150."
+  },
+  {
+    "id": 9,
+    "topic": "Variables & Memory References",
+    "difficulty": "High",
+    "question": "What is the exact outcome of executing the following Python code?",
+    "code": "score = 95\nif score > 50:\n    del score\nprint(score)",
+    "options": [
+      "Prints 0",
+      "Raises NameError: name 'score' is not defined",
+      "Prints None",
+      "Prints 95"
+    ],
+    "correctIndex": 1,
+    "explanation": "The `del` statement removes the variable binding `score` from the local/global namespace. When `print(score)` attempts to resolve the name on the subsequent line, Python raises `NameError: name 'score' is not defined`."
+  },
+  {
+    "id": 10,
+    "topic": "Data Types & Type Casting",
+    "difficulty": "High",
+    "question": "What occurs when Python evaluates the expression `int('38.9')`?",
+    "code": "num = int(\"38.9\")",
+    "options": [
+      "ValueError: invalid literal for int() with base 10: '38.9'",
+      "TypeError: string contains floating-point representation",
+      "num becomes 38 (truncation)",
+      "num becomes 39 (rounding)"
+    ],
+    "correctIndex": 0,
+    "explanation": "The built-in function `int()` with base 10 requires a string consisting purely of integer characters (optionally signed). If the string contains a decimal point, `int()` raises a ValueError. To parse it properly, one must write `int(float('38.9'))`."
+  },
+  {
+    "id": 11,
+    "topic": "Data Types & Type Casting",
+    "difficulty": "High",
+    "question": "What will be printed by the following code?",
+    "code": "print(bool(\"False\"), bool(\"0\"), bool(\"\"), bool(None))",
+    "options": [
+      "True False False False",
+      "True True False False",
+      "False True False False",
+      "False False False False"
+    ],
+    "correctIndex": 1,
+    "explanation": "In Python, any non-empty string evaluates to truthy (`True`), regardless of its characters. Therefore, `bool('False')` is `True` and `bool('0')` is `True`. An empty string `\"\"` and the singleton `None` are falsy (`False`)."
+  },
+  {
+    "id": 12,
+    "topic": "Data Types & Type Casting",
+    "difficulty": "Medium",
+    "question": "What is the return value of `type(type(100))` in Python?",
+    "code": "",
+    "options": [
+      "<class 'NoneType'>",
+      "<class 'object'>",
+      "<class 'type'>",
+      "<class 'int'>"
+    ],
+    "correctIndex": 2,
+    "explanation": "`type(100)` evaluates to `<class 'int'>`. Since classes and types in Python 3 are themselves instances of the metaclass `type`, `type(<class 'int'>)` returns `<class 'type'>`."
+  },
+  {
+    "id": 13,
+    "topic": "Data Types & Type Casting",
+    "difficulty": "High",
+    "question": "What will be the output of evaluating the expression `0.1 + 0.2 == 0.3`?",
+    "code": "print(0.1 + 0.2 == 0.3)",
+    "options": [
+      "FloatingPointError",
+      "False",
+      "True",
+      "None"
+    ],
+    "correctIndex": 1,
+    "explanation": "Python uses IEEE 754 double-precision binary floats. Decimal numbers like 0.1 and 0.2 cannot be represented with exact finite precision in base-2 binary. In Python, `0.1 + 0.2` results in `0.30000000000000004`, which is not equal to `0.3`. Hence the equality test returns `False`."
+  },
+  {
+    "id": 14,
+    "topic": "Data Types & Type Casting",
+    "difficulty": "Medium",
+    "question": "What are the data types of variables `res1` and `res2`?",
+    "code": "res1 = 12 + 4.0\nres2 = True + 5",
+    "options": [
+      "int and int",
+      "float and float",
+      "float and bool",
+      "float and int"
+    ],
+    "correctIndex": 3,
+    "explanation": "In `12 + 4.0`, Python implicitly coerces integer 12 to float 12.0, producing `16.0` (`float`). In Python, `bool` is a subclass of `int` where `True == 1`, so `True + 5` produces integer `6` (`int`)."
+  },
+  {
+    "id": 15,
+    "topic": "Data Types & Type Casting",
+    "difficulty": "High",
+    "question": "What will be the output of the following arithmetic with type conversions?",
+    "code": "val = int(True) * 10 + int(False) * 20 + int(float(\"4.8\"))\nprint(val)",
+    "options": [
+      "14",
+      "15",
+      "TypeError: cannot cast float string to int directly",
+      "34"
+    ],
+    "correctIndex": 0,
+    "explanation": "`int(True)` is 1, so `1 * 10 = 10`. `int(False)` is 0, so `0 * 20 = 0`. `float('4.8')` is `4.8`, and `int(4.8)` truncates the decimal part to `4`. Sum = `10 + 0 + 4 = 14`."
+  },
+  {
+    "id": 16,
+    "topic": "Arithmetic Operators & Precedence",
+    "difficulty": "High",
+    "question": "What will be printed by the floor division `print(-19 // 4)`?",
+    "code": "print(-19 // 4)",
+    "options": [
+      "-4.0",
+      "-4",
+      "-4.75",
+      "-5"
+    ],
+    "correctIndex": 3,
+    "explanation": "Floor division `//` always rounds down toward negative infinity (the mathematical floor). Normal division `-19 / 4` is `-4.75`. The nearest integer less than or equal to `-4.75` is `-5`."
+  },
+  {
+    "id": 17,
+    "topic": "Arithmetic Operators & Precedence",
+    "difficulty": "High",
+    "question": "What is the output of the modulo operation `print(-19 % 4)`?",
+    "code": "print(-19 % 4)",
+    "options": [
+      "1",
+      "-1",
+      "3",
+      "-3"
+    ],
+    "correctIndex": 0,
+    "explanation": "Python satisfies the division theorem identity: `a = (a // b) * b + (a % b)`. For `a = -19, b = 4`: since `-19 // 4 = -5`, we have `(-5) * 4 = -20`. Adding `1` yields `-19`. Thus, `-19 % 4 = 1`. In Python, the result of `%` always shares the sign of the divisor (`b`)."
+  },
+  {
+    "id": 18,
+    "topic": "Arithmetic Operators & Precedence",
+    "difficulty": "High",
+    "question": "What will be the output of `print(2 ** 3 ** 2)`?",
+    "code": "print(2 ** 3 ** 2)",
+    "options": [
+      "512",
+      "4096",
+      "64",
+      "36"
+    ],
+    "correctIndex": 0,
+    "explanation": "The exponentiation operator `**` has right-to-left associativity in Python. Therefore, `2 ** 3 ** 2` is grouped and evaluated as `2 ** (3 ** 2) = 2 ** 9 = 512`."
+  },
+  {
+    "id": 19,
+    "topic": "Arithmetic Operators & Precedence",
+    "difficulty": "High",
+    "question": "What will be printed by the following code?",
+    "code": "print(-3 ** 2, (-3) ** 2)",
+    "options": [
+      "9 -9",
+      "-9 -9",
+      "-9 9",
+      "9 9"
+    ],
+    "correctIndex": 2,
+    "explanation": "In Python, exponentiation `**` has higher precedence than unary negation `-`. Thus `-3 ** 2` is evaluated as `-(3 ** 2) = -9`. When parentheses enclose the negative base, `(-3) ** 2` computes `(-3) * (-3) = 9`."
+  },
+  {
+    "id": 20,
+    "topic": "Arithmetic Operators & Precedence",
+    "difficulty": "Medium",
+    "question": "Evaluate the following Python arithmetic expression according to operator precedence:",
+    "code": "ans = 10 + 20 * 2 // 5 - 3 ** 2 % 4\nprint(ans)",
+    "options": [
+      "17",
+      "11",
+      "15",
+      "19"
+    ],
+    "correctIndex": 0,
+    "explanation": "Operator precedence steps:\n1) `3 ** 2 = 9`\n2) `20 * 2 = 40`\n3) `40 // 5 = 8`\n4) `9 % 4 = 1`\n5) `10 + 8 - 1 = 17`."
+  },
+  {
+    "id": 21,
+    "topic": "Arithmetic Operators & Precedence",
+    "difficulty": "Medium",
+    "question": "What will be printed by the following code involving sequence multiplication?",
+    "code": "s1 = \"Data\" * 0\ns2 = \"Data\" * -3\nprint(repr(s1), repr(s2))",
+    "options": [
+      "'' ''",
+      "None None",
+      "TypeError: sequence multiplication with negative factor",
+      "'Data' 'ataD'"
+    ],
+    "correctIndex": 0,
+    "explanation": "Multiplying any sequence (including strings) by 0 or a negative integer in Python always produces an empty sequence of the same type (`''`)."
+  },
+  {
+    "id": 22,
+    "topic": "Python String Operations & Slicing",
+    "difficulty": "High",
+    "question": "What will be printed by the following slice expression?",
+    "code": "s = \"ABCDEFGHI\"\nprint(s[7:2:-2])",
+    "options": [
+      "HFD",
+      "HF",
+      "GECA",
+      "H F D B"
+    ],
+    "correctIndex": 0,
+    "explanation": "In `s[7:2:-2]`: start = 7 ('H'), stop = 2 ('C', non-inclusive), step = -2.\nVisited indices:\nIndex 7 -> 'H'\nIndex 5 -> 'F'\nIndex 3 -> 'D'\nNext index 1 is past stop index 2. Result is `'HFD'`."
+  },
+  {
+    "id": 23,
+    "topic": "Python String Operations & Slicing",
+    "difficulty": "High",
+    "question": "What will be the output of `print(\"Computer\"[::-2])`?",
+    "code": "print(\"Computer\"[::-2])",
+    "options": [
+      "retupmoC",
+      "rtpC",
+      "eumo",
+      "rtpo"
+    ],
+    "correctIndex": 3,
+    "explanation": "`\"Computer\"` has length 8 with characters: C(0), o(1), m(2), p(3), u(4), t(5), e(6), r(7).\nWith step -2 and omitted start/stop, it traverses backwards from index 7:\nIndex 7: 'r'\nIndex 5: 't'\nIndex 3: 'p'\nIndex 1: 'o'\nCombining these yields `'rtpo'`."
+  },
+  {
+    "id": 24,
+    "topic": "Python String Operations & Slicing",
+    "difficulty": "High",
+    "question": "What is the output of the following conflicting slice?",
+    "code": "s = \"PYTHON\"\nprint(repr(s[1:4:-1]))",
+    "options": [
+      "'NOHT'",
+      "IndexError: step direction incompatible with bounds",
+      "''",
+      "'TYP'"
+    ],
+    "correctIndex": 2,
+    "explanation": "Here start = 1 ('Y') and stop = 4 ('O'). With a negative step (-1), Python decrements the index from 1 toward 0, which moves away from the stop index 4. Because index 1 is already <= stop index 4 in descending direction, 0 characters match and Python returns an empty string `''` without raising an error."
+  },
+  {
+    "id": 25,
+    "topic": "Python String Operations & Slicing",
+    "difficulty": "Medium",
+    "question": "What will be printed when slicing out of bounds versus direct indexing?",
+    "code": "s = \"Python\"\nslice_res = repr(s[10:20])\nprint(slice_res)",
+    "options": [
+      "IndexError: string index out of range",
+      "''",
+      "None",
+      "'Python'"
+    ],
+    "correctIndex": 1,
+    "explanation": "String indexing (`s[10]`) raises an `IndexError` if the index is out of bounds. However, string slicing (`s[10:20]`) is bounds-safe and gracefully returns an empty string `''`."
+  },
+  {
+    "id": 26,
+    "topic": "Python String Operations & Slicing",
+    "difficulty": "Medium",
+    "question": "What will be printed by the following code?",
+    "code": "text = \"hello\"\ntext.upper()\nprint(text)",
+    "options": [
+      "HELLO",
+      "AttributeError: string object has no in-place upper method",
+      "hello",
+      "Hello"
+    ],
+    "correctIndex": 2,
+    "explanation": "Strings in Python are strictly immutable. Calling `text.upper()` computes and returns a new uppercase string object `'HELLO'`, but does NOT modify `text` in-place. Since the return value is not assigned back to `text`, `text` remains `'hello'`."
+  },
+  {
+    "id": 27,
+    "topic": "Python String Operations & Slicing",
+    "difficulty": "High",
+    "question": "What happens when searching for a missing substring using `.find()` versus `.index()`?",
+    "code": "s = \"Algorithm\"\nres1 = s.find(\"z\")\n# res2 = s.index(\"z\")",
+    "options": [
+      "Both raise IndexError",
+      "Both return -1",
+      ".find() raises ValueError, whereas .index() returns -1",
+      ".find() returns -1, whereas .index() raises ValueError"
+    ],
+    "correctIndex": 3,
+    "explanation": "The string method `.find(sub)` returns the lowest index of the substring if found, or `-1` if not found. The method `.index(sub)` behaves identically except that it raises `ValueError: substring not found` when the substring is missing."
+  },
+  {
+    "id": 28,
+    "topic": "Python String Operations & Slicing",
+    "difficulty": "High",
+    "question": "What will be printed by the following code comparing `.split()` and `.split(' ')`?",
+    "code": "phrase = \"red   green  blue\"\nprint(len(phrase.split()), len(phrase.split(\" \")))",
+    "options": [
+      "3 3",
+      "6 3",
+      "3 6",
+      "3 5"
+    ],
+    "correctIndex": 2,
+    "explanation": "`phrase.split()` with no arguments splits on arbitrary consecutive whitespace runs and discards empty strings, giving `['red', 'green', 'blue']` (length 3). In contrast, `phrase.split(' ')` uses a single space as strict separator; the runs of spaces produce empty string tokens `''`, giving `['red', '', '', 'green', '', 'blue']` (length 6)."
+  },
+  {
+    "id": 29,
+    "topic": "Python String Operations & Slicing",
+    "difficulty": "High",
+    "question": "What will be the final printed output of this method chaining?",
+    "code": "msg = \"  python programming  \"\nresult = msg.strip().title().replace(\"Programming\", \"Core\")\nprint(result)",
+    "options": [
+      "  Python Core  ",
+      "Python Programming",
+      "Python Core",
+      "python Core"
+    ],
+    "correctIndex": 2,
+    "explanation": "1) `msg.strip()` strips leading and trailing spaces: `'python programming'`\n2) `.title()` capitalizes each word: `'Python Programming'`\n3) `.replace('Programming', 'Core')` replaces the word: `'Python Core'`."
+  },
+  {
+    "id": 30,
+    "topic": "Boolean & Logical Expressions",
+    "difficulty": "High",
+    "question": "What value is bound to `result` due to short-circuit evaluation of `or`?",
+    "code": "result = 0 or \"\" or \"Hello\" or 42\nprint(result)",
+    "options": [
+      "Hello",
+      "True",
+      "42",
+      "0"
+    ],
+    "correctIndex": 0,
+    "explanation": "In Python, logical `or` tests operands from left to right and immediately returns the FIRST truthy operand without converting it to a boolean. Here `0` is falsy, `\"\"` is falsy, and `\"Hello\"` is truthy. Evaluation short-circuits and returns `'Hello'`."
+  },
+  {
+    "id": 31,
+    "topic": "Boolean & Logical Expressions",
+    "difficulty": "High",
+    "question": "What will be printed by the following short-circuit expression?",
+    "code": "val = 5 and \"Python\" or 0 and \"Java\"\nprint(val)",
+    "options": [
+      "True",
+      "Python",
+      "5",
+      "Java"
+    ],
+    "correctIndex": 1,
+    "explanation": "`and` has higher precedence than `or`.\nLeft expression: `5 and 'Python'`: since 5 is truthy, `and` returns the second operand `'Python'`.\nExpression becomes: `'Python' or (0 and 'Java')`.\nSince `'Python'` is truthy, `or` short-circuits immediately and returns `'Python'`."
+  },
+  {
+    "id": 32,
+    "topic": "Boolean & Logical Expressions",
+    "difficulty": "High",
+    "question": "What is the boolean result of evaluating: `not False and False or True and not True`?",
+    "code": "ans = not False and False or True and not True\nprint(ans)",
+    "options": [
+      "False",
+      "SyntaxError",
+      "None",
+      "True"
+    ],
+    "correctIndex": 0,
+    "explanation": "Precedence order is `not` > `and` > `or`:\n1) Apply `not`: `not False` is `True`; `not True` is `False`.\n2) Expression is now: `True and False or True and False`.\n3) Apply `and`: `True and False` is `False`; `True and False` is `False`.\n4) Expression is now: `False or False` which evaluates to `False`."
+  },
+  {
+    "id": 33,
+    "topic": "Boolean & Logical Expressions",
+    "difficulty": "High",
+    "question": "What will be printed by this chained comparison in Python?",
+    "code": "print(1 < 2 < 3 == 3)",
+    "options": [
+      "True",
+      "False",
+      "TypeError: chained operator type mismatch",
+      "None"
+    ],
+    "correctIndex": 0,
+    "explanation": "In Python, chained comparisons are expanded with implicit `and` conjunctions: `1 < 2 < 3 == 3` translates into `(1 < 2) and (2 < 3) and (3 == 3)`. Since `1 < 2` is True, `2 < 3` is True, and `3 == 3` is True, the entire expression evaluates to `True`."
+  },
+  {
+    "id": 34,
+    "topic": "Boolean & Logical Expressions",
+    "difficulty": "Medium",
+    "question": "What will be printed by comparing two newly instantiated identical lists?",
+    "code": "list1 = [1, 2, 3]\nlist2 = [1, 2, 3]\nprint(list1 == list2, list1 is list2)",
+    "options": [
+      "True True",
+      "False True",
+      "True False",
+      "False False"
+    ],
+    "correctIndex": 2,
+    "explanation": "`==` checks value equality (whether contents are identical), which is `True`. `is` checks object identity (whether both refer to the exact same memory address). Because two separate list instances were created, `list1 is list2` is `False`."
+  },
+  {
+    "id": 35,
+    "topic": "Boolean & Logical Expressions",
+    "difficulty": "High",
+    "question": "What will be the output of the following boolean evaluation?",
+    "code": "x = bool(None) or bool(\"\") and bool(\"0\")\nprint(x)",
+    "options": [
+      "True",
+      "None",
+      "False",
+      "0"
+    ],
+    "correctIndex": 2,
+    "explanation": "`bool(None)` is `False`. `bool(\"\")` is `False`. `bool(\"0\")` is `True`.\n`and` has precedence: `False and True` evaluates to `False`.\nThen `False or False` evaluates to `False`."
+  },
+  {
+    "id": 36,
+    "topic": "Input & Output",
+    "difficulty": "Medium",
+    "question": "What will be the exact screen output produced by these two print calls?",
+    "code": "print(\"A\", \"B\", sep=\"*\", end=\"#\")\nprint(\"C\", \"D\", sep=\"@\")",
+    "options": [
+      "A*B\\n#C@D",
+      "A*B#\\nC@D",
+      "A B#C D",
+      "A*B#C@D"
+    ],
+    "correctIndex": 3,
+    "explanation": "The first `print` outputs arguments separated by `*`: `\"A*B\"`. Because `end=\"#\"`, it outputs `#` instead of a newline and does not move to the next line. The second `print` continues immediately on the same line, printing `\"C@D\"` with newline. Combined output is `A*B#C@D`."
+  },
+  {
+    "id": 37,
+    "topic": "Input & Output",
+    "difficulty": "Medium",
+    "question": "What will be printed when `sep=\"\"` is used with multiple numbers?",
+    "code": "print(10, 20, 30, sep=\"\")",
+    "options": [
+      "10 20 30",
+      "102030",
+      "10, 20, 30",
+      "TypeError: sep cannot be an empty string"
+    ],
+    "correctIndex": 1,
+    "explanation": "The default separator between values in `print()` is a single space `' '`. Setting `sep=\"\"` instructs Python to join the values with no space between them, producing `102030`."
+  },
+  {
+    "id": 38,
+    "topic": "Input & Output",
+    "difficulty": "Medium",
+    "question": "Suppose a user inputs `7` for the first prompt and `8` for the second prompt. What does the program output?",
+    "code": "a = input(\"Enter first: \")\nb = input(\"Enter second: \")\nprint(a + b)",
+    "options": [
+      "78",
+      "TypeError: unsupported operand for +",
+      "15",
+      "7 8"
+    ],
+    "correctIndex": 0,
+    "explanation": "The built-in `input()` function ALWAYS returns the user input as a string (`str`). Therefore, `a = '7'` and `b = '8'`. The `+` operator on two strings performs string concatenation, resulting in `'78'`, not mathematical addition."
+  },
+  {
+    "id": 39,
+    "topic": "Input & Output",
+    "difficulty": "High",
+    "question": "What will be printed by the formatted f-string `f\"{val:.2f}\"` when `val = 14.856`?",
+    "code": "val = 14.856\nprint(f\"{val:.2f}\")",
+    "options": [
+      "14.85",
+      "14.86",
+      "14.9",
+      "14.856"
+    ],
+    "correctIndex": 1,
+    "explanation": "The format specification `:.2f` rounds floating-point numbers to two decimal places. Since the third digit after the decimal point is 6 (which is >= 5), it rounds up from 14.85 to `14.86`."
+  },
+  {
+    "id": 40,
+    "topic": "Input & Output",
+    "difficulty": "Medium",
+    "question": "What are the lengths of `s1` (raw string) and `s2` (standard string)?",
+    "code": "s1 = r\"hello\\nworld\"\ns2 = \"hello\\nworld\"\nprint(len(s1), len(s2))",
+    "options": [
+      "11 10",
+      "11 11",
+      "12 12",
+      "12 11"
+    ],
+    "correctIndex": 3,
+    "explanation": "In raw string `r\"hello\\nworld\"`, escape sequences are not interpreted; `\\` and `n` are treated as two literal characters (5 + 1 + 1 + 5 = 12 characters). In standard string `\"hello\\nworld\"`, `\\n` is parsed as a single newline character (5 + 1 + 5 = 11 characters)."
+  },
+  {
+    "id": 41,
+    "topic": "Conditional Statements",
+    "difficulty": "High",
+    "question": "What will be printed when the following multi-branch conditional is executed?",
+    "code": "marks = 75\nif marks > 90:\n    print(\"Grade A\")\nelif marks > 70:\n    print(\"Grade B\")\nelif marks > 50:\n    print(\"Grade C\")\nelse:\n    print(\"Grade D\")",
+    "options": [
+      "Grade A",
+      "Grade B\\nGrade C",
+      "Grade B",
+      "Grade C"
+    ],
+    "correctIndex": 2,
+    "explanation": "In an `if-elif-else` ladder, conditions are checked sequentially. As soon as a branch condition evaluates to `True` (`marks > 70` is true for 75), its block executes, and Python exits the entire conditional structure immediately. It does not check subsequent `elif` blocks."
+  },
+  {
+    "id": 42,
+    "topic": "Conditional Statements",
+    "difficulty": "High",
+    "question": "What will be printed by the following code with nested indentation?",
+    "code": "x = 10\ny = 4\nif x > 5:\n    if y > 10:\n        print(\"Alpha\")\nelse:\n    print(\"Beta\")",
+    "options": [
+      "Beta",
+      "Alpha",
+      "Nothing is printed",
+      "IndentationError: dangling else detected"
+    ],
+    "correctIndex": 2,
+    "explanation": "Notice the indentation carefully: the `else:` block is aligned with the outer `if x > 5:`. Since `x > 5` is `True`, the outer if-block is entered. Inside it, `y > 10` is `False`, so `\"Alpha\"` is not printed. Because the outer condition was true, the outer `else` is skipped. Therefore, nothing is printed."
+  },
+  {
+    "id": 43,
+    "topic": "Conditional Statements",
+    "difficulty": "Medium",
+    "question": "What is the evaluated output of this nested conditional ternary expression?",
+    "code": "score = 62\nstatus = \"Distinction\" if score >= 75 else \"First Class\" if score >= 60 else \"Pass\"\nprint(status)",
+    "options": [
+      "SyntaxError: invalid ternary syntax",
+      "Distinction",
+      "Pass",
+      "First Class"
+    ],
+    "correctIndex": 3,
+    "explanation": "Python's conditional expression `X if C else Y` is evaluated right-to-left when chained. `score >= 75` is False. It falls to the else part: `\"First Class\" if score >= 60 else \"Pass\"`. Since `score >= 60` is True for 62, it evaluates to `'First Class'`."
+  },
+  {
+    "id": 44,
+    "topic": "Conditional Statements",
+    "difficulty": "High",
+    "question": "What will be printed when testing the truth value of a non-empty container in an `if` statement?",
+    "code": "items = [0]\nif items:\n    print(\"Has elements\")\nelse:\n    print(\"Empty\")",
+    "options": [
+      "0",
+      "Has elements",
+      "TypeError: list cannot be coerced to bool in if statement",
+      "Empty"
+    ],
+    "correctIndex": 1,
+    "explanation": "In Python, collections (lists, tuples, strings, dicts) evaluate to `False` ONLY when empty (i.e. length == 0). Although the element inside `items` is 0 (which is falsy), the list itself has length 1 (`len(items) == 1`). A non-empty list is truthy, so it prints `'Has elements'`."
+  },
+  {
+    "id": 45,
+    "topic": "Conditional Statements",
+    "difficulty": "High",
+    "question": "What is printed by this conditional testing the truthiness of integer 0?",
+    "code": "num = 0\nif num:\n    print(\"Non-zero\")\nelif not num:\n    print(\"Zero detected\")\nelse:\n    print(\"None\")",
+    "options": [
+      "Non-zero",
+      "Zero detected",
+      "Zero detected\\nNone",
+      "None"
+    ],
+    "correctIndex": 1,
+    "explanation": "In Python, integer 0 is falsy. The first `if num:` evaluates to `False`. The `elif not num:` evaluates `not False`, which is `True`. Thus, `'Zero detected'` is printed."
+  },
+  {
+    "id": 46,
+    "topic": "Conditional Statements",
+    "difficulty": "Medium",
+    "question": "Why does the following code run safely without raising `ZeroDivisionError`?",
+    "code": "divisor = 0\nnumber = 50\nif divisor != 0 and number / divisor > 2:\n    print(\"Valid ratio\")\nelse:\n    print(\"Computation bypassed\")",
+    "options": [
+      "The comparison operator > has higher precedence than /",
+      "Python short-circuits the 'and' operator; because divisor != 0 is False, the right-hand division is never evaluated",
+      "The compiler optimizes out the division at parse time",
+      "Python automatically replaces division by zero with infinity in conditional statements"
+    ],
+    "correctIndex": 1,
+    "explanation": "Python implements short-circuit boolean evaluation. For `A and B`, if `A` evaluates to `False`, the entire expression can never be True, so Python immediately skips evaluating `B`. This prevents `number / divisor` from executing when `divisor == 0`, avoiding a `ZeroDivisionError`."
+  },
+  {
+    "id": 47,
+    "topic": "Problem Solving & Flowcharts",
+    "difficulty": "Medium",
+    "question": "In standard flowchart conventions, which geometric symbol is used to represent a decision/condition (such as checking `is N > 0`)?",
+    "code": "",
+    "options": [
+      "Oval",
+      "Rectangle",
+      "Parallelogram",
+      "Diamond"
+    ],
+    "correctIndex": 3,
+    "explanation": "Standard flowchart shapes:\n- Oval: Start/End (Terminal)\n- Parallelogram: Input / Output\n- Rectangle: Processing / Calculation\n- Diamond: Decision / Condition (branching based on True/False)"
+  },
+  {
+    "id": 48,
+    "topic": "Problem Solving & Flowcharts",
+    "difficulty": "High",
+    "question": "Trace the following algorithmic loop logic. What is the final value of `total`?",
+    "code": "# Algorithm:\n# 1. total = 0, k = 1\n# 2. While k <= 4:\n# 3.     total = total + k * k\n# 4.     k = k + 1\n# 5. Output total",
+    "options": [
+      "14",
+      "55",
+      "30",
+      "16"
+    ],
+    "correctIndex": 2,
+    "explanation": "Step-by-step trace table:\n- k = 1: total = 0 + 1*1 = 1, k becomes 2\n- k = 2: total = 1 + 2*2 = 5, k becomes 3\n- k = 3: total = 5 + 3*3 = 14, k becomes 4\n- k = 4: total = 14 + 4*4 = 30, k becomes 5\n- k = 5: condition (5 <= 4) is False, loop terminates.\nFinal total is 30."
+  },
+  {
+    "id": 49,
+    "topic": "Problem Solving & Flowcharts",
+    "difficulty": "Medium",
+    "question": "In the IPO (Input - Process - Output) problem solving framework, what constitutes the correct decomposition for calculating the perimeter of a rectangle?",
+    "code": "",
+    "options": [
+      "Input: length, width | Process: length * width | Output: perimeter",
+      "Input: length, width | Process: 2 * (length + width) | Output: perimeter",
+      "Input: perimeter | Process: divide by 4 | Output: side length",
+      "Input: length | Process: length * length | Output: area"
+    ],
+    "correctIndex": 1,
+    "explanation": "The perimeter of a rectangle requires two inputs (length and width), processes them using the formula `2 * (length + width)`, and outputs the calculated perimeter."
+  },
+  {
+    "id": 50,
+    "topic": "Problem Solving & Flowcharts",
+    "difficulty": "High",
+    "question": "Consider an algorithm designed to find the minimum of three numbers (A, B, C). Which potential edge case must the decision logic properly handle to avoid incorrect classification?",
+    "code": "",
+    "options": [
+      "Cases where all numbers are positive integers",
+      "Cases where the numbers are entered in strictly descending order",
+      "Cases where float division is not supported",
+      "Cases where two or all three values are identical (e.g., A == B < C or A == B == C)"
+    ],
+    "correctIndex": 3,
+    "explanation": "When designing comparison algorithms with `<` or `>`, failure to account for equality (`==`) or using strict inequalities without `>=` or `<=` causes logic errors when duplicates or identical values are passed (e.g. `5, 5, 10`)."
+  },
+  {
+    "id": 51,
+    "topic": "For Loop",
+    "difficulty": "Medium",
+    "question": "What list of numbers is generated by `list(range(12, 2, -3))`?",
+    "code": "print(list(range(12, 2, -3)))",
+    "options": [
+      "[9, 6, 3]",
+      "[12, 9, 6, 3, 0]",
+      "[12, 9, 6]",
+      "[12, 9, 6, 3]"
+    ],
+    "correctIndex": 3,
+    "explanation": "`range(start=12, stop=2, step=-3)` starts at 12 and steps backwards by 3:\n1st: 12\n2nd: 9\n3rd: 6\n4th: 3\nThe next value would be 0, which is <= stop value 2. Because stop is exclusive, 0 is excluded. The result is `[12, 9, 6, 3]`."
+  },
+  {
+    "id": 52,
+    "topic": "For Loop",
+    "difficulty": "High",
+    "question": "What is the value of `sum(range(6, 2))` in Python?",
+    "code": "print(sum(range(6, 2)))",
+    "options": [
+      "14",
+      "ValueError: step must be negative when start > stop",
+      "20",
+      "0"
+    ],
+    "correctIndex": 3,
+    "explanation": "In `range(start, stop)`, the default step is `+1`. When `start (6) > stop (2)` with a positive step, the range generates no values (it is empty). The sum of an empty sequence in Python is `0`."
+  },
+  {
+    "id": 53,
+    "topic": "For Loop",
+    "difficulty": "High",
+    "question": "How many times does the `count += 1` statement execute in this nested loop?",
+    "code": "count = 0\nfor i in range(1, 5):\n    for j in range(i, 5):\n        count += 1\nprint(count)",
+    "options": [
+      "10",
+      "8",
+      "14",
+      "16"
+    ],
+    "correctIndex": 0,
+    "explanation": "Traced iterations:\n- i = 1: j runs through 1, 2, 3, 4 (4 times)\n- i = 2: j runs through 2, 3, 4 (3 times)\n- i = 3: j runs through 3, 4 (2 times)\n- i = 4: j runs through 4 (1 time)\nTotal executions = 4 + 3 + 2 + 1 = 10."
+  },
+  {
+    "id": 54,
+    "topic": "For Loop",
+    "difficulty": "High",
+    "question": "What will be printed by the following code featuring a `for ... else` clause?",
+    "code": "for n in range(2, 6):\n    if n % 7 == 0:\n        print(\"Found\")\n        break\nelse:\n    print(\"Not Found\")",
+    "options": [
+      "Not Found",
+      "Found\\nNot Found",
+      "Nothing is printed",
+      "Found"
+    ],
+    "correctIndex": 0,
+    "explanation": "In Python, the `else` block of a `for` loop executes ONLY if the loop completes all iterations without encountering a `break` statement. Since none of the numbers 2, 3, 4, 5 are divisible by 7, the `break` is never hit, and `'Not Found'` is printed upon normal loop completion."
+  },
+  {
+    "id": 55,
+    "topic": "For Loop",
+    "difficulty": "High",
+    "question": "What will be the final value of `total` in this nested loop with `continue`?",
+    "code": "total = 0\nfor i in range(1, 4):\n    for j in range(1, 4):\n        if i == j:\n            continue\n        total += 1\nprint(total)",
+    "options": [
+      "4",
+      "6",
+      "3",
+      "9"
+    ],
+    "correctIndex": 1,
+    "explanation": "The outer loop runs 3 times; the inner loop runs 3 times (total 3 * 3 = 9 combinations). Whenever `i == j` (which occurs for (1,1), (2,2), (3,3) — 3 times), `continue` skips the increment. Remaining iterations where `i != j` = 9 - 3 = 6."
+  },
+  {
+    "id": 56,
+    "topic": "For Loop",
+    "difficulty": "High",
+    "question": "What pattern of output is generated by the following nested loop?",
+    "code": "for i in range(1, 4):\n    s = \"\"\n    for j in range(i):\n        s += str(i)\n    print(s)",
+    "options": [
+      "1\\n22\\n333",
+      "3\\n22\\n111",
+      "1\\n12\\n123",
+      "111\\n22\\n3"
+    ],
+    "correctIndex": 0,
+    "explanation": "In the outer loop:\n- i = 1: inner loop runs 1 time, appending '1' -> prints '1'\n- i = 2: inner loop runs 2 times, appending '2' twice -> prints '22'\n- i = 3: inner loop runs 3 times, appending '3' three times -> prints '333'."
+  },
+  {
+    "id": 57,
+    "topic": "For Loop",
+    "difficulty": "High",
+    "question": "What will be printed when referencing the loop variable after the loop terminates?",
+    "code": "for k in range(5):\n    if k == 3:\n        pass\nprint(k)",
+    "options": [
+      "4",
+      "5",
+      "3",
+      "NameError: 'k' is not defined outside loop"
+    ],
+    "correctIndex": 0,
+    "explanation": "In Python, `for` loops do NOT create a new local scope. The loop variable `k` remains bound in the enclosing scope after the loop finishes, retaining its last assigned value from the iteration (`range(5)` ends at 4, so `k = 4`)."
+  },
+  {
+    "id": 58,
+    "topic": "While Loop & Number Logic",
+    "difficulty": "High",
+    "question": "What will be the final printed output of this digit-reversal algorithm?",
+    "code": "n = 5020\nrev = 0\nwhile n > 0:\n    rev = rev * 10 + n % 10\n    n //= 10\nprint(rev)",
+    "options": [
+      "0205",
+      "5020",
+      "25",
+      "205"
+    ],
+    "correctIndex": 3,
+    "explanation": "Tracing iterations:\n1) n = 5020: digit = 0; rev = 0*10 + 0 = 0; n = 502\n2) n = 502: digit = 2; rev = 0*10 + 2 = 2; n = 50\n3) n = 50: digit = 0; rev = 2*10 + 0 = 20; n = 5\n4) n = 5: digit = 5; rev = 20*10 + 5 = 205; n = 0\nLoop ends. As an integer, leading zero is not stored. Result is `205`."
+  },
+  {
+    "id": 59,
+    "topic": "While Loop & Number Logic",
+    "difficulty": "High",
+    "question": "What is the behavior of the following code snippet?",
+    "code": "i = 1\nwhile i != 10:\n    i += 2\nprint(i)",
+    "options": [
+      "It prints 11",
+      "Raises OverflowError",
+      "It prints 10",
+      "It runs indefinitely as an infinite loop because i skips 10 (1, 3, 5, 7, 9, 11...)"
+    ],
+    "correctIndex": 3,
+    "explanation": "`i` starts at 1 and increases by 2 on each iteration: 1, 3, 5, 7, 9, 11, 13... Since `i` is always odd, the condition `i != 10` is always `True`, resulting in an infinite loop."
+  },
+  {
+    "id": 60,
+    "topic": "While Loop & Number Logic",
+    "difficulty": "High",
+    "question": "What will be printed by the following code featuring `while ... else`?",
+    "code": "val = 12\nwhile val > 0:\n    val -= 4\n    if val == 4:\n        print(\"Hit Target\")\n        break\nelse:\n    print(\"Finished Cleanly\")",
+    "options": [
+      "Nothing is printed",
+      "Hit Target",
+      "Hit Target\\nFinished Cleanly",
+      "Finished Cleanly"
+    ],
+    "correctIndex": 1,
+    "explanation": "Iteration 1: val = 12 - 4 = 8 (not 4).\nIteration 2: val = 8 - 4 = 4. The condition `val == 4` is True, so it prints `'Hit Target'` and executes `break`. Because the loop exited via `break`, the `else` block is skipped."
+  },
+  {
+    "id": 61,
+    "topic": "While Loop & Number Logic",
+    "difficulty": "High",
+    "question": "What is the printed value of `counter` in this nested while loop?",
+    "code": "i = 1\ncounter = 0\nj = 1\nwhile i <= 3:\n    while j <= 2:\n        counter += 1\n        j += 1\n    i += 1\nprint(counter)",
+    "options": [
+      "6",
+      "3",
+      "4",
+      "2"
+    ],
+    "correctIndex": 3,
+    "explanation": "Crucial observation: `j = 1` is initialized outside the outer loop and NEVER reset inside the `while i <= 3:` loop!\n- When i = 1: j increments from 1 to 2 to 3 (counter becomes 2).\n- When i = 2: j is still 3; inner condition `j <= 2` is immediately False.\n- When i = 3: j is still 3; inner loop is skipped again.\nFinal counter value is `2`."
+  },
+  {
+    "id": 62,
+    "topic": "While Loop & Number Logic",
+    "difficulty": "High",
+    "question": "An Armstrong number of 3 digits is a number equal to the sum of the cubes of its digits (e.g. 153 = 1^3 + 5^3 + 3^3). Which condition correctly identifies an Armstrong number?",
+    "code": "num = 153\ntemp = num\ntotal = 0\nwhile temp > 0:\n    digit = temp % 10\n    total += digit ** 3\n    temp //= 10\nis_armstrong = (total == num)",
+    "options": [
+      "Armstrong validation requires using digit ** 2 instead of digit ** 3",
+      "total // 10 == num is required to normalize the base",
+      "total == num correctly validates that the sum of cubed digits equals the original number",
+      "total == temp should be checked because temp holds the final accumulated value"
+    ],
+    "correctIndex": 2,
+    "explanation": "The algorithm extracts each digit using `temp % 10`, cubes it (`digit ** 3`), adds it to `total`, and truncates with `temp //= 10`. When `temp` reaches 0, `total == num` correctly compares the sum against the original number (stored in `num` before `temp` was reduced)."
+  },
+  {
+    "id": 63,
+    "topic": "While Loop & Number Logic",
+    "difficulty": "Medium",
+    "question": "How many times does the while loop body execute before terminating?",
+    "code": "n = 64\nsteps = 0\nwhile n > 1:\n    n //= 2\n    steps += 1\nprint(steps)",
+    "options": [
+      "7",
+      "64",
+      "6",
+      "5"
+    ],
+    "correctIndex": 2,
+    "explanation": "Values of `n` after each division:\n1: 32\n2: 16\n3: 8\n4: 4\n5: 2\n6: 1\nWhen n becomes 1, the condition `1 > 1` is False and the loop terminates. `steps` is 6 (which is log2(64))."
+  },
+  {
+    "id": 64,
+    "topic": "While Loop & Number Logic",
+    "difficulty": "High",
+    "question": "What will be printed by this two-pointer palindrome verification algorithm?",
+    "code": "s = \"radar\"\nis_palindrome = True\nleft = 0\nright = len(s) - 1\nwhile left < right:\n    if s[left] != s[right]:\n        is_palindrome = False\n        break\n    left += 1\n    right -= 1\nprint(is_palindrome)",
+    "options": [
+      "True",
+      "False",
+      "IndexError: pointer exceeds bounds",
+      "None"
+    ],
+    "correctIndex": 0,
+    "explanation": "The algorithm compares characters from both ends moving inward:\n- left=0 ('r'), right=4 ('r'): match, left becomes 1, right becomes 3\n- left=1 ('a'), right=3 ('a'): match, left becomes 2, right becomes 2\n- left < right (2 < 2) is False: loop terminates cleanly.\n`is_palindrome` remains `True`."
+  }
+];
+
+</script>
+<script>
+// Python Exam Portal Engine
+(function() {
+  // Global State
+  const TOTAL_TIME_SECONDS = 90 * 60; // 90 minutes = 5400 seconds
+  let questions = [];
+  let currentQIndex = 0;
+  let userAnswers = {}; // { qId: optionIndex }
+  let qStatus = {}; // { qId: 'not-visited' | 'not-answered' | 'answered' | 'review' | 'review-answered' }
+  let examMode = 'timed'; // 'timed' or 'practice'
+  let timerInterval = null;
+  let timeRemaining = TOTAL_TIME_SECONDS;
+  let examSubmitted = false;
+  let candidateName = "Student";
+  let candidateRoll = "PY-SEM1-001";
+  let activePaletteFilter = 'all';
+  let activeReviewFilter = 'all';
+
+  // DOM Elements
+  const welcomeScreen = document.getElementById("welcomeScreen");
+  const examInterface = document.getElementById("examInterface");
+  const resultsScreen = document.getElementById("resultsScreen");
+  const submitModal = document.getElementById("submitModal");
+  
+  // Timer Elements
+  const timerDisplay = document.getElementById("timerDisplay");
+  const timerBadge = document.getElementById("timerBadge");
+
+  // Load questions data
+  function initExamData() {
+    if (typeof EXAM_QUESTIONS !== 'undefined' && Array.isArray(EXAM_QUESTIONS)) {
+      questions = EXAM_QUESTIONS;
+      setupInitialState();
+    } else {
+      fetch('questions.json')
+        .then(res => res.json())
+        .then(data => {
+          questions = data;
+          setupInitialState();
+        })
+        .catch(err => {
+          console.error("Failed to load questions from JSON", err);
+          alert("Could not load exam questions. Please ensure questions.js or questions.json is present.");
+        });
+    }
+  }
+
+  function setupInitialState() {
+    for (let q of questions) {
+      qStatus[q.id] = 'not-visited';
+    }
+    // Mark first question as not-answered upon viewing
+    qStatus[questions[0].id] = 'not-answered';
+  }
+
+  // Start Exam
+  window.startExam = function() {
+    const nameInput = document.getElementById("inputName").value.trim();
+    const rollInput = document.getElementById("inputRoll").value.trim();
+    examMode = document.querySelector('input[name="examMode"]:checked').value;
+
+    if (nameInput) candidateName = nameInput;
+    if (rollInput) candidateRoll = rollInput;
+
+    document.getElementById("badgeCandidateName").innerText = candidateName;
+    document.getElementById("badgeRoll").innerText = candidateRoll;
+
+    welcomeScreen.style.display = "none";
+    examInterface.style.display = "grid";
+    resultsScreen.style.display = "none";
+
+    renderPalette();
+    renderQuestion(0);
+    startTimer();
+    bindKeyboardShortcuts();
+  };
+
+  // Timer logic
+  function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+      timeRemaining--;
+      updateTimerDisplay();
+
+      if (timeRemaining <= 0) {
+        clearInterval(timerInterval);
+        alert("Time is up! Your exam will be submitted automatically.");
+        submitExam(true);
+      }
+    }, 1000);
+  }
+
+  function updateTimerDisplay() {
+    const hrs = Math.floor(timeRemaining / 3600);
+    const mins = Math.floor((timeRemaining % 3600) / 60);
+    const secs = timeRemaining % 60;
+
+    let timeStr = "";
+    if (hrs > 0) {
+      timeStr = `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    } else {
+      timeStr = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    timerDisplay.innerText = timeStr;
+
+    // Color triggers
+    if (timeRemaining <= 300) { // < 5 mins
+      timerBadge.className = "timer-container danger";
+    } else if (timeRemaining <= 900) { // < 15 mins
+      timerBadge.className = "timer-container warning";
+    } else {
+      timerBadge.className = "timer-container";
+    }
+  }
+
+  // Render Question
+  function renderQuestion(index) {
+    if (index < 0 || index >= questions.length) return;
+    currentQIndex = index;
+    const q = questions[index];
+
+    // Status transition: if not-visited, mark as not-answered
+    if (qStatus[q.id] === 'not-visited') {
+      qStatus[q.id] = 'not-answered';
+    }
+
+    // Header info
+    document.getElementById("qNumberText").innerText = `Question ${q.id} of ${questions.length}`;
+    document.getElementById("qTopicBadge").innerText = q.topic;
+    
+    const diffBadge = document.getElementById("qDiffBadge");
+    diffBadge.innerText = q.difficulty;
+    diffBadge.className = `badge badge-difficulty-${q.difficulty.toLowerCase()}`;
+
+    // Question statement
+    document.getElementById("qQuestionText").innerText = q.question;
+
+    // Code block
+    const codeContainer = document.getElementById("qCodeContainer");
+    if (q.code && q.code.trim().length > 0) {
+      codeContainer.innerText = q.code;
+      codeContainer.style.display = "block";
+    } else {
+      codeContainer.style.display = "none";
+    }
+
+    // Options
+    const optionsList = document.getElementById("qOptionsList");
+    optionsList.innerHTML = "";
+    const optionLabels = ["A", "B", "C", "D"];
+
+    q.options.forEach((optText, optIndex) => {
+      const card = document.createElement("div");
+      card.className = "option-card";
+      if (userAnswers[q.id] === optIndex) {
+        card.classList.add("selected");
+      }
+
+      card.innerHTML = `
+        <div class="option-marker">${optionLabels[optIndex]}</div>
+        <div class="option-text">${escapeHtml(optText)}</div>
+      `;
+
+      card.addEventListener("click", () => {
+        selectOption(optIndex);
+      });
+
+      optionsList.appendChild(card);
+    });
+
+    // Practice mode explanation
+    const practiceBox = document.getElementById("practiceExplanationBox");
+    const practiceBtn = document.getElementById("btnPracticeExplain");
+    if (examMode === 'practice') {
+      practiceBtn.style.display = "inline-flex";
+      practiceBox.classList.remove("active");
+      document.getElementById("practiceExplainContent").innerText = q.explanation;
+    } else {
+      practiceBtn.style.display = "none";
+      practiceBox.classList.remove("active");
+    }
+
+    // Navigation buttons state
+    document.getElementById("btnPrev").disabled = (currentQIndex === 0);
+    document.getElementById("btnNext").innerText = (currentQIndex === questions.length - 1) ? "Save & Review" : "Save & Next →";
+
+    updatePaletteHighlight();
+    updatePaletteStats();
+  }
+
+  // Option selection
+  function selectOption(optIndex) {
+    const q = questions[currentQIndex];
+    userAnswers[q.id] = optIndex;
+
+    // Update status
+    if (qStatus[q.id] === 'review' || qStatus[q.id] === 'review-answered') {
+      qStatus[q.id] = 'review-answered';
+    } else {
+      qStatus[q.id] = 'answered';
+    }
+
+    // Re-render options to update UI selection
+    const cards = document.querySelectorAll(".option-card");
+    cards.forEach((c, idx) => {
+      if (idx === optIndex) c.classList.add("selected");
+      else c.classList.remove("selected");
+    });
+
+    updatePaletteHighlight();
+    updatePaletteStats();
+  }
+
+  // Navigation handlers
+  window.nextQuestion = function() {
+    if (currentQIndex < questions.length - 1) {
+      renderQuestion(currentQIndex + 1);
+    } else {
+      openSubmitModal();
+    }
+  };
+
+  window.prevQuestion = function() {
+    if (currentQIndex > 0) {
+      renderQuestion(currentQIndex - 1);
+    }
+  };
+
+  window.clearResponse = function() {
+    const q = questions[currentQIndex];
+    delete userAnswers[q.id];
+
+    if (qStatus[q.id] === 'review-answered') {
+      qStatus[q.id] = 'review';
+    } else {
+      qStatus[q.id] = 'not-answered';
+    }
+
+    const cards = document.querySelectorAll(".option-card");
+    cards.forEach(c => c.classList.remove("selected"));
+
+    updatePaletteHighlight();
+    updatePaletteStats();
+  };
+
+  window.markForReview = function() {
+    const q = questions[currentQIndex];
+    if (userAnswers[q.id] !== undefined) {
+      qStatus[q.id] = 'review-answered';
+    } else {
+      qStatus[q.id] = 'review';
+    }
+
+    if (currentQIndex < questions.length - 1) {
+      renderQuestion(currentQIndex + 1);
+    } else {
+      updatePaletteHighlight();
+      updatePaletteStats();
+    }
+  };
+
+  window.togglePracticeExplanation = function() {
+    const practiceBox = document.getElementById("practiceExplanationBox");
+    practiceBox.classList.toggle("active");
+  };
+
+  // Render Palette Grid
+  function renderPalette() {
+    const grid = document.getElementById("paletteGrid");
+    grid.innerHTML = "";
+
+    questions.forEach((q, index) => {
+      const btn = document.createElement("button");
+      btn.id = `palette-btn-${q.id}`;
+      btn.className = `q-btn not-visited`;
+      btn.innerText = q.id;
+
+      btn.addEventListener("click", () => {
+        renderQuestion(index);
+      });
+
+      grid.appendChild(btn);
+    });
+
+    updatePaletteHighlight();
+    updatePaletteStats();
+  }
+
+  function updatePaletteHighlight() {
+    questions.forEach((q, idx) => {
+      const btn = document.getElementById(`palette-btn-${q.id}`);
+      if (!btn) return;
+
+      const status = qStatus[q.id] || 'not-visited';
+      btn.className = `q-btn ${status}`;
+
+      if (idx === currentQIndex) {
+        btn.classList.add("current");
+      }
+
+      // Filter visibility
+      let visible = true;
+      if (activePaletteFilter === 'answered') {
+        visible = (status === 'answered' || status === 'review-answered');
+      } else if (activePaletteFilter === 'unanswered') {
+        visible = (status === 'not-answered' || status === 'not-visited');
+      } else if (activePaletteFilter === 'review') {
+        visible = (status === 'review' || status === 'review-answered');
+      }
+      btn.style.display = visible ? "flex" : "none";
+    });
+  }
+
+  function updatePaletteStats() {
+    let answeredCount = 0;
+    let notAnsweredCount = 0;
+    let reviewCount = 0;
+    let reviewAnsweredCount = 0;
+    let notVisitedCount = 0;
+
+    for (let q of questions) {
+      const s = qStatus[q.id];
+      if (s === 'answered') answeredCount++;
+      else if (s === 'not-answered') notAnsweredCount++;
+      else if (s === 'review') reviewCount++;
+      else if (s === 'review-answered') reviewAnsweredCount++;
+      else notVisitedCount++;
+    }
+
+    document.getElementById("statAnswered").innerText = answeredCount + reviewAnsweredCount;
+    document.getElementById("statNotAnswered").innerText = notAnsweredCount;
+    document.getElementById("statReview").innerText = reviewCount + reviewAnsweredCount;
+    document.getElementById("statNotVisited").innerText = notVisitedCount;
+  }
+
+  window.filterPalette = function(filterType) {
+    activePaletteFilter = filterType;
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.classList.remove("active");
+    });
+    const clickedBtn = document.getElementById(`filter-${filterType}`);
+    if (clickedBtn) clickedBtn.classList.add("active");
+    updatePaletteHighlight();
+  };
+
+  // Submit Modal
+  window.openSubmitModal = function() {
+    let answered = 0;
+    let unanswered = 0;
+    let marked = 0;
+
+    for (let q of questions) {
+      if (userAnswers[q.id] !== undefined) answered++;
+      else unanswered++;
+      if (qStatus[q.id] === 'review' || qStatus[q.id] === 'review-answered') marked++;
+    }
+
+    document.getElementById("modalTotalQ").innerText = questions.length;
+    document.getElementById("modalAnsweredQ").innerText = answered;
+    document.getElementById("modalUnansweredQ").innerText = unanswered;
+    document.getElementById("modalMarkedQ").innerText = marked;
+
+    submitModal.classList.add("active");
+  };
+
+  window.closeSubmitModal = function() {
+    submitModal.classList.remove("active");
+  };
+
+  // Final Exam Submission
+  window.submitExam = function(auto = false) {
+    if (examSubmitted) return;
+    examSubmitted = true;
+    clearInterval(timerInterval);
+    closeSubmitModal();
+
+    examInterface.style.display = "none";
+    resultsScreen.style.display = "flex";
+
+    calculateAndRenderResults();
+  };
+
+  // Results Calculation
+  function calculateAndRenderResults() {
+    let score = 0;
+    let correctCount = 0;
+    let incorrectCount = 0;
+    let skippedCount = 0;
+    const topicStats = {};
+
+    questions.forEach(q => {
+      if (!topicStats[q.topic]) {
+        topicStats[q.topic] = { total: 0, correct: 0 };
+      }
+      topicStats[q.topic].total++;
+
+      const selected = userAnswers[q.id];
+      if (selected === undefined) {
+        skippedCount++;
+      } else if (selected === q.correctIndex) {
+        score++;
+        correctCount++;
+        topicStats[q.topic].correct++;
+      } else {
+        incorrectCount++;
+      }
+    });
+
+    const percent = ((score / questions.length) * 100).toFixed(1);
+    const timeSpentSecs = TOTAL_TIME_SECONDS - timeRemaining;
+    const spentMins = Math.floor(timeSpentSecs / 60);
+    const spentSecs = timeSpentSecs % 60;
+
+    // Hero stats
+    document.getElementById("resScore").innerText = score;
+    document.getElementById("resPercent").innerText = `${percent}%`;
+    document.getElementById("resCandidate").innerText = `${candidateName} (${candidateRoll})`;
+    document.getElementById("resTimeTaken").innerText = `${spentMins}m ${spentSecs}s / 90m`;
+    document.getElementById("resCorrect").innerText = correctCount;
+    document.getElementById("resIncorrect").innerText = incorrectCount;
+    document.getElementById("resSkipped").innerText = skippedCount;
+
+    // Performance Band
+    const bandBadge = document.getElementById("resBandBadge");
+    if (percent >= 85) {
+      bandBadge.innerText = "Distinction / Outstanding";
+      bandBadge.style.background = "#22c55e";
+    } else if (percent >= 70) {
+      bandBadge.innerText = "First Class";
+      bandBadge.style.background = "#3b82f6";
+    } else if (percent >= 50) {
+      bandBadge.innerText = "Second Class / Pass";
+      bandBadge.style.background = "#f59e0b";
+    } else {
+      bandBadge.innerText = "Needs Improvement";
+      bandBadge.style.background = "#ef4444";
+    }
+
+    // Render topic breakdown
+    renderTopicBreakdown(topicStats);
+
+    // Render review solutions list
+    renderReviewSolutions();
+  }
+
+  function renderTopicBreakdown(topicStats) {
+    const container = document.getElementById("topicBarsContainer");
+    container.innerHTML = "";
+
+    for (let topic in topicStats) {
+      const stat = topicStats[topic];
+      const pct = Math.round((stat.correct / stat.total) * 100);
+
+      const item = document.createElement("div");
+      item.className = "topic-bar-item";
+      item.innerHTML = `
+        <div class="topic-bar-header">
+          <span>${topic}</span>
+          <span>${stat.correct} / ${stat.total} (${pct}%)</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width: ${pct}%; background: ${pct >= 75 ? '#22c55e' : pct >= 50 ? '#3b82f6' : '#ef4444'};"></div>
+        </div>
+      `;
+      container.appendChild(item);
+    }
+  }
+
+  function renderReviewSolutions() {
+    const list = document.getElementById("reviewSolutionsList");
+    list.innerHTML = "";
+    const optionLabels = ["A", "B", "C", "D"];
+
+    questions.forEach((q, idx) => {
+      const selected = userAnswers[q.id];
+      const isCorrect = (selected === q.correctIndex);
+      const isSkipped = (selected === undefined);
+
+      let statusClass = isCorrect ? "is-correct" : isSkipped ? "is-skipped" : "is-incorrect";
+      let statusBadge = isCorrect 
+        ? "<span style='color: #16a34a; font-weight: 700;'>✔ Correct (+1.0)</span>"
+        : isSkipped 
+        ? "<span style='color: #d97706; font-weight: 700;'>⚠ Skipped (0.0)</span>"
+        : "<span style='color: #dc2626; font-weight: 700;'>✘ Incorrect (0.0)</span>";
+
+      // Filter check
+      if (activeReviewFilter === 'correct' && !isCorrect) return;
+      if (activeReviewFilter === 'incorrect' && (isCorrect || isSkipped)) return;
+      if (activeReviewFilter === 'skipped' && !isSkipped) return;
+
+      const card = document.createElement("div");
+      card.className = `review-item ${statusClass}`;
+
+      let codeHtml = "";
+      if (q.code && q.code.trim().length > 0) {
+        codeHtml = `<div class="code-container">${escapeHtml(q.code)}</div>`;
+      }
+
+      let optionsHtml = "";
+      q.options.forEach((optText, optIdx) => {
+        let optClass = "opt-review-card";
+        let prefix = `${optionLabels[optIdx]}. `;
+        if (optIdx === q.correctIndex) {
+          optClass += " correct";
+          prefix = `✔ ${optionLabels[optIdx]}. `;
+        } else if (optIdx === selected) {
+          optClass += " wrong-selected";
+          prefix = `✘ ${optionLabels[optIdx]}. (Your Choice) `;
+        }
+        optionsHtml += `<div class="${optClass}">${prefix}${escapeHtml(optText)}</div>`;
+      });
+
+      card.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+          <div>
+            <strong>Q${q.id}.</strong> <span class="badge badge-topic">${q.topic}</span>
+            <span class="badge badge-difficulty-${q.difficulty.toLowerCase()}">${q.difficulty}</span>
+          </div>
+          <div>${statusBadge}</div>
+        </div>
+        <p style="font-size: 1.05rem; font-weight: 600; margin-bottom: 0.75rem;">${escapeHtml(q.question)}</p>
+        ${codeHtml}
+        <div style="margin-bottom: 1rem;">${optionsHtml}</div>
+        <div class="explanation-callout">
+          <strong>💡 Step-by-Step Explanation:</strong><br>
+          ${escapeHtml(q.explanation)}
+        </div>
+      `;
+
+      list.appendChild(card);
+    });
+  }
+
+  window.filterReviewSolutions = function(filterType) {
+    activeReviewFilter = filterType;
+    document.querySelectorAll(".review-filter-btn").forEach(btn => {
+      btn.classList.remove("active");
+    });
+    const clicked = document.getElementById(`review-filter-${filterType}`);
+    if (clicked) clicked.classList.add("active");
+    renderReviewSolutions();
+  };
+
+  // Keyboard Shortcuts
+  function bindKeyboardShortcuts() {
+    window.addEventListener("keydown", (e) => {
+      // Don't trigger if typing in an input
+      if (e.target.tagName === 'INPUT') return;
+      if (examSubmitted) return;
+
+      const key = e.key.toUpperCase();
+      if (key === '1' || key === 'A') selectOption(0);
+      else if (key === '2' || key === 'B') selectOption(1);
+      else if (key === '3' || key === 'C') selectOption(2);
+      else if (key === '4' || key === 'D') selectOption(3);
+      else if (key === 'N' || e.key === 'ArrowRight') nextQuestion();
+      else if (key === 'P' || e.key === 'ArrowLeft') prevQuestion();
+      else if (key === 'M') markForReview();
+      else if (key === 'DELETE' || key === 'BACKSPACE') clearResponse();
+    });
+  }
+
+  // Theme toggle
+  window.toggleTheme = function() {
+    const current = document.documentElement.getAttribute("data-theme");
+    const next = current === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    localStorage.setItem("portal-theme", next);
+  };
+
+  // Restore saved theme
+  const savedTheme = localStorage.getItem("portal-theme") || "light";
+  document.documentElement.setAttribute("data-theme", savedTheme);
+
+  // Download results as JSON
+  window.downloadResultJSON = function() {
+    const exportData = {
+      exam: "Python Programming Semester Examination",
+      candidate: candidateName,
+      roll: candidateRoll,
+      totalQuestions: questions.length,
+      timeRemainingSeconds: timeRemaining,
+      answers: userAnswers,
+      completedAt: new Date().toISOString()
+    };
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `python_exam_result_${candidateRoll}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Retake exam
+  window.retakeExam = function() {
+    if (confirm("Are you sure you want to retake the exam? Your current responses will be reset.")) {
+      userAnswers = {};
+      qStatus = {};
+      currentQIndex = 0;
+      timeRemaining = TOTAL_TIME_SECONDS;
+      examSubmitted = false;
+      setupInitialState();
+      
+      resultsScreen.style.display = "none";
+      welcomeScreen.style.display = "block";
+    }
+  };
+
+  // Utility
+  function escapeHtml(text) {
+    if (!text) return "";
+    return text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  // Initialize on load
+  document.addEventListener("DOMContentLoaded", initExamData);
+})();
+
+</script>
+
+</body>
+</html>
