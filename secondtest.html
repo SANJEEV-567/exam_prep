@@ -4,7 +4,1043 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NTA Examination Services - Python Core & Logic Assessment</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+/* NTA JEE/NEET/CUET Style Exam Portal Theme */
+:root {
+  --nta-blue: #0b3b60;
+  --nta-dark-blue: #06233b;
+  --nta-light-blue: #1976d2;
+  --nta-header-bg: #ffffff;
+  --nta-accent: #ff9800;
+  --bg-page: #eef2f6;
+  --bg-card: #ffffff;
+  --text-dark: #212529;
+  --text-muted: #6c757d;
+  --border-color: #d1d5db;
+  
+  /* NTA Question Status Colors */
+  --status-answered: #228b22;           /* Green */
+  --status-not-answered: #dc3545;       /* Red / Orange-Red */
+  --status-not-visited: #6c757d;        /* Silver / Gray */
+  --status-marked-review: #6f42c1;      /* Purple */
+  --status-review-evaluated: #6f42c1;   /* Purple with green dot */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+body {
+  background-color: var(--bg-page);
+  color: var(--text-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Allow text selection inside code blocks and explanations during review */
+.code-snippet, .explanation-box, .review-container {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  user-select: text !important;
+}
+
+/* ==================== HEADER BAR ==================== */
+.exam-header {
+  background: #ffffff;
+  border-bottom: 3px solid #0b3b60;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.tricolor-stripe {
+  height: 4px;
+  background: linear-gradient(90deg, #ff9933 33.3%, #ffffff 33.3%, #ffffff 66.6%, #138808 66.6%);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nta-badge {
+  background: var(--nta-blue);
+  color: #fff;
+  font-weight: 800;
+  font-size: 18px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+
+.exam-info h1 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--nta-dark-blue);
+  line-height: 1.2;
+}
+
+.exam-info .subtitle {
+  font-size: 11px;
+  color: #495057;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Timer Badge */
+.timer-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8f9fa;
+  border: 1px solid #ced4da;
+  padding: 6px 14px;
+  border-radius: 6px;
+}
+
+.timer-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #495057;
+  text-transform: uppercase;
+}
+
+.timer-digits {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  color: #0b3b60;
+  letter-spacing: 1px;
+}
+
+.timer-warning {
+  background: #fff3cd !important;
+  border-color: #ffeeba !important;
+  color: #856404 !important;
+}
+
+.timer-danger {
+  background: #f8d7da !important;
+  border-color: #f5c6cb !important;
+  color: #721c24 !important;
+  animation: pulse-danger 1s infinite alternate;
+}
+
+@keyframes pulse-danger {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.03); }
+}
+
+/* Proctor Status Badge */
+.proctor-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.proctor-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #2e7d32;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #2e7d32;
+  animation: blink-dot 1.5s infinite;
+}
+
+@keyframes blink-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.proctor-warning {
+  background: #ffebee;
+  color: #c62828;
+  border-color: #ffcdd2;
+}
+
+.proctor-warning .proctor-dot {
+  background-color: #c62828;
+  box-shadow: 0 0 6px #c62828;
+}
+
+/* Candidate Profile Header Box */
+.candidate-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #e9ecef;
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: 1px solid #ced4da;
+}
+
+.candidate-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--nta-blue);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.candidate-details {
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.candidate-details .name {
+  font-weight: 700;
+  color: #212529;
+}
+
+.candidate-details .roll {
+  font-size: 11px;
+  color: #6c757d;
+}
+
+/* ==================== SUB-HEADER / SECTION BAR ==================== */
+.section-nav-bar {
+  background: #34495e;
+  padding: 6px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.section-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+}
+
+.section-tab {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.section-tab:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.section-tab.active {
+  background: #27ae60;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-secondary-nav {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-secondary-nav:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ==================== MAIN CONTENT LAYOUT ==================== */
+.main-exam-container {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 110px);
+  overflow: hidden;
+}
+
+/* Left: Question Area */
+.question-viewport {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-right: 1px solid var(--border-color);
+  overflow-y: auto;
+}
+
+.question-meta-header {
+  padding: 10px 24px;
+  border-bottom: 2px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.question-identity {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.question-number-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--nta-blue);
+}
+
+.question-type-badge {
+  font-size: 12px;
+  background: #e2e8f0;
+  color: #334155;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.question-topic-badge {
+  font-size: 12px;
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.marking-scheme {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  display: flex;
+  gap: 8px;
+}
+
+.marks-pos {
+  color: #15803d;
+  background: #dcfce7;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.marks-neg {
+  color: #b91c1c;
+  background: #fee2e2;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.question-content-box {
+  padding: 24px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.question-text {
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 16px;
+}
+
+/* Code Snippet Box */
+.code-container {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+  font-size: 14.5px;
+  line-height: 1.5;
+  overflow-x: auto;
+  border: 1px solid #333;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.code-container pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Options Container */
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.option-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 16px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.option-item:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.option-item.selected {
+  background-color: #e0f2fe;
+  border-color: #0284c7;
+  box-shadow: 0 0 0 1px #0284c7;
+}
+
+.option-radio {
+  margin-top: 3px;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #0284c7;
+}
+
+.option-label {
+  font-weight: 700;
+  font-size: 14px;
+  color: #475569;
+  min-width: 24px;
+}
+
+.option-text {
+  font-size: 15px;
+  color: #1e293b;
+  line-height: 1.4;
+  font-family: inherit;
+}
+
+/* Bottom Action Navigation Toolbar */
+.bottom-action-bar {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.action-left-group, .action-right-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Buttons */
+.btn {
+  padding: 8px 16px;
+  font-size: 13.5px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+}
+
+.btn-save-next {
+  background-color: #2e7d32;
+  color: #ffffff;
+}
+.btn-save-next:hover {
+  background-color: #1b5e20;
+}
+
+.btn-save-review {
+  background-color: #f57c00;
+  color: #ffffff;
+}
+.btn-save-review:hover {
+  background-color: #e65100;
+}
+
+.btn-clear {
+  background-color: #ffffff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+.btn-clear:hover {
+  background-color: #f1f5f9;
+}
+
+.btn-review-next {
+  background-color: #673ab7;
+  color: #ffffff;
+}
+.btn-review-next:hover {
+  background-color: #512da8;
+}
+
+.btn-nav {
+  background-color: #ffffff;
+  color: #1e293b;
+  border: 1px solid #94a3b8;
+}
+.btn-nav:hover {
+  background-color: #e2e8f0;
+}
+
+.btn-submit-exam {
+  background-color: #0284c7;
+  color: #ffffff;
+  font-weight: 700;
+  padding: 9px 22px;
+  box-shadow: 0 2px 4px rgba(2, 132, 199, 0.3);
+}
+.btn-submit-exam:hover {
+  background-color: #0369a1;
+}
+
+/* ==================== RIGHT: QUESTION PALETTE ==================== */
+.palette-sidebar {
+  width: 340px;
+  background: #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  border-left: 1px solid #cbd5e1;
+}
+
+/* Legend Section */
+.legend-card {
+  background: #ffffff;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.legend-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: #334155;
+}
+
+/* Authentic NTA Status Badges */
+.nta-shape {
+  width: 28px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+/* 1. Answered: Green with tapered bottom or rounded */
+.shape-answered {
+  background-color: var(--status-answered);
+  border-radius: 4px;
+}
+
+/* 2. Not Answered: Red/Orange rounded */
+.shape-not-answered {
+  background-color: var(--status-not-answered);
+  border-radius: 4px;
+}
+
+/* 3. Not Visited: Gray */
+.shape-not-visited {
+  background-color: var(--status-not-visited);
+  border-radius: 4px;
+  color: #fff;
+}
+
+/* 4. Marked for Review: Purple Circle */
+.shape-review {
+  background-color: var(--status-marked-review);
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+}
+
+/* 5. Answered & Marked for Review: Purple Circle with small green dot */
+.shape-review-evaluated {
+  background-color: var(--status-review-evaluated);
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  position: relative;
+}
+
+.shape-review-evaluated::after {
+  content: "";
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  width: 8px;
+  height: 8px;
+  background-color: #4caf50;
+  border-radius: 2px;
+  border: 1px solid #fff;
+}
+
+.legend-count {
+  font-weight: 700;
+}
+
+/* Palette Grid */
+.palette-body {
+  padding: 16px;
+  flex: 1;
+}
+
+.palette-filter-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 12px;
+}
+
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.palette-btn {
+  height: 38px;
+  font-size: 13.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.1s, box-shadow 0.1s;
+  position: relative;
+}
+
+.palette-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.palette-btn.active-question {
+  outline: 3px solid #0284c7;
+  outline-offset: 1px;
+  box-shadow: 0 0 8px rgba(2, 132, 199, 0.6);
+  z-index: 2;
+}
+
+.palette-footer {
+  padding: 12px 16px;
+  background: #ffffff;
+  border-top: 1px solid #cbd5e1;
+}
+
+.btn-sidebar-submit {
+  width: 100%;
+  padding: 10px;
+  background: #0284c7;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 4px;
+}
+.btn-sidebar-submit:hover {
+  background: #0369a1;
+}
+
+/* ==================== MODALS ==================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(3px);
+}
+
+.modal-card {
+  background: #ffffff;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 650px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: modal-pop 0.2s ease-out;
+}
+
+@keyframes modal-pop {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-header {
+  padding: 14px 20px;
+  border-bottom: 2px solid #0b3b60;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+}
+
+.modal-header h2 {
+  font-size: 18px;
+  color: var(--nta-dark-blue);
+  font-weight: 700;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #64748b;
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  line-height: 1.6;
+  font-size: 14px;
+  color: #334155;
+}
+
+.modal-footer {
+  padding: 12px 20px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  background: #f8fafc;
+}
+
+/* Proctoring Security Warning Modal */
+.security-alert-card {
+  max-width: 500px;
+  border: 3px solid #dc2626;
+  background: #fff;
+}
+
+.security-alert-header {
+  background: #fee2e2;
+  color: #991b1b;
+  border-bottom: 2px solid #ef4444;
+}
+
+.security-badge-big {
+  background: #dc2626;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.violation-counter {
+  font-size: 15px;
+  font-weight: 700;
+  color: #dc2626;
+  margin: 12px 0;
+  padding: 8px 12px;
+  background: #fef2f2;
+  border-left: 4px solid #dc2626;
+  border-radius: 4px;
+}
+
+/* Summary Table in Submit Modal */
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+}
+
+.summary-table th, .summary-table td {
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  text-align: left;
+}
+
+.summary-table th {
+  background: #f1f5f9;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* ==================== RESULT DASHBOARD ==================== */
+.result-container {
+  max-width: 1000px;
+  margin: 24px auto;
+  padding: 20px;
+  width: 95%;
+}
+
+.scorecard-header {
+  background: #ffffff;
+  border: 2px solid #0b3b60;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  margin-bottom: 20px;
+}
+
+.scorecard-header h2 {
+  color: #0b3b60;
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.score-highlight {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.score-box {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  padding: 14px 22px;
+  border-radius: 8px;
+  min-width: 160px;
+  text-align: center;
+}
+
+.score-box .num {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0b3b60;
+  margin-bottom: 4px;
+}
+
+.score-box .desc {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.review-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.review-tab-btn {
+  padding: 8px 16px;
+  background: #e2e8f0;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #334155;
+}
+
+.review-tab-btn.active {
+  background: #0b3b60;
+  color: #fff;
+}
+
+.review-card {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.review-card.status-correct {
+  border-left: 6px solid #228b22;
+}
+
+.review-card.status-incorrect {
+  border-left: 6px solid #dc3545;
+}
+
+.review-card.status-skipped {
+  border-left: 6px solid #6c757d;
+}
+
+.review-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.explanation-box {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin-top: 12px;
+  font-size: 13.5px;
+  color: #166534;
+}
+
+/* Fullscreen Start Overlay */
+.start-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #0b3b60;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.start-modal {
+  background: #ffffff;
+  color: #1e293b;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 90%;
+  padding: 30px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+}
+
+.start-modal h2 {
+  color: #0b3b60;
+  margin-bottom: 12px;
+}
+
+.start-instructions {
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  margin: 16px 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.start-instructions ul {
+  padding-left: 20px;
+  margin-top: 8px;
+}
+
+.btn-start-exam {
+  width: 100%;
+  padding: 12px;
+  background: #2e7d32;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(46, 125, 50, 0.3);
+  transition: all 0.2s;
+}
+.btn-start-exam:hover {
+  background: #1b5e20;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 992px) {
+  .main-exam-container {
+    flex-direction: column;
+    height: auto;
+  }
+  .palette-sidebar {
+    width: 100%;
+    border-left: none;
+    border-top: 2px solid #cbd5e1;
+  }
+}
+
+</style>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>">
 </head>
 <body oncontextmenu="return false;">
@@ -396,8 +1432,1920 @@
   </div>
 
   <!-- Load Questions data (works offline, locally via file://, and with server) -->
-  <script src="questions.js"></script>
+  <script>
+window.EXAM_QUESTIONS = [
+  {
+    "id": 1,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "01_Intro to Python",
+    "difficulty": "Basic",
+    "question": "Who created the Python programming language and in which year was it first officially released?",
+    "code": null,
+    "options": [
+      "Dennis Ritchie in 1972",
+      "Bjarne Stroustrup in 1985",
+      "Guido van Rossum in 1991",
+      "James Gosling in 1995"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Python was created by Guido van Rossum at CWI in the Netherlands and was first officially released in February 1991 (version 0.9.0)."
+  },
+  {
+    "id": 2,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "01_Intro to Python",
+    "difficulty": "Basic",
+    "question": "Which of the following best describes Python in terms of execution model and type checking?",
+    "code": null,
+    "options": [
+      "Purely compiled and statically typed",
+      "Interpreted (byte-compiled) and dynamically typed",
+      "Compiled to machine code and weakly typed",
+      "Purely assembly-based and manually typed"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Python compiles source code into intermediate bytecode (.pyc), which is then interpreted by the Python Virtual Machine (PVM). Variable types are bound and checked at runtime (dynamic typing)."
+  },
+  {
+    "id": 3,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "01_Intro to Python",
+    "difficulty": "Basic",
+    "question": "What is the standard file extension used for Python source code files?",
+    "code": null,
+    "options": [
+      ".pt",
+      ".py",
+      ".pyt",
+      ".p"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Standard Python source scripts use the '.py' extension, whereas compiled bytecode uses '.pyc'."
+  },
+  {
+    "id": 4,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "01_Intro to Python",
+    "difficulty": "Intermediate",
+    "question": "Which of the following statements is TRUE regarding case sensitivity in Python?",
+    "code": null,
+    "options": [
+      "Python is case-insensitive for variables but sensitive for keywords",
+      "Python is strictly case-sensitive for both identifiers and keywords",
+      "Python treats 'student_name' and 'Student_Name' as the identical identifier",
+      "Case sensitivity in Python depends on the underlying Operating System"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Python is strictly case-sensitive. 'age', 'Age', and 'AGE' are treated as three distinct identifiers."
+  },
+  {
+    "id": 5,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "01_Intro to Python",
+    "difficulty": "Intermediate",
+    "question": "What is the primary function of the '__pycache__' directory generated in Python projects?",
+    "code": null,
+    "options": [
+      "To store virtual environment dependencies",
+      "To cache compiled bytecode (.pyc files) to accelerate module loading",
+      "To save automatic Git commit revisions",
+      "To keep backup files of source scripts"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Python compiles imported source files to bytecode and saves them in '__pycache__' with names like module.cpython-314.pyc so it doesn't need to recompile them on subsequent runs."
+  },
+  {
+    "id": 6,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "02_Variables",
+    "difficulty": "Basic",
+    "question": "Which of the following is a VALID variable identifier according to Python naming rules?",
+    "code": null,
+    "options": [
+      "2nd_rank",
+      "student-branch",
+      "_student_roll",
+      "class"
+    ],
+    "correctAnswer": 2,
+    "explanation": "A variable name must start with an alphabet letter or an underscore (_). It cannot start with a digit, cannot contain hyphens (-), and cannot be a reserved keyword like 'class'."
+  },
+  {
+    "id": 7,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "02_Variables",
+    "difficulty": "Basic",
+    "question": "What will be the output of the following chained variable assignment?",
+    "code": "x = y = z = 0\nprint(x, y, z)",
+    "options": [
+      "0 0 0",
+      "0 None None",
+      "SyntaxError: invalid syntax",
+      "(0, 0, 0)"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Python supports chained assignment 'x = y = z = 0', assigning the integer object 0 to all three variables."
+  },
+  {
+    "id": 8,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "02_Variables",
+    "difficulty": "Basic",
+    "question": "What will be the output of the following code snippet?",
+    "code": "marks = 70\nmarks = 85\nprint(marks)",
+    "options": [
+      "70",
+      "85",
+      "155",
+      "TypeError: cannot overwrite variable"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In Python, variables are labels referring to objects. Reassigning 'marks = 85' re-binds the name 'marks' to the object 85."
+  },
+  {
+    "id": 9,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "02_Variables",
+    "difficulty": "Intermediate",
+    "question": "What will be the values of 'name', 'age', and 'city' after executing the following multiple assignment?",
+    "code": "name, age, city = 'Rahul', 18, 'Patna'\nprint(name, age, city)",
+    "options": [
+      "Patna 18 Rahul",
+      "Rahul 18 Patna",
+      "('Rahul', 18, 'Patna')",
+      "ValueError: too many values to unpack"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Python unpacks the tuple on the right hand side sequentially into the variables on the left hand side in corresponding order."
+  },
+  {
+    "id": 10,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "02_Variables",
+    "difficulty": "Intermediate",
+    "question": "What will happen when attempting to run the following Python code?",
+    "code": "pass = 'exam_clear'\nprint(pass)",
+    "options": [
+      "Prints 'exam_clear'",
+      "SyntaxError: invalid syntax",
+      "NameError: name 'pass' is not defined",
+      "ValueError: invalid identifier"
+    ],
+    "correctAnswer": 1,
+    "explanation": "'pass' is a reserved keyword in Python used as a placeholder statement. It cannot be used as an identifier/variable name."
+  },
+  {
+    "id": 11,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "02_Variables",
+    "difficulty": "Intermediate",
+    "question": "What will be printed when dynamically re-typing a variable as shown below?",
+    "code": "value = 7\nprint(type(value).__name__, end=' ')\nvalue = '57'\nprint(type(value).__name__)",
+    "options": [
+      "int int",
+      "int str",
+      "str str",
+      "TypeError: variable type cannot be modified"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Because Python is dynamically typed, the variable 'value' first holds an 'int' (7) and is later reassigned to a 'str' ('57')."
+  },
+  {
+    "id": 12,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "02_Variables",
+    "difficulty": "Advanced",
+    "question": "What will be printed by the following code illustrating integer immutability and variable binding?",
+    "code": "a = 10\nb = a\na = 20\nprint(b)",
+    "options": [
+      "20",
+      "10",
+      "None",
+      "30"
+    ],
+    "correctAnswer": 1,
+    "explanation": "'b = a' makes 'b' reference the object 10. When 'a = 20' is executed, 'a' points to a new integer object 20, but 'b' continues pointing to 10."
+  },
+  {
+    "id": 13,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "03_data",
+    "difficulty": "Basic",
+    "question": "What will the following code print?",
+    "code": "a = 50\nb = 50.0\nc = '50'\nprint(type(a).__name__, type(b).__name__, type(c).__name__)",
+    "options": [
+      "int float str",
+      "int double string",
+      "number float text",
+      "int int str"
+    ],
+    "correctAnswer": 0,
+    "explanation": "In Python, 50 is an 'int', 50.0 is a 'float', and '50' enclosed in quotes is a 'str'."
+  },
+  {
+    "id": 14,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "03_data",
+    "difficulty": "Basic",
+    "question": "What is the data type of a variable assigned the value 'None'?",
+    "code": "result = None\nprint(type(result))",
+    "options": [
+      "<class 'null'>",
+      "<class 'void'>",
+      "<class 'NoneType'>",
+      "<class 'undefined'>"
+    ],
+    "correctAnswer": 2,
+    "explanation": "In Python, 'None' represents the absence of a value and is the sole instance of the class 'NoneType'."
+  },
+  {
+    "id": 15,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "03_data",
+    "difficulty": "Basic",
+    "question": "What is the difference between 'x = True' and 'y = \"True\"'?",
+    "code": "x = True\ny = 'True'\nprint(type(x) == type(y))",
+    "options": [
+      "True, both are boolean",
+      "False, x is bool while y is str",
+      "Error: types cannot be compared",
+      "None"
+    ],
+    "correctAnswer": 1,
+    "explanation": "'True' without quotes is a built-in boolean literal (type bool). '\"True\"' with quotes is a string literal (type str). Hence their types are not equal."
+  },
+  {
+    "id": 16,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "03_data",
+    "difficulty": "Intermediate",
+    "question": "What will be printed by the printf-style string formatting below?",
+    "code": "name = 'John'\nprint('Hello: %s' % name)",
+    "options": [
+      "Hello: John",
+      "Hello: %s John",
+      "TypeError: not all arguments converted during string formatting",
+      "Hello: ('John')"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'%s' is the format specifier for string conversion in Python's legacy printf-style string formatting."
+  },
+  {
+    "id": 17,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "03_data",
+    "difficulty": "Intermediate",
+    "question": "What is the output of checking the type of a type object in Python?",
+    "code": "print(type(type(10)))",
+    "options": [
+      "<class 'int'>",
+      "<class 'type'>",
+      "<class 'class'>",
+      "TypeError"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In Python, all classes and types are instances of the metaclass 'type'. Thus 'type(int)' returns <class 'type'>."
+  },
+  {
+    "id": 18,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "03_data",
+    "difficulty": "Intermediate",
+    "question": "Why does the expression '0.1 + 0.2 == 0.3' evaluate to False in Python?",
+    "code": "print(0.1 + 0.2 == 0.3)",
+    "options": [
+      "Python does not support decimal comparisons",
+      "Due to IEEE 754 binary floating-point representation, 0.1 + 0.2 is approx 0.30000000000000004",
+      "Because Python automatically converts floats to integers in additions",
+      "Because double precision requires explicit casting in Python"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Floating point numbers are stored in binary IEEE 754 format. Fractions like 0.1 and 0.2 cannot be represented with exact precision, causing slight rounding inaccuracies."
+  },
+  {
+    "id": 19,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "03_data",
+    "difficulty": "Advanced",
+    "question": "What will the following code output regarding Python's boolean inheritance hierarchy?",
+    "code": "print(isinstance(True, int), issubclass(bool, int))",
+    "options": [
+      "False False",
+      "True True",
+      "False True",
+      "TypeError: issubclass requires classes"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In Python, 'bool' is an explicit subclass of 'int'. The booleans 'True' and 'False' are integer instances with numerical values 1 and 0."
+  },
+  {
+    "id": 20,
+    "section": "Section 1: Python Fundamentals & Variables",
+    "topic": "03_data",
+    "difficulty": "Advanced",
+    "question": "What is the return type of the true division expression '10 / 2' in Python 3?",
+    "code": "res = 10 / 2\nprint(type(res))",
+    "options": [
+      "<class 'int'>",
+      "<class 'float'>",
+      "<class 'double'>",
+      "<class 'decimal'>"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In Python 3, the single slash division operator '/' always returns a 'float' (5.0), even if the quotient divides evenly without a remainder."
+  },
+  {
+    "id": 21,
+    "section": "Section 2: Operators & Expressions",
+    "topic": "04_Arithmetic",
+    "difficulty": "Basic",
+    "question": "What is the result of the floor division '11 // 5'?",
+    "code": "print(11 // 5)",
+    "options": [
+      "2.2",
+      "2",
+      "2.0",
+      "1"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Floor division '//' divides two numbers and rounds down to the nearest integer towards negative infinity. 11 // 5 produces integer 2."
+  },
+  {
+    "id": 22,
+    "section": "Section 2: Operators & Expressions",
+    "topic": "04_Arithmetic",
+    "difficulty": "Basic",
+    "question": "What is the output of the exponentiation operator in the expression '3 ** 3'?",
+    "code": "print(3 ** 3)",
+    "options": [
+      "9",
+      "27",
+      "6",
+      "81"
+    ],
+    "correctAnswer": 1,
+    "explanation": "'**' is the power/exponent operator in Python. 3 ** 3 = 3 * 3 * 3 = 27."
+  },
+  {
+    "id": 23,
+    "section": "Section 2: Operators & Expressions",
+    "topic": "04_Arithmetic",
+    "difficulty": "Intermediate",
+    "question": "What is the exact output of negative floor division '-36 // 23' in Python?",
+    "code": "d = -36\nb = 23\nprint(d // b)",
+    "options": [
+      "-1",
+      "-2",
+      "-1.56",
+      "0"
+    ],
+    "correctAnswer": 1,
+    "explanation": "-36 / 23 is approximately -1.565. Floor division always rounds down to the nearest integer smaller than or equal to the quotient. Floor of -1.565 is -2."
+  },
+  {
+    "id": 24,
+    "section": "Section 2: Operators & Expressions",
+    "topic": "04_Arithmetic",
+    "difficulty": "Intermediate",
+    "question": "What will be printed by the modulo operation '-5 % 4' in Python?",
+    "code": "print(-5 % 4)",
+    "options": [
+      "-1",
+      "3",
+      "1",
+      "-5"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In Python, modulo is defined by: a % b = a - (b * (a // b)). Here -5 // 4 = -2. So -5 - (4 * -2) = -5 - (-8) = 3. In Python, the result always takes the sign of the divisor."
+  },
+  {
+    "id": 25,
+    "section": "Section 2: Operators & Expressions",
+    "topic": "04_Arithmetic",
+    "difficulty": "Intermediate",
+    "question": "What will be printed by the modulo operation '5 % -4' in Python?",
+    "code": "print(5 % -4)",
+    "options": [
+      "1",
+      "-3",
+      "-1",
+      "3"
+    ],
+    "correctAnswer": 1,
+    "explanation": "5 // -4 = -2. Then 5 - (-4 * -2) = 5 - 8 = -3. Notice the result takes the negative sign of the divisor -4."
+  },
+  {
+    "id": 26,
+    "section": "Section 2: Operators & Expressions",
+    "topic": "04_Arithmetic",
+    "difficulty": "Intermediate",
+    "question": "What is the result of '-5 % -4' in Python?",
+    "code": "print(-5 % -4)",
+    "options": [
+      "-1",
+      "1",
+      "-3",
+      "3"
+    ],
+    "correctAnswer": 0,
+    "explanation": "-5 // -4 = 1. Then -5 - (-4 * 1) = -5 - (-4) = -1. The sign matches the negative divisor."
+  },
+  {
+    "id": 27,
+    "section": "Section 2: Operators & Expressions",
+    "topic": "04_Arithmetic",
+    "difficulty": "Intermediate",
+    "question": "What is the output of the following arithmetic expressions evaluating precedence?",
+    "code": "print(10 + 5 * 2)\nprint((10 + 5) * 2)",
+    "options": [
+      "20 and 30",
+      "30 and 30",
+      "20 and 20",
+      "15 and 20"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Multiplication '*' has higher precedence than addition '+', so 10 + 5 * 2 = 10 + 10 = 20. In the second expression, parentheses force addition first: 15 * 2 = 30."
+  },
+  {
+    "id": 28,
+    "section": "Section 2: Operators & Expressions",
+    "topic": "04_Arithmetic",
+    "difficulty": "Advanced",
+    "question": "What is the output of chained exponentiation '2 ** 3 ** 2' in Python?",
+    "code": "print(2 ** 3 ** 2)",
+    "options": [
+      "64",
+      "512",
+      "36",
+      "18"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The exponentiation operator '**' possesses right-to-left associativity in Python. Therefore, 2 ** 3 ** 2 is evaluated as 2 ** (3 ** 2) = 2 ** 9 = 512."
+  },
+  {
+    "id": 29,
+    "section": "Section 2: Operators & Expressions",
+    "topic": "04_Arithmetic",
+    "difficulty": "Intermediate",
+    "question": "What will be printed by the following boolean arithmetic operations?",
+    "code": "print(True + 5, False * 10, True - 5)",
+    "options": [
+      "6 0 -4",
+      "True False -4",
+      "TypeError: unsupported operand type",
+      "5 10 5"
+    ],
+    "correctAnswer": 0,
+    "explanation": "In arithmetic expressions, True is treated as 1 and False is treated as 0. 1 + 5 = 6; 0 * 10 = 0; 1 - 5 = -4."
+  },
+  {
+    "id": 30,
+    "section": "Section 2: Operators & Expressions",
+    "topic": "04_Arithmetic",
+    "difficulty": "Intermediate",
+    "question": "What is the output of the following string operators code?",
+    "code": "x = '8'\ny = '3'\nz = 3\nprint(x + y, x * z)",
+    "options": [
+      "11 24",
+      "83 888",
+      "83 24",
+      "TypeError"
+    ],
+    "correctAnswer": 1,
+    "explanation": "'x + y' concatenates two strings: '8' + '3' = '83'. 'x * z' repeats the string 3 times: '8' * 3 = '888'."
+  },
+  {
+    "id": 31,
+    "section": "Section 2: Operators & Expressions",
+    "topic": "04_Arithmetic",
+    "difficulty": "Advanced",
+    "question": "What happens when attempting to add 'None' and an integer in Python?",
+    "code": "a = None\nb = 8\nprint(a + b)",
+    "options": [
+      "Prints 8",
+      "Prints None",
+      "TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'",
+      "ValueError"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Python does not implicitly convert None to 0 in arithmetic operations. Performing addition raises a TypeError."
+  },
+  {
+    "id": 32,
+    "section": "Section 2: Operators & Expressions",
+    "topic": "04_Arithmetic",
+    "difficulty": "Advanced",
+    "question": "What will be printed by the following expression demonstrating precedence and associativity?",
+    "code": "print(100 - 20 // 5 * 2)",
+    "options": [
+      "32",
+      "92",
+      "8",
+      "96"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Floor division '//' and multiplication '*' have equal precedence and are evaluated from left to right: 20 // 5 = 4; then 4 * 2 = 8; finally 100 - 8 = 92."
+  },
+  {
+    "id": 33,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "05_String_Operators",
+    "difficulty": "Basic",
+    "question": "What will be the output of string indexing with positive and negative indices?",
+    "code": "text = 'Python'\nprint(text[0], text[3], text[-1], text[-2])",
+    "options": [
+      "P h n o",
+      "P t n o",
+      "y h o n",
+      "IndexError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Indices: text[0]='P', text[3]='h', text[-1]='n' (last char), text[-2]='o' (second to last char)."
+  },
+  {
+    "id": 34,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "05_String_Operators",
+    "difficulty": "Basic",
+    "question": "What is the length of an empty string and a string with spaces in Python?",
+    "code": "text1 = ''\ntext2 = 'Hello World'\nprint(len(text1), len(text2))",
+    "options": [
+      "0 11",
+      "0 10",
+      "1 11",
+      "None 11"
+    ],
+    "correctAnswer": 0,
+    "explanation": "An empty string has 0 characters. 'Hello World' has 5 letters + 1 space + 5 letters = 11 characters."
+  },
+  {
+    "id": 35,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "05_String_Operators",
+    "difficulty": "Basic",
+    "question": "What is the output of the string membership operators 'in' and 'not in'?",
+    "code": "text = 'Python Programming'\nprint('Python' in text, 'Java' in text, 'Java' not in text)",
+    "options": [
+      "True False True",
+      "True True False",
+      "False True False",
+      "True False False"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'Python' is a substring of text (True). 'Java' is not in text (False). 'Java' not in text is therefore True."
+  },
+  {
+    "id": 36,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "05_String_Operators",
+    "difficulty": "Intermediate",
+    "question": "What will be printed by the following slicing operations?",
+    "code": "text = 'Programming'\nprint(text[0:4], text[3:8], text[:5])",
+    "options": [
+      "Prog gramm Progr",
+      "Progr gramm Prog",
+      "Prog gram Progr",
+      "Progr gra Progr"
+    ],
+    "correctAnswer": 0,
+    "explanation": "text[0:4] = 'Prog' (indices 0,1,2,3). text[3:8] = 'gramm' (indices 3,4,5,6,7). text[:5] = 'Progr' (indices 0,1,2,3,4)."
+  },
+  {
+    "id": 37,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "05_String_Operators",
+    "difficulty": "Intermediate",
+    "question": "What is the output of slicing 'alphabet = \"ABCDEFGHIJKL\"' with step 2?",
+    "code": "alphabet = 'ABCDEFGHIJKL'\nprint(alphabet[::2])",
+    "options": [
+      "ACEGIK",
+      "BDFHJL",
+      "ABCDEF",
+      "GHIJKL"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Step 2 selects characters at even indices: 0('A'), 2('C'), 4('E'), 6('G'), 8('I'), 10('K') -> 'ACEGIK'."
+  },
+  {
+    "id": 38,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "05_String_Operators",
+    "difficulty": "Intermediate",
+    "question": "What is the output of slicing with start, stop, and step: 'alphabet[1:8:2]'?",
+    "code": "alphabet = 'ABCDEFGHIJKL'\nprint(alphabet[1:8:2])",
+    "options": [
+      "BDFH",
+      "BDFHJ",
+      "ACEG",
+      "CDEG"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Starting at index 1 up to index 7 with step 2 selects indices 1 ('B'), 3 ('D'), 5 ('F'), 7 ('H') -> 'BDFH'."
+  },
+  {
+    "id": 39,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "05_String_Operators",
+    "difficulty": "Intermediate",
+    "question": "What is the output of the string reversal slice 'text[::-1]' for 'text = \"Python\"'?",
+    "code": "text = 'Python'\nprint(text[::-1])",
+    "options": [
+      "Python",
+      "nohtyP",
+      "P",
+      "IndexError"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A step of -1 with omitted start and stop reverses the string, giving 'nohtyP'."
+  },
+  {
+    "id": 40,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "05_String_Operators",
+    "difficulty": "Intermediate",
+    "question": "What is the difference between string methods '.find()' and '.index()' when a substring is not found?",
+    "code": "text = 'Python'\n# text.find('z') vs text.index('z')",
+    "options": [
+      "Both return -1",
+      "Both raise ValueError",
+      ".find() returns -1, while .index() raises ValueError",
+      ".find() raises ValueError, while .index() returns -1"
+    ],
+    "correctAnswer": 2,
+    "explanation": "In Python, str.find() returns -1 if the substring is not found, whereas str.index() raises a ValueError."
+  },
+  {
+    "id": 41,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "05_String_Operators",
+    "difficulty": "Intermediate",
+    "question": "What will be printed by the following string case conversions?",
+    "code": "case = 'python programming language'\nprint(case.capitalize())\nprint(case.title())",
+    "options": [
+      "Python programming language \\n Python Programming Language",
+      "Python Programming Language \\n Python programming language",
+      "PYTHON PROGRAMMING LANGUAGE \\n Python Programming Language",
+      "python programming language \\n Python Programming Language"
+    ],
+    "correctAnswer": 0,
+    "explanation": ".capitalize() only capitalizes the very first character of the string, while .title() capitalizes the first letter of every word."
+  },
+  {
+    "id": 42,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "05_String_Operators",
+    "difficulty": "Advanced",
+    "question": "What will happen when attempting to execute the following code?",
+    "code": "s = 'Python'\ns[0] = 'J'",
+    "options": [
+      "s becomes 'Jython'",
+      "TypeError: 'str' object does not support item assignment",
+      "ValueError: string is read-only",
+      "A new string 'Jython' is automatically created in place"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Strings in Python are immutable. Attempting to assign or mutate a character by index raises a TypeError."
+  },
+  {
+    "id": 43,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "05_String_Operators",
+    "difficulty": "Advanced",
+    "question": "What is the output of the string .replace() method when passed a count parameter of 1?",
+    "code": "text = 'apple apple apple'\nprint(text.replace('apple', 'mango', 1))",
+    "options": [
+      "mango mango mango",
+      "mango apple apple",
+      "apple apple mango",
+      "apple mango apple"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The third argument to str.replace(old, new, count) limits the replacement to at most count occurrences from the left. Here, only the first 'apple' is replaced."
+  },
+  {
+    "id": 44,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "05_String_Operators",
+    "difficulty": "Advanced",
+    "question": "What is the result of slicing a string beyond its length in Python?",
+    "code": "text = 'Python'\nprint(repr(text[10:20]))",
+    "options": [
+      "IndexError: string index out of range",
+      "'' (empty string)",
+      "None",
+      "'Python'"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Unlike direct indexing (which raises IndexError), string slicing in Python is forgiving and gracefully returns an empty string '' when indices are out of range."
+  },
+  {
+    "id": 45,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "05_String_Operators",
+    "difficulty": "Advanced",
+    "question": "What will be printed by the following string methods?",
+    "code": "filename = 'student_notes.pdf'\nprint(filename.startswith('student'), filename.endswith('.pdf'), filename.find('.txt'))",
+    "options": [
+      "True True -1",
+      "True True False",
+      "False True -1",
+      "True False -1"
+    ],
+    "correctAnswer": 0,
+    "explanation": "filename begins with 'student' (True) and ends with '.pdf' (True). Since '.txt' is not present in the string, find() returns -1."
+  },
+  {
+    "id": 46,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "06_Boolean",
+    "difficulty": "Basic",
+    "question": "Which of the following values evaluates to 'False' when passed to bool()?",
+    "code": null,
+    "options": [
+      "bool(10)",
+      "bool('Hello')",
+      "bool(' ')",
+      "bool(None)"
+    ],
+    "correctAnswer": 3,
+    "explanation": "In Python, 0, None, empty strings '', and empty collections evaluate to False. Non-zero numbers and non-empty strings (even a single space ' ') evaluate to True."
+  },
+  {
+    "id": 47,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "06_Boolean",
+    "difficulty": "Basic",
+    "question": "What is the output of 'bool(\"False\")' and 'bool(\"0\")' in Python?",
+    "code": "print(bool('False'), bool('0'))",
+    "options": [
+      "False False",
+      "True True",
+      "False True",
+      "True False"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Both 'False' and '0' are non-empty strings. Any non-empty string in Python evaluates to True in boolean context."
+  },
+  {
+    "id": 48,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "06_Boolean",
+    "difficulty": "Intermediate",
+    "question": "What is the result of the following logical operator combination?",
+    "code": "number = 30\nprint(10 < number and number < 50)",
+    "options": [
+      "True",
+      "False",
+      "30",
+      "SyntaxError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "10 < 30 is True, and 30 < 50 is True. True and True evaluates to True."
+  },
+  {
+    "id": 49,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "06_Boolean",
+    "difficulty": "Intermediate",
+    "question": "What is the order of precedence among the logical operators 'not', 'and', and 'or'?",
+    "code": null,
+    "options": [
+      "or > and > not",
+      "and > or > not",
+      "not > and > or",
+      "All three have equal precedence and evaluate left to right"
+    ],
+    "correctAnswer": 2,
+    "explanation": "In Python, logical operator precedence from highest to lowest is: 'not' (highest), followed by 'and', and finally 'or' (lowest)."
+  },
+  {
+    "id": 50,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "06_Boolean",
+    "difficulty": "Advanced",
+    "question": "What is the output of the expression 'not False and False or True'?",
+    "code": "print(not False and False or True)",
+    "options": [
+      "False",
+      "True",
+      "None",
+      "TypeError"
+    ],
+    "correctAnswer": 1,
+    "explanation": "1. 'not False' evaluates to True. 2. 'True and False' evaluates to False. 3. 'False or True' evaluates to True."
+  },
+  {
+    "id": 51,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "06_Boolean",
+    "difficulty": "Advanced",
+    "question": "What will be printed by Python's short-circuit evaluation below?",
+    "code": "print(0 or 'Python', 'Hello' and 'World')",
+    "options": [
+      "True True",
+      "Python World",
+      "0 Hello",
+      "Python Hello"
+    ],
+    "correctAnswer": 1,
+    "explanation": "'0 or \"Python\"': 0 is falsy, so 'or' returns the second operand ('Python'). '\"Hello\" and \"World\"': \"Hello\" is truthy, so 'and' returns the second operand ('World')."
+  },
+  {
+    "id": 52,
+    "section": "Section 3: Strings & Booleans",
+    "topic": "06_Boolean",
+    "difficulty": "Advanced",
+    "question": "What is the output of the following expression containing division by zero?",
+    "code": "print(True or (10 / 0 == 0))",
+    "options": [
+      "ZeroDivisionError",
+      "True",
+      "False",
+      "None"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Due to short-circuiting in Python, if the first argument of 'or' is True, Python never evaluates the second argument, completely avoiding the ZeroDivisionError."
+  },
+  {
+    "id": 53,
+    "section": "Section 4: I/O, Conditionals & Loops",
+    "topic": "07_Input_Output",
+    "difficulty": "Basic",
+    "question": "What data type is ALWAYS returned by Python's built-in input() function?",
+    "code": null,
+    "options": [
+      "int if the user types numbers, float if decimals, otherwise str",
+      "str",
+      "object",
+      "tuple"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In Python 3, input() always reads input from standard input as a string ('str'). Explicit type casting is required to convert it to int or float."
+  },
+  {
+    "id": 54,
+    "section": "Section 4: I/O, Conditionals & Loops",
+    "topic": "07_Input_Output",
+    "difficulty": "Basic",
+    "question": "What will the following print() statement output?",
+    "code": "print('2026', '08', '19', sep='-')",
+    "options": [
+      "2026 08 19",
+      "2026-08-19",
+      "2026--08--19",
+      "SyntaxError: invalid argument sep"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The 'sep' keyword argument in print() specifies the delimiter string placed between each argument. Here '-' produces '2026-08-19'."
+  },
+  {
+    "id": 55,
+    "section": "Section 4: I/O, Conditionals & Loops",
+    "topic": "07_Input_Output",
+    "difficulty": "Basic",
+    "question": "What will be printed by the following code controlling the 'end' parameter?",
+    "code": "print('Hello', end=' ')\nprint('World')",
+    "options": [
+      "Hello\\nWorld (on two separate lines)",
+      "Hello World (on the same line)",
+      "HelloWorld (no space)",
+      "Hello end= World"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The 'end' keyword argument specifies what is printed at the end of the print statement. Replacing the default newline '\\n' with a space ' ' keeps both outputs on the same line."
+  },
+  {
+    "id": 56,
+    "section": "Section 4: I/O, Conditionals & Loops",
+    "topic": "07_Input_Output",
+    "difficulty": "Intermediate",
+    "question": "What will happen when attempting to directly convert '\"25.5\"' into an integer?",
+    "code": "val = int('25.5')",
+    "options": [
+      "val becomes 25",
+      "val becomes 25.5",
+      "ValueError: invalid literal for int() with base 10: '25.5'",
+      "val becomes 26 (rounded)"
+    ],
+    "correctAnswer": 2,
+    "explanation": "int() cannot directly parse a string containing a decimal point. To convert '25.5' to 25, you must first convert it to a float: int(float('25.5'))."
+  },
+  {
+    "id": 57,
+    "section": "Section 4: I/O, Conditionals & Loops",
+    "topic": "07_Input_Output",
+    "difficulty": "Intermediate",
+    "question": "What will be the output of formatting a float using an f-string with precision specifier ':.2f'?",
+    "code": "product_price = 99.22345678\nprint(f'{product_price:.2f}')",
+    "options": [
+      "99.2",
+      "99.22",
+      "99.223",
+      "99"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The format specifier ':.2f' inside an f-string formats the floating-point number rounded to exactly 2 decimal places, yielding '99.22'."
+  },
+  {
+    "id": 58,
+    "section": "Section 4: I/O, Conditionals & Loops",
+    "topic": "07_Input_Output",
+    "difficulty": "Advanced",
+    "question": "Suppose a user enters 'Rahul Kumar Sharma' when the following line executes. What happens?",
+    "code": "first_name, last_name = input().split()",
+    "options": [
+      "first_name = 'Rahul', last_name = 'Kumar'",
+      "ValueError: too many values to unpack (expected 2)",
+      "first_name = 'Rahul', last_name = 'Sharma'",
+      "TypeError: split() takes at most 2 arguments"
+    ],
+    "correctAnswer": 1,
+    "explanation": "input().split() returns a list of 3 strings ['Rahul', 'Kumar', 'Sharma']. Attempting to unpack 3 items into 2 variables raises a ValueError."
+  },
+  {
+    "id": 59,
+    "section": "Section 4: I/O, Conditionals & Loops",
+    "topic": "08_Conditional_statements",
+    "difficulty": "Basic",
+    "question": "What is the output of the chained comparison below?",
+    "code": "number = 15\nprint(10 < number < 50)",
+    "options": [
+      "True",
+      "False",
+      "15",
+      "TypeError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Python supports chained comparisons. '10 < number < 50' is mathematically and logically evaluated as '(10 < number) and (number < 50)'. Since 15 is between 10 and 50, it evaluates to True."
+  },
+  {
+    "id": 60,
+    "section": "Section 4: I/O, Conditionals & Loops",
+    "topic": "08_Conditional_statements",
+    "difficulty": "Intermediate",
+    "question": "What will be printed by the following conditional ladder?",
+    "code": "marks = 75\nif marks >= 90:\n    print('Excellent')\nelif marks >= 60:\n    print('Good')\nelif marks >= 40:\n    print('Pass')\nelse:\n    print('Fail')",
+    "options": [
+      "Excellent",
+      "Good",
+      "Good \\n Pass",
+      "Pass"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In an if-elif-else ladder, conditions are evaluated sequentially. The first condition that evaluates to True is executed ('marks >= 60'), and the remaining conditions are skipped entirely."
+  },
+  {
+    "id": 61,
+    "section": "Section 4: I/O, Conditionals & Loops",
+    "topic": "08_Conditional_statements",
+    "difficulty": "Intermediate",
+    "question": "What will be the output of the following nested conditional structure?",
+    "code": "age = 20\nif age >= 18:\n    if age <= 60:\n        print('Between 18 and 60')\n    else:\n        print('Senior Citizen')\nelse:\n    print('Minor')",
+    "options": [
+      "Minor",
+      "Between 18 and 60",
+      "Senior Citizen",
+      "No output"
+    ],
+    "correctAnswer": 1,
+    "explanation": "age = 20 satisfies age >= 18, entering the outer block. Then age <= 60 is True (20 <= 60), executing print('Between 18 and 60')."
+  },
+  {
+    "id": 62,
+    "section": "Section 4: I/O, Conditionals & Loops",
+    "topic": "08_Conditional_statements",
+    "difficulty": "Advanced",
+    "question": "What will be printed by the following compound comparison?",
+    "code": "print(1 < 2 < 3 > 4)",
+    "options": [
+      "True",
+      "False",
+      "SyntaxError",
+      "3"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The chained comparison expands to: (1 < 2) and (2 < 3) and (3 > 4). Since 3 > 4 is False, the entire expression evaluates to False."
+  },
+  {
+    "id": 63,
+    "section": "Section 4: I/O, Conditionals & Loops",
+    "topic": "08_Conditional_statements",
+    "difficulty": "Advanced",
+    "question": "What will the following code output regarding truth value testing in if statements?",
+    "code": "items = []\nif items:\n    print('Has Items')\nelse:\n    print('Cart Empty')",
+    "options": [
+      "Has Items",
+      "Cart Empty",
+      "TypeError",
+      "None"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In Python, empty collections (empty list [], empty tuple (), empty string '', etc.) evaluate to False in boolean context. Therefore, the else block executes, printing 'Cart Empty'."
+  },
+  {
+    "id": 64,
+    "section": "Section 4: I/O, Conditionals & Loops",
+    "topic": "09_Problem_Solving",
+    "difficulty": "Intermediate",
+    "question": "What will be the output of the following integer classification logic?",
+    "code": "integer = -6\nif integer > 0 and integer % 2 == 0:\n    print('Positive Even')\nelif integer < 0 and integer % 2 == 0:\n    print('Negative Even')\nelif integer == 0:\n    print('Zero')\nelse:\n    print('Odd')",
+    "options": [
+      "Positive Even",
+      "Negative Even",
+      "Odd",
+      "Zero"
+    ],
+    "correctAnswer": 1,
+    "explanation": "integer is -6 (< 0) and -6 % 2 == 0 (in Python -6 % 2 is 0). Both conditions in the second branch are True, printing 'Negative Even'."
+  },
+  {
+    "id": 65,
+    "section": "Section 4: I/O, Conditionals & Loops",
+    "topic": "09_Problem_Solving",
+    "difficulty": "Advanced",
+    "question": "What will be the values of 'a' and 'b' after the arithmetic swap below?",
+    "code": "a = 15\nb = 35\na = a + b\nb = a - b\na = a - b\nprint(a, b)",
+    "options": [
+      "15 35",
+      "35 15",
+      "50 15",
+      "35 50"
+    ],
+    "correctAnswer": 1,
+    "explanation": "1. a = 15 + 35 = 50. 2. b = 50 - 35 = 15. 3. a = 50 - 15 = 35. The variables are successfully swapped without using a temporary variable."
+  },
+  {
+    "id": 66,
+    "section": "Section 4: I/O, Conditionals & Loops",
+    "topic": "09_Problem_Solving",
+    "difficulty": "Advanced",
+    "question": "In a FizzBuzz algorithm, why MUST the condition '(n % 3 == 0 and n % 5 == 0)' be placed before '(n % 3 == 0)' in an if-elif ladder?",
+    "code": null,
+    "options": [
+      "Because Python raises a SyntaxError if 'and' appears in an elif",
+      "Because numbers divisible by both 3 and 5 (like 15) would match 'n % 3 == 0' first and never reach the FizzBuzz block",
+      "Because 5 has higher arithmetic precedence than 3 in Python",
+      "Because elif statements only accept single conditions"
+    ],
+    "correctAnswer": 1,
+    "explanation": "If 'n % 3 == 0' is checked first, any multiple of 15 will satisfy it, printing 'Fizz' and exiting the conditional ladder, preventing 'FizzBuzz' from ever running."
+  },
+  {
+    "id": 67,
+    "section": "Section 4: I/O, Conditionals & Loops",
+    "topic": "10_Loop",
+    "difficulty": "Basic",
+    "question": "What sequence of numbers will be printed by the following for loop?",
+    "code": "for i in range(5):\n    print(i, end=' ')",
+    "options": [
+      "1 2 3 4 5",
+      "0 1 2 3 4",
+      "0 1 2 3 4 5",
+      "1 2 3 4"
+    ],
+    "correctAnswer": 1,
+    "explanation": "range(5) starts at 0 by default and stops at 5 - 1 = 4. It prints: 0 1 2 3 4."
+  },
+  {
+    "id": 68,
+    "section": "Section 4: I/O, Conditionals & Loops",
+    "topic": "10_Loop",
+    "difficulty": "Intermediate",
+    "question": "What is the output of range with start, stop, and negative step: 'list(range(5, 0, -1))'?",
+    "code": "print(list(range(5, 0, -1)))",
+    "options": [
+      "[5, 4, 3, 2, 1, 0]",
+      "[5, 4, 3, 2, 1]",
+      "[4, 3, 2, 1, 0]",
+      "[] (empty list)"
+    ],
+    "correctAnswer": 1,
+    "explanation": "range(5, 0, -1) starts at 5 and steps by -1 down to, but not including, the stop value 0. Hence it produces [5, 4, 3, 2, 1]."
+  },
+  {
+    "id": 69,
+    "section": "Section 4: I/O, Conditionals & Loops",
+    "topic": "10_Loop",
+    "difficulty": "Advanced",
+    "question": "What will be printed by the loop below combining both 'continue' and 'break'?",
+    "code": "total = 0\nfor i in range(1, 6):\n    if i == 3:\n        continue\n    if i == 5:\n        break\n    total += i\nprint(total)",
+    "options": [
+      "7",
+      "10",
+      "15",
+      "6"
+    ],
+    "correctAnswer": 0,
+    "explanation": "i=1: total=1; i=2: total=1+2=3; i=3: continue skips to next iteration; i=4: total=3+4=7; i=5: break immediately exits the loop. total is 7."
+  },
+  {
+    "id": 70,
+    "section": "Section 4: I/O, Conditionals & Loops",
+    "topic": "10_Loop",
+    "difficulty": "Advanced",
+    "question": "What will be printed by the following nested loop code counting iterations?",
+    "code": "count = 0\nfor row in range(1, 4):\n    for col in range(row):\n        count += 1\nprint(count)",
+    "options": [
+      "9",
+      "6",
+      "3",
+      "4"
+    ],
+    "correctAnswer": 1,
+    "explanation": "row=1: inner loop runs for range(1) -> 1 time. row=2: inner loop runs for range(2) -> 2 times. row=3: inner loop runs for range(3) -> 3 times. Total count = 1 + 2 + 3 = 6."
+  }
+];
+</script>
   <!-- Main Exam Engine Script -->
-  <script src="app.js"></script>
+  <script>
+/**
+ * NTA Exam Portal - Main Exam Engine & Anti-Cheating System
+ * National Testing Agency JEE/NEET/CUET Simulation
+ */
+
+(function () {
+  "use strict";
+
+  // State Variables
+  let questions = [];
+  let currentIndex = 0;
+  let userResponses = [];
+  let totalTimeSeconds = 100 * 60; // 100 Minutes = 6000 seconds
+  let timeRemaining = totalTimeSeconds;
+  let timerInterval = null;
+  let examStarted = false;
+  let examSubmitted = false;
+  let currentSectionFilter = "all";
+
+  // Anti-Cheat / Proctoring State
+  let warningCount = 0;
+  const maxWarnings = 3;
+  let violationLog = [];
+  let isCooldown = false;
+  let audioCtx = null;
+
+  // DOM Elements
+  const startOverlay = document.getElementById("startOverlay");
+  const consentCheckbox = document.getElementById("consentCheckbox");
+  const btnStartExam = document.getElementById("btnStartExam");
+
+  const timerDisplay = document.getElementById("timerDisplay");
+  const timerContainer = document.getElementById("timerContainer");
+  const proctorStatusBadge = document.getElementById("proctorStatusBadge");
+  const warningCountText = document.getElementById("warningCountText");
+
+  const qNumberTitle = document.getElementById("qNumberTitle");
+  const qTopicBadge = document.getElementById("qTopicBadge");
+  const qDifficultyBadge = document.getElementById("qDifficultyBadge");
+  const questionText = document.getElementById("questionText");
+  const codeSnippetContainer = document.getElementById("codeSnippetContainer");
+  const codeSnippetText = document.getElementById("codeSnippetText");
+  const optionsContainer = document.getElementById("optionsContainer");
+
+  const btnPrev = document.getElementById("btnPrev");
+  const btnNext = document.getElementById("btnNext");
+  const btnSaveNext = document.getElementById("btnSaveNext");
+  const btnSaveMarkReview = document.getElementById("btnSaveMarkReview");
+  const btnClearResponse = document.getElementById("btnClearResponse");
+  const btnMarkReviewNext = document.getElementById("btnMarkReviewNext");
+  const btnSubmitBottom = document.getElementById("btnSubmitBottom");
+  const btnSubmitSidebar = document.getElementById("btnSubmitSidebar");
+
+  const paletteGrid = document.getElementById("paletteGrid");
+  const sectionTabs = document.getElementById("sectionTabs");
+
+  // Status Legend Counts
+  const countAnswered = document.getElementById("countAnswered");
+  const countNotAnswered = document.getElementById("countNotAnswered");
+  const countNotVisited = document.getElementById("countNotVisited");
+  const countMarkedReview = document.getElementById("countMarkedReview");
+  const countReviewEvaluated = document.getElementById("countReviewEvaluated");
+
+  // Modals
+  const securityModal = document.getElementById("securityModal");
+  const violationCounterText = document.getElementById("violationCounterText");
+  const btnAcknowledgeSecurity = document.getElementById("btnAcknowledgeSecurity");
+  const questionPaperModal = document.getElementById("questionPaperModal");
+  const qpModalBody = document.getElementById("qpModalBody");
+  const instructionsModal = document.getElementById("instructionsModal");
+  const submitConfirmModal = document.getElementById("submitConfirmModal");
+  const btnFinalSubmitConfirm = document.getElementById("btnFinalSubmitConfirm");
+
+  // Result Dashboard
+  const resultDashboard = document.getElementById("resultDashboard");
+  const examMainContainer = document.getElementById("examMainContainer");
+  const btnRetakeExam = document.getElementById("btnRetakeExam");
+
+  // Initialize Audio Synth for Alarm
+  function initAudio() {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (AudioContext) {
+        audioCtx = new AudioContext();
+      }
+    } catch (e) {
+      console.warn("Web Audio API not supported", e);
+    }
+  }
+
+  function playSecurityAlarm() {
+    if (!audioCtx) return;
+    try {
+      if (audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(880, audioCtx.currentTime); // A5
+      osc.frequency.setValueAtTime(440, audioCtx.currentTime + 0.15); // A4
+      osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.3); // A5
+
+      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.5);
+    } catch (err) {
+      console.warn("Alarm play error", err);
+    }
+  }
+
+  // Initialize Exam Data
+  function initExam() {
+    if (window.EXAM_QUESTIONS && Array.isArray(window.EXAM_QUESTIONS)) {
+      questions = window.EXAM_QUESTIONS;
+    } else {
+      console.error("Questions not loaded!");
+      return;
+    }
+
+    // Initialize user responses structure
+    userResponses = questions.map((q, idx) => ({
+      questionId: q.id,
+      selectedOption: null,
+      // 'NOT_VISITED', 'NOT_ANSWERED', 'ANSWERED', 'MARKED_REVIEW', 'REVIEW_EVALUATED'
+      status: idx === 0 ? "NOT_ANSWERED" : "NOT_VISITED",
+      visited: idx === 0
+    }));
+
+    renderPalette();
+    renderCurrentQuestion();
+    updateStatusCounts();
+  }
+
+  // Start Exam Flow
+  consentCheckbox.addEventListener("change", function () {
+    btnStartExam.disabled = !this.checked;
+  });
+
+  btnStartExam.addEventListener("click", function () {
+    initAudio();
+    enterFullscreen();
+    startOverlay.style.display = "none";
+    examStarted = true;
+    startTimer();
+    bindAntiCheatListeners();
+  });
+
+  // Fullscreen Management
+  function enterFullscreen() {
+    const docElm = document.documentElement;
+    if (docElm.requestFullscreen) {
+      docElm.requestFullscreen().catch(err => console.log(err));
+    } else if (docElm.webkitRequestFullscreen) {
+      docElm.webkitRequestFullscreen();
+    } else if (docElm.msRequestFullscreen) {
+      docElm.msRequestFullscreen();
+    }
+  }
+
+  document.getElementById("btnFullscreenToggle").addEventListener("click", () => {
+    if (!document.fullscreenElement) {
+      enterFullscreen();
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  });
+
+  // ==================== ANTI-CHEAT & PROCTORING ENGINE ====================
+  function bindAntiCheatListeners() {
+    // 1. Detect tab switch & minimization
+    document.addEventListener("visibilitychange", () => {
+      if (!examStarted || examSubmitted) return;
+      if (document.hidden) {
+        triggerSecurityViolation("Switched browser tab or minimized window");
+      }
+    });
+
+    // 2. Detect window blur (alt-tab, clicking outside)
+    window.addEventListener("blur", () => {
+      if (!examStarted || examSubmitted) return;
+      triggerSecurityViolation("Window focus lost / application switched");
+    });
+
+    // 3. Detect exiting fullscreen
+    document.addEventListener("fullscreenchange", () => {
+      if (!examStarted || examSubmitted) return;
+      if (!document.fullscreenElement) {
+        triggerSecurityViolation("Exited Fullscreen mode");
+      }
+    });
+
+    // 4. Prevent accidental refresh or tab close
+    window.addEventListener("beforeunload", (e) => {
+      if (examStarted && !examSubmitted) {
+        e.preventDefault();
+        e.returnValue = "Are you sure you want to leave the exam? Your progress will be lost!";
+        return e.returnValue;
+      }
+    });
+
+    // 5. Disable common shortcut keys (Ctrl+W, Ctrl+R, F5, Ctrl+Tab)
+    window.addEventListener("keydown", (e) => {
+      if (!examStarted || examSubmitted) return;
+      if (
+        (e.key === "F5") ||
+        (e.ctrlKey && e.key.toLowerCase() === "r") ||
+        (e.ctrlKey && e.key.toLowerCase() === "w") ||
+        (e.ctrlKey && e.key.toLowerCase() === "t") ||
+        (e.ctrlKey && e.key.toLowerCase() === "u") ||
+        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "i")
+      ) {
+        e.preventDefault();
+        triggerSecurityViolation(`Prohibited key combination pressed (${e.key})`);
+      }
+    });
+  }
+
+  function triggerSecurityViolation(reason) {
+    if (isCooldown || examSubmitted) return;
+    isCooldown = true;
+    setTimeout(() => { isCooldown = false; }, 2000); // 2-second cooldown to avoid duplicate triggers
+
+    warningCount++;
+    const timestamp = new Date().toLocaleTimeString();
+    violationLog.push({ warning: warningCount, reason, timestamp });
+
+    playSecurityAlarm();
+
+    // Update Proctor Status Badge
+    warningCountText.innerText = warningCount;
+    proctorStatusBadge.classList.add("proctor-warning");
+
+    // Display Security Modal
+    violationCounterText.innerText = `WARNING #${warningCount} OF ${maxWarnings}`;
+    securityModal.style.display = "flex";
+
+    if (warningCount >= maxWarnings) {
+      setTimeout(() => {
+        alert("CRITICAL VIOLATION: Maximum permitted proctoring warnings (3) reached. The exam is being submitted immediately.");
+        securityModal.style.display = "none";
+        submitExam("Malpractice violation: 3 warnings reached");
+      }, 500);
+    }
+  }
+
+  btnAcknowledgeSecurity.addEventListener("click", () => {
+    securityModal.style.display = "none";
+    enterFullscreen();
+  });
+
+  // ==================== TIMER ENGINE ====================
+  function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+      if (timeRemaining > 0) {
+        timeRemaining--;
+        updateTimerDisplay();
+
+        if (timeRemaining <= 300) {
+          timerContainer.className = "timer-container timer-danger";
+        } else if (timeRemaining <= 900) {
+          timerContainer.className = "timer-container timer-warning";
+        }
+      } else {
+        clearInterval(timerInterval);
+        alert("Time Up! 100 minutes have expired. Your responses are being automatically submitted.");
+        submitExam("Time expired (100 Minutes)");
+      }
+    }, 1000);
+  }
+
+  function updateTimerDisplay() {
+    const hours = Math.floor(timeRemaining / 3600);
+    const minutes = Math.floor((timeRemaining % 3600) / 60);
+    const seconds = timeRemaining % 60;
+
+    const pad = (n) => (n < 10 ? "0" + n : n);
+    timerDisplay.innerText = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+  }
+
+  // ==================== QUESTION RENDERING ====================
+  function renderCurrentQuestion() {
+    const q = questions[currentIndex];
+    const resp = userResponses[currentIndex];
+
+    // Mark as visited
+    resp.visited = true;
+    if (resp.status === "NOT_VISITED") {
+      resp.status = "NOT_ANSWERED";
+    }
+
+    qNumberTitle.innerText = `Question No. ${q.id}`;
+    qTopicBadge.innerText = q.topic;
+    qDifficultyBadge.innerText = q.difficulty;
+    questionText.innerText = q.question;
+
+    // Code snippet display
+    if (q.code) {
+      codeSnippetText.innerText = q.code;
+      codeSnippetContainer.style.display = "block";
+    } else {
+      codeSnippetContainer.style.display = "none";
+    }
+
+    // Render Options A, B, C, D
+    const optionLetters = ["A", "B", "C", "D"];
+    optionsContainer.innerHTML = "";
+
+    q.options.forEach((optText, optIdx) => {
+      const isSelected = resp.selectedOption === optIdx;
+      const optDiv = document.createElement("div");
+      optDiv.className = `option-item ${isSelected ? "selected" : ""}`;
+      optDiv.innerHTML = `
+        <input type="radio" name="optRadio" class="option-radio" id="opt_${optIdx}" ${isSelected ? "checked" : ""}>
+        <span class="option-label">(${optionLetters[optIdx]})</span>
+        <span class="option-text">${escapeHtml(optText)}</span>
+      `;
+
+      optDiv.addEventListener("click", () => {
+        selectOption(optIdx);
+      });
+
+      optionsContainer.appendChild(optDiv);
+    });
+
+    // Update Palette Active class
+    updatePaletteActiveState();
+    updateStatusCounts();
+
+    // Disable/Enable Nav buttons
+    btnPrev.disabled = currentIndex === 0;
+    btnNext.disabled = currentIndex === questions.length - 1;
+  }
+
+  function selectOption(optIdx) {
+    userResponses[currentIndex].selectedOption = optIdx;
+    const items = optionsContainer.querySelectorAll(".option-item");
+    items.forEach((item, idx) => {
+      const radio = item.querySelector("input[type=radio]");
+      if (idx === optIdx) {
+        item.classList.add("selected");
+        radio.checked = true;
+      } else {
+        item.classList.remove("selected");
+        radio.checked = false;
+      }
+    });
+  }
+
+  function escapeHtml(text) {
+    if (!text) return "";
+    return text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  // ==================== PALETTE GENERATION & UPDATES ====================
+  function renderPalette() {
+    paletteGrid.innerHTML = "";
+    questions.forEach((q, idx) => {
+      const btn = document.createElement("button");
+      btn.className = `palette-btn ${getStatusShapeClass(userResponses[idx].status)}`;
+      btn.id = `palette_btn_${idx}`;
+      btn.innerText = q.id;
+
+      btn.addEventListener("click", () => {
+        navigateToQuestion(idx);
+      });
+
+      paletteGrid.appendChild(btn);
+    });
+  }
+
+  function getStatusShapeClass(status) {
+    switch (status) {
+      case "ANSWERED":
+        return "shape-answered";
+      case "NOT_ANSWERED":
+        return "shape-not-answered";
+      case "MARKED_REVIEW":
+        return "shape-review";
+      case "REVIEW_EVALUATED":
+        return "shape-review-evaluated";
+      case "NOT_VISITED":
+      default:
+        return "shape-not-visited";
+    }
+  }
+
+  function updatePaletteActiveState() {
+    const allBtns = paletteGrid.querySelectorAll(".palette-btn");
+    allBtns.forEach((btn, idx) => {
+      btn.className = `palette-btn ${getStatusShapeClass(userResponses[idx].status)}`;
+      if (idx === currentIndex) {
+        btn.classList.add("active-question");
+      }
+    });
+  }
+
+  function updateStatusCounts() {
+    let answered = 0;
+    let notAnswered = 0;
+    let notVisited = 0;
+    let markedReview = 0;
+    let reviewEvaluated = 0;
+
+    userResponses.forEach((r) => {
+      switch (r.status) {
+        case "ANSWERED":
+          answered++;
+          break;
+        case "NOT_ANSWERED":
+          notAnswered++;
+          break;
+        case "MARKED_REVIEW":
+          markedReview++;
+          break;
+        case "REVIEW_EVALUATED":
+          reviewEvaluated++;
+          break;
+        case "NOT_VISITED":
+        default:
+          notVisited++;
+          break;
+      }
+    });
+
+    countAnswered.innerText = answered;
+    countNotAnswered.innerText = notAnswered;
+    countNotVisited.innerText = notVisited;
+    countMarkedReview.innerText = markedReview;
+    countReviewEvaluated.innerText = reviewEvaluated;
+  }
+
+  function navigateToQuestion(newIndex) {
+    if (newIndex < 0 || newIndex >= questions.length) return;
+    currentIndex = newIndex;
+    renderCurrentQuestion();
+  }
+
+  // ==================== ACTION BUTTON HANDLERS ====================
+
+  // 1. Save & Next
+  btnSaveNext.addEventListener("click", () => {
+    const currentResp = userResponses[currentIndex];
+    if (currentResp.selectedOption !== null) {
+      currentResp.status = "ANSWERED";
+    } else {
+      currentResp.status = "NOT_ANSWERED";
+    }
+
+    if (currentIndex < questions.length - 1) {
+      currentIndex++;
+    }
+    renderCurrentQuestion();
+  });
+
+  // 2. Save & Mark for Review
+  btnSaveMarkReview.addEventListener("click", () => {
+    const currentResp = userResponses[currentIndex];
+    if (currentResp.selectedOption !== null) {
+      currentResp.status = "REVIEW_EVALUATED";
+    } else {
+      currentResp.status = "MARKED_REVIEW";
+    }
+
+    if (currentIndex < questions.length - 1) {
+      currentIndex++;
+    }
+    renderCurrentQuestion();
+  });
+
+  // 3. Clear Response
+  btnClearResponse.addEventListener("click", () => {
+    userResponses[currentIndex].selectedOption = null;
+    userResponses[currentIndex].status = "NOT_ANSWERED";
+    renderCurrentQuestion();
+  });
+
+  // 4. Mark for Review & Next
+  btnMarkReviewNext.addEventListener("click", () => {
+    const currentResp = userResponses[currentIndex];
+    if (currentResp.selectedOption !== null) {
+      currentResp.status = "REVIEW_EVALUATED";
+    } else {
+      currentResp.status = "MARKED_REVIEW";
+    }
+
+    if (currentIndex < questions.length - 1) {
+      currentIndex++;
+    }
+    renderCurrentQuestion();
+  });
+
+  // 5. Previous & Next Nav
+  btnPrev.addEventListener("click", () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      renderCurrentQuestion();
+    }
+  });
+
+  btnNext.addEventListener("click", () => {
+    if (currentIndex < questions.length - 1) {
+      currentIndex++;
+      renderCurrentQuestion();
+    }
+  });
+
+  // ==================== SECTION TABS ====================
+  sectionTabs.addEventListener("click", (e) => {
+    const tab = e.target.closest(".section-tab");
+    if (!tab) return;
+
+    sectionTabs.querySelectorAll(".section-tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+
+    const sectionName = tab.getAttribute("data-section");
+    currentSectionFilter = sectionName;
+
+    // Filter palette or jump to first question in section
+    if (sectionName === "all") {
+      navigateToQuestion(0);
+    } else {
+      const firstInSec = questions.findIndex(q => q.section.startsWith(sectionName));
+      if (firstInSec !== -1) {
+        navigateToQuestion(firstInSec);
+      }
+    }
+  });
+
+  // ==================== MODALS & POPUPS ====================
+  window.closeModal = function (modalId) {
+    document.getElementById(modalId).style.display = "none";
+  };
+
+  // Question Paper Modal
+  document.getElementById("btnQuestionPaper").addEventListener("click", () => {
+    renderQuestionPaper();
+    questionPaperModal.style.display = "flex";
+  });
+
+  function renderQuestionPaper() {
+    qpModalBody.innerHTML = "";
+    questions.forEach((q) => {
+      const qDiv = document.createElement("div");
+      qDiv.style.marginBottom = "20px";
+      qDiv.style.paddingBottom = "14px";
+      qDiv.style.borderBottom = "1px solid #e2e8f0";
+
+      let codeHtml = q.code ? `<div class="code-container" style="margin: 8px 0;"><pre><code>${escapeHtml(q.code)}</code></pre></div>` : "";
+      
+      let optionsHtml = q.options.map((opt, oIdx) => {
+        const letters = ["A", "B", "C", "D"];
+        return `<div style="margin-left: 16px; margin-top: 4px; font-size: 13.5px;">(${letters[oIdx]}) ${escapeHtml(opt)}</div>`;
+      }).join("");
+
+      qDiv.innerHTML = `
+        <div style="font-weight: 700; color: #0b3b60; margin-bottom: 6px;">Q${q.id}. [${q.topic}] (${q.difficulty})</div>
+        <div style="font-size: 14.5px; color: #1e293b; margin-bottom: 6px;">${escapeHtml(q.question)}</div>
+        ${codeHtml}
+        ${optionsHtml}
+      `;
+      qpModalBody.appendChild(qDiv);
+    });
+  }
+
+  // Instructions Modal
+  document.getElementById("btnInstructions").addEventListener("click", () => {
+    instructionsModal.style.display = "flex";
+  });
+
+  // Submit Confirmation Modal
+  function openSubmitConfirmation() {
+    updateStatusCounts();
+    document.getElementById("modalSumAnswered").innerText = countAnswered.innerText;
+    document.getElementById("modalSumNotAnswered").innerText = countNotAnswered.innerText;
+    document.getElementById("modalSumNotVisited").innerText = countNotVisited.innerText;
+    document.getElementById("modalSumReview").innerText = countMarkedReview.innerText;
+    document.getElementById("modalSumReviewEval").innerText = countReviewEvaluated.innerText;
+
+    submitConfirmModal.style.display = "flex";
+  }
+
+  btnSubmitBottom.addEventListener("click", openSubmitConfirmation);
+  btnSubmitSidebar.addEventListener("click", openSubmitConfirmation);
+
+  btnFinalSubmitConfirm.addEventListener("click", () => {
+    submitConfirmModal.style.display = "none";
+    submitExam("Normal submission by candidate");
+  });
+
+  // ==================== SUBMIT & RESULT EVALUATION ====================
+  function submitExam(reason = "Completed") {
+    examSubmitted = true;
+    clearInterval(timerInterval);
+
+    // Calculate Scores (+4 for correct, -1 for incorrect, 0 for unattempted)
+    // Note: NTA rules state questions "Answered & Marked for Review" ARE evaluated!
+    let correctCount = 0;
+    let incorrectCount = 0;
+    let unattemptedCount = 0;
+
+    userResponses.forEach((resp, idx) => {
+      const q = questions[idx];
+      if (resp.selectedOption !== null) {
+        if (resp.selectedOption === q.correctAnswer) {
+          correctCount++;
+        } else {
+          incorrectCount++;
+        }
+      } else {
+        unattemptedCount++;
+      }
+    });
+
+    const totalQuestions = questions.length;
+    const maxScore = totalQuestions * 4; // 70 * 4 = 280
+    const calculatedScore = (correctCount * 4) - (incorrectCount * 1);
+    const percentage = ((calculatedScore / maxScore) * 100).toFixed(1);
+    const attemptedCount = correctCount + incorrectCount;
+    const accuracy = attemptedCount > 0 ? ((correctCount / attemptedCount) * 100).toFixed(1) : 0;
+    const timeSpentSeconds = totalTimeSeconds - timeRemaining;
+    const timeSpentMins = Math.floor(timeSpentSeconds / 60);
+    const timeSpentSecs = timeSpentSeconds % 60;
+
+    // Hide main exam viewport & show Result Dashboard
+    examMainContainer.style.display = "none";
+    document.querySelector(".section-nav-bar").style.display = "none";
+    document.getElementById("timerContainer").style.display = "none";
+    resultDashboard.style.display = "block";
+
+    // Populate Scorecard
+    document.getElementById("resExamDate").innerText = new Date().toLocaleString();
+    document.getElementById("resTotalScore").innerText = `${calculatedScore}`;
+    document.getElementById("resPercentage").innerText = `${percentage}%`;
+    document.getElementById("resAccuracy").innerText = `${accuracy}%`;
+    document.getElementById("resTimeTaken").innerText = `${timeSpentMins}m ${timeSpentSecs}s`;
+    document.getElementById("resCorrectCount").innerText = correctCount;
+    document.getElementById("resIncorrectCount").innerText = incorrectCount;
+    document.getElementById("resUnattemptedCount").innerText = unattemptedCount;
+
+    const resProctorStatus = document.getElementById("resProctorStatus");
+    if (warningCount === 0) {
+      resProctorStatus.innerText = "Clean (0 Warnings)";
+      resProctorStatus.style.color = "#15803d";
+    } else {
+      resProctorStatus.innerText = `Recorded ${warningCount} Violation(s)`;
+      resProctorStatus.style.color = "#dc2626";
+    }
+
+    // Save to local storage or backend API
+    const submissionData = {
+      candidate: "Sanjeev Kumar",
+      roll: "NTA-PY2026-7001",
+      submittedAt: new Date().toISOString(),
+      score: calculatedScore,
+      maxScore: maxScore,
+      percentage: percentage,
+      correct: correctCount,
+      incorrect: incorrectCount,
+      unattempted: unattemptedCount,
+      warningsCount: warningCount,
+      violationLog: violationLog,
+      responses: userResponses
+    };
+
+    try {
+      fetch("/api/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(submissionData)
+      }).catch(err => console.log("Offline mode or local server not reached", err));
+    } catch (e) {
+      console.log(e);
+    }
+
+    // Render Solutions Review
+    renderReviewSolutions("all");
+    setupReviewFilterTabs();
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // Solution Review Renderer
+  function renderReviewSolutions(filter = "all") {
+    const container = document.getElementById("reviewQuestionsContainer");
+    container.innerHTML = "";
+
+    const letters = ["A", "B", "C", "D"];
+
+    questions.forEach((q, idx) => {
+      const resp = userResponses[idx];
+      const isAttempted = resp.selectedOption !== null;
+      const isCorrect = isAttempted && resp.selectedOption === q.correctAnswer;
+      const isIncorrect = isAttempted && resp.selectedOption !== q.correctAnswer;
+
+      if (filter === "correct" && !isCorrect) return;
+      if (filter === "incorrect" && !isIncorrect) return;
+      if (filter === "unattempted" && isAttempted) return;
+
+      let statusBadge = "";
+      let cardClass = "";
+
+      if (isCorrect) {
+        statusBadge = '<span style="color: #15803d; background: #dcfce7; padding: 2px 8px; border-radius: 4px; font-weight: 700;">✓ Correct (+4.00)</span>';
+        cardClass = "status-correct";
+      } else if (isIncorrect) {
+        statusBadge = '<span style="color: #b91c1c; background: #fee2e2; padding: 2px 8px; border-radius: 4px; font-weight: 700;">✗ Incorrect (-1.00)</span>';
+        cardClass = "status-incorrect";
+      } else {
+        statusBadge = '<span style="color: #475569; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-weight: 700;">○ Skipped (0.00)</span>';
+        cardClass = "status-skipped";
+      }
+
+      let codeHtml = q.code ? `<div class="code-container"><pre><code>${escapeHtml(q.code)}</code></pre></div>` : "";
+
+      let optionsHtml = q.options.map((opt, oIdx) => {
+        let optStyle = "padding: 8px 12px; margin-bottom: 6px; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 14px;";
+        if (oIdx === q.correctAnswer) {
+          optStyle += " background: #dcfce7; border-color: #86efac; font-weight: 600; color: #166534;";
+        } else if (isAttempted && resp.selectedOption === oIdx) {
+          optStyle += " background: #fee2e2; border-color: #fca5a5; font-weight: 600; color: #991b1b;";
+        }
+        return `
+          <div style="${optStyle}">
+            <strong>(${letters[oIdx]})</strong> ${escapeHtml(opt)}
+            ${oIdx === q.correctAnswer ? '<span style="float: right; color: #166534; font-weight: 700;">[Correct Option]</span>' : ''}
+            ${(isAttempted && resp.selectedOption === oIdx && oIdx !== q.correctAnswer) ? '<span style="float: right; color: #991b1b; font-weight: 700;">[Your Option]</span>' : ''}
+          </div>
+        `;
+      }).join("");
+
+      const card = document.createElement("div");
+      card.className = `review-card ${cardClass}`;
+      card.innerHTML = `
+        <div class="review-meta">
+          <div>
+            <span style="font-size: 15px; font-weight: 700; color: #0b3b60;">Question ${q.id}</span>
+            <span style="color: #64748b; margin-left: 8px; font-size: 12px;">[${q.topic}]</span>
+            <span style="color: #64748b; margin-left: 4px; font-size: 12px;">(${q.difficulty})</span>
+          </div>
+          <div>${statusBadge}</div>
+        </div>
+        <div style="font-size: 15px; color: #1e293b; margin-bottom: 10px; font-weight: 500;">${escapeHtml(q.question)}</div>
+        ${codeHtml}
+        <div style="margin: 12px 0;">${optionsHtml}</div>
+        <div class="explanation-box">
+          <strong>💡 Solution & Explanation:</strong><br>
+          ${escapeHtml(q.explanation)}
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function setupReviewFilterTabs() {
+    const tabs = document.querySelectorAll(".review-tab-btn");
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        tabs.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        const filter = tab.getAttribute("data-filter");
+        renderReviewSolutions(filter);
+      });
+    });
+  }
+
+  btnRetakeExam.addEventListener("click", () => {
+    if (confirm("Are you sure you want to retake the exam? Your current progress will be reset.")) {
+      window.location.reload();
+    }
+  });
+
+  // Start initialization on DOM loaded
+  document.addEventListener("DOMContentLoaded", initExam);
+})();
+
+</script>
 </body>
 </html>
