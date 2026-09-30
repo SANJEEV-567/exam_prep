@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NTA Examination Services - Python Core & Logic Assessment</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>">
+</head>
+<body oncontextmenu="return false;">
+
+  <!-- START OVERLAY (Full screen launch & proctoring consent) -->
+  <div id="startOverlay" class="start-overlay">
+    <div class="start-modal">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+        <span class="nta-badge">NTA</span>
+        <div>
+          <h2 style="margin: 0; font-size: 19px;">NATIONAL TESTING AGENCY</h2>
+          <p style="font-size: 12px; color: #64748b;">National Python Eligibility & Proficiency Assessment (NPEPA - 2026)</p>
+        </div>
+      </div>
+      <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 12px 0;">
+      
+      <div class="start-instructions">
+        <strong>Important Examination Instructions:</strong>
+        <ul>
+          <li><strong>Total Questions:</strong> 70 Questions (Multiple Choice Format).</li>
+          <li><strong>Duration:</strong> 100 Minutes countdown timer.</li>
+          <li><strong>Marking Scheme:</strong> <span style="color: #15803d; font-weight: 700;">+4</span> for each correct answer; <span style="color: #b91c1c; font-weight: 700;">-1</span> for each incorrect answer; <span style="color: #64748b; font-weight: 700;">0</span> for unattempted.</li>
+          <li><strong>Anti-Cheating & Proctoring Protocol:</strong>
+            <ul style="margin-top: 4px; color: #b91c1c;">
+              <li>The exam runs in Fullscreen Mode.</li>
+              <li>Switching tabs, minimizing the browser, or clicking outside will trigger an immediate <strong>PROCTORING SECURITY WARNING</strong> and an audible alarm.</li>
+              <li>A maximum of <strong>3 Warnings</strong> are permitted before your test is automatically submitted!</li>
+            </ul>
+          </li>
+          <li><strong>Syllabus:</strong> Introduction to Python, Variables, Data Types, Arithmetic & Edge Cases, String Operations, Booleans, I/O & Formatting, Conditionals, Problem Solving, and Loops.</li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label style="font-size: 13.5px; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" id="consentCheckbox" style="width: 16px; height: 16px;">
+          <span>I have read all instructions and agree to the proctoring regulations.</span>
+        </label>
+      </div>
+
+      <button id="btnStartExam" class="btn-start-exam" disabled>START EXAM NOW</button>
+    </div>
+  </div>
+
+  <!-- EXAM TOP HEADER -->
+  <header class="exam-header">
+    <div class="tricolor-stripe"></div>
+    <div class="header-content">
+      <div class="logo-section">
+        <span class="nta-badge">NTA</span>
+        <div class="exam-info">
+          <h1>NATIONAL TESTING AGENCY (EXAM SERVICES)</h1>
+          <div class="subtitle">Python Programming Assessment (70 Questions &bull; 100 Minutes)</div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Proctor Status -->
+        <div id="proctorStatusBadge" class="proctor-badge">
+          <span class="proctor-dot"></span>
+          <span>Proctor Active | Warnings: <span id="warningCountText">0</span>/3</span>
+        </div>
+
+        <!-- Timer -->
+        <div id="timerContainer" class="timer-container">
+          <span class="timer-label">Time Left:</span>
+          <span id="timerDisplay" class="timer-digits">01:40:00</span>
+        </div>
+
+        <!-- Candidate Details -->
+        <div class="candidate-box">
+          <div class="candidate-avatar">SK</div>
+          <div class="candidate-details">
+            <div class="name">Sanjeev Kumar</div>
+            <div class="roll">Roll: NTA-PY2026-7001</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SUB-HEADER / SECTION & NAVIGATION BAR -->
+  <nav class="section-nav-bar">
+    <div class="section-tabs" id="sectionTabs">
+      <button class="section-tab active" data-section="all">All Questions (1-70)</button>
+      <button class="section-tab" data-section="Section 1">Sec 1: Fundamentals & Variables (1-20)</button>
+      <button class="section-tab" data-section="Section 2">Sec 2: Operators & Expressions (21-32)</button>
+      <button class="section-tab" data-section="Section 3">Sec 3: Strings & Booleans (33-52)</button>
+      <button class="section-tab" data-section="Section 4">Sec 4: I/O, Conditionals & Loops (53-70)</button>
+    </div>
+
+    <div class="nav-actions">
+      <button id="btnQuestionPaper" class="btn-secondary-nav">
+        <span>📄 Question Paper</span>
+      </button>
+      <button id="btnInstructions" class="btn-secondary-nav">
+        <span>ℹ️ Instructions</span>
+      </button>
+      <button id="btnFullscreenToggle" class="btn-secondary-nav">
+        <span>⛶ Fullscreen</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MAIN EXAM AREA -->
+  <main class="main-exam-container" id="examMainContainer">
+    <!-- LEFT: Question Viewport -->
+    <section class="question-viewport">
+      <div class="question-meta-header">
+        <div class="question-identity">
+          <span class="question-number-title" id="qNumberTitle">Question No. 1</span>
+          <span class="question-type-badge">Multiple Choice (Single Option)</span>
+          <span class="question-topic-badge" id="qTopicBadge">01_Intro to Python</span>
+          <span class="question-type-badge" id="qDifficultyBadge">Basic</span>
+        </div>
+        <div class="marking-scheme">
+          <span class="marks-pos">Correct: +4.00</span>
+          <span class="marks-neg">Incorrect: -1.00</span>
+        </div>
+      </div>
+
+      <div class="question-content-box">
+        <div class="question-text" id="questionText">Loading question statement...</div>
+        
+        <div id="codeSnippetContainer" class="code-container" style="display: none;">
+          <pre><code id="codeSnippetText"></code></pre>
+        </div>
+
+        <div class="options-list" id="optionsContainer">
+          <!-- Dynamically populated options A, B, C, D -->
+        </div>
+      </div>
+
+      <!-- Action Navigation Toolbar -->
+      <footer class="bottom-action-bar">
+        <div class="action-left-group">
+          <button id="btnSaveNext" class="btn btn-save-next">Save & Next</button>
+          <button id="btnSaveMarkReview" class="btn btn-save-review">Save & Mark for Review</button>
+          <button id="btnClearResponse" class="btn btn-clear">Clear Response</button>
+          <button id="btnMarkReviewNext" class="btn btn-review-next">Mark for Review & Next</button>
+        </div>
+        <div class="action-right-group">
+          <button id="btnPrev" class="btn btn-nav">&laquo; Previous</button>
+          <button id="btnNext" class="btn btn-nav">Next &raquo;</button>
+          <button id="btnSubmitBottom" class="btn btn-submit-exam">Submit</button>
+        </div>
+      </footer>
+    </section>
+
+    <!-- RIGHT: Question Palette -->
+    <aside class="palette-sidebar">
+      <!-- Status Legend -->
+      <div class="legend-card">
+        <div class="legend-title">Question Status Palette</div>
+        <div class="legend-grid">
+          <div class="legend-item">
+            <span class="nta-shape shape-answered" id="countAnswered">0</span>
+            <span>Answered</span>
+          </div>
+          <div class="legend-item">
+            <span class="nta-shape shape-not-answered" id="countNotAnswered">0</span>
+            <span>Not Answered</span>
+          </div>
+          <div class="legend-item">
+            <span class="nta-shape shape-not-visited" id="countNotVisited">70</span>
+            <span>Not Visited</span>
+          </div>
+          <div class="legend-item">
+            <span class="nta-shape shape-review" id="countMarkedReview">0</span>
+            <span>Marked for Review</span>
+          </div>
+          <div class="legend-item" style="grid-column: span 2;">
+            <span class="nta-shape shape-review-evaluated" id="countReviewEvaluated">0</span>
+            <span style="font-size: 11px;">Answered &amp; Marked for Review (Evaluated)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question Palette Grid -->
+      <div class="palette-body">
+        <div class="palette-filter-title">Choose a Question:</div>
+        <div class="palette-grid" id="paletteGrid">
+          <!-- 70 Buttons generated dynamically -->
+        </div>
+      </div>
+
+      <div class="palette-footer">
+        <button id="btnSubmitSidebar" class="btn btn-sidebar-submit">Submit Exam</button>
+      </div>
+    </aside>
+  </main>
+
+  <!-- RESULT DASHBOARD (Initially Hidden) -->
+  <div id="resultDashboard" class="result-container" style="display: none;">
+    <div class="scorecard-header">
+      <span class="nta-badge" style="font-size: 15px;">NTA RESULT</span>
+      <h2 style="margin-top: 8px;">NATIONAL TESTING AGENCY - OFFICIAL SCORECARD</h2>
+      <p style="color: #64748b; font-size: 13px;">National Python Eligibility & Proficiency Assessment (NPEPA - 2026)</p>
+      
+      <div style="margin: 16px 0; font-size: 14px; color: #334155; display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+        <div><strong>Candidate Name:</strong> Sanjeev Kumar</div>
+        <div><strong>Roll Number:</strong> NTA-PY2026-7001</div>
+        <div><strong>Exam Date:</strong> <span id="resExamDate">2026-09-30</span></div>
+        <div><strong>Proctor Status:</strong> <span id="resProctorStatus" style="font-weight: 700; color: #15803d;">Clean</span></div>
+      </div>
+
+      <div class="score-highlight">
+        <div class="score-box">
+          <div class="num" id="resTotalScore">0</div>
+          <div class="desc">Score Out of 280</div>
+        </div>
+        <div class="score-box">
+          <div class="num" id="resPercentage">0%</div>
+          <div class="desc">Percentage</div>
+        </div>
+        <div class="score-box">
+          <div class="num" id="resAccuracy">0%</div>
+          <div class="desc">Accuracy</div>
+        </div>
+        <div class="score-box">
+          <div class="num" id="resTimeTaken">0m</div>
+          <div class="desc">Time Taken</div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 16px; margin-top: 14px; flex-wrap: wrap;">
+        <span style="color: #15803d; font-weight: 600;">✓ Correct: <span id="resCorrectCount">0</span></span>
+        <span style="color: #b91c1c; font-weight: 600;">✗ Incorrect: <span id="resIncorrectCount">0</span></span>
+        <span style="color: #64748b; font-weight: 600;">○ Unattempted: <span id="resUnattemptedCount">0</span></span>
+      </div>
+    </div>
+
+    <!-- Review Section with Filter Tabs -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+      <h3 style="color: #0b3b60;">Detailed Solutions & Explanations</h3>
+      <div class="review-tabs">
+        <button class="review-tab-btn active" data-filter="all">All (70)</button>
+        <button class="review-tab-btn" data-filter="correct">Correct</button>
+        <button class="review-tab-btn" data-filter="incorrect">Incorrect</button>
+        <button class="review-tab-btn" data-filter="unattempted">Unattempted</button>
+      </div>
+    </div>
+
+    <div id="reviewQuestionsContainer" class="review-container">
+      <!-- Detailed question breakdown injected here -->
+    </div>
+
+    <div style="text-align: center; margin: 30px 0; display: flex; justify-content: center; gap: 14px;">
+      <button onclick="window.print()" class="btn btn-nav" style="padding: 10px 20px;">🖨️ Print / Save Scorecard</button>
+      <button id="btnRetakeExam" class="btn btn-save-next" style="padding: 10px 20px;">↺ Retake Exam</button>
+    </div>
+  </div>
+
+  <!-- SECURITY WARNING / PROCTORING MODAL -->
+  <div id="securityModal" class="modal-overlay" style="display: none;">
+    <div class="modal-card security-alert-card">
+      <div class="modal-header security-alert-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="security-badge-big">SECURITY ALERT</span>
+          <h2 style="font-size: 17px; color: #991b1b;">EXAM PROCTORING VIOLATION</h2>
+        </div>
+      </div>
+      <div class="modal-body">
+        <p><strong>Warning! Tab switch, window minimization, or focus change detected.</strong></p>
+        <div class="violation-counter" id="violationCounterText">
+          WARNING #1 OF 3
+        </div>
+        <p style="font-size: 13.5px; color: #4b5563;">
+          Leaving the exam window or switching tabs is strictly forbidden under NTA exam proctoring guidelines.
+          If you receive <strong>3 warnings</strong>, your exam will be automatically submitted immediately with all recorded violations.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button id="btnAcknowledgeSecurity" class="btn btn-submit-exam" style="background-color: #dc2626; width: 100%;">
+          I UNDERSTAND & RESUME IN FULLSCREEN
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTION PAPER MODAL (Displays all 70 questions) -->
+  <div id="questionPaperModal" class="modal-overlay" style="display: none;">
+    <div class="modal-card" style="max-width: 850px;">
+      <div class="modal-header">
+        <h2>Question Paper (All 70 Questions)</h2>
+        <button class="modal-close" onclick="closeModal('questionPaperModal')">&times;</button>
+      </div>
+      <div class="modal-body" id="qpModalBody">
+        <!-- Rendered list of all questions -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-nav" onclick="closeModal('questionPaperModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSTRUCTIONS MODAL -->
+  <div id="instructionsModal" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>General Examination Instructions</h2>
+        <button class="modal-close" onclick="closeModal('instructionsModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h4>Question Palette Color Scheme:</h4>
+        <ul style="list-style: none; padding: 0; margin: 12px 0; display: flex; flex-direction: column; gap: 8px;">
+          <li style="display: flex; align-items: center; gap: 10px;">
+            <span class="nta-shape shape-not-visited">1</span> You have not visited the question yet.
+          </li>
+          <li style="display: flex; align-items: center; gap: 10px;">
+            <span class="nta-shape shape-not-answered">2</span> You have not answered the question.
+          </li>
+          <li style="display: flex; align-items: center; gap: 10px;">
+            <span class="nta-shape shape-answered">3</span> You have answered the question.
+          </li>
+          <li style="display: flex; align-items: center; gap: 10px;">
+            <span class="nta-shape shape-review">4</span> You have marked the question for review (not answered).
+          </li>
+          <li style="display: flex; align-items: center; gap: 10px;">
+            <span class="nta-shape shape-review-evaluated">5</span> The question is answered and marked for review (will be evaluated).
+          </li>
+        </ul>
+        <hr style="margin: 14px 0; border: 0; border-top: 1px solid #e2e8f0;">
+        <h4>Navigating to a Question:</h4>
+        <p>1. Click on the question number in the Question Palette on the right to jump directly to it.</p>
+        <p>2. Click <strong>Save & Next</strong> to save your answer and go to the next question.</p>
+        <p>3. Click <strong>Mark for Review & Next</strong> to mark for review without saving an answer.</p>
+        <p>4. Click <strong>Clear Response</strong> to deselect an answered option.</p>
+        <hr style="margin: 14px 0; border: 0; border-top: 1px solid #e2e8f0;">
+        <h4>Proctoring Protocol:</h4>
+        <p style="color: #b91c1c;">Do NOT switch tabs, resize the browser window, or press Alt+Tab. Doing so generates security warnings. Reaching 3 warnings terminates the exam.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-nav" onclick="closeModal('instructionsModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBMIT CONFIRMATION MODAL -->
+  <div id="submitConfirmModal" class="modal-overlay" style="display: none;">
+    <div class="modal-card" style="max-width: 550px;">
+      <div class="modal-header">
+        <h2>Submit Examination Confirmation</h2>
+        <button class="modal-close" onclick="closeModal('submitConfirmModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-weight: 600; color: #1e293b;">Here is a summary of your responses:</p>
+        
+        <table class="summary-table">
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th style="width: 100px; text-align: center;">Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Answered</td>
+              <td style="text-align: center; font-weight: 700; color: #2e7d32;" id="modalSumAnswered">0</td>
+            </tr>
+            <tr>
+              <td>Not Answered</td>
+              <td style="text-align: center; font-weight: 700; color: #dc3545;" id="modalSumNotAnswered">0</td>
+            </tr>
+            <tr>
+              <td>Not Visited</td>
+              <td style="text-align: center; font-weight: 700; color: #6c757d;" id="modalSumNotVisited">70</td>
+            </tr>
+            <tr>
+              <td>Marked for Review</td>
+              <td style="text-align: center; font-weight: 700; color: #6f42c1;" id="modalSumReview">0</td>
+            </tr>
+            <tr>
+              <td>Answered &amp; Marked for Review (Evaluated)</td>
+              <td style="text-align: center; font-weight: 700; color: #6f42c1;" id="modalSumReviewEval">0</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div style="background: #fff3cd; color: #856404; padding: 10px 14px; border-radius: 6px; font-size: 13px; border: 1px solid #ffeeba;">
+          ⚠️ <strong>Attention:</strong> Once submitted, you cannot change your answers. Do you want to submit your exam finally?
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-clear" onclick="closeModal('submitConfirmModal')">No, Return to Exam</button>
+        <button id="btnFinalSubmitConfirm" class="btn btn-save-next" style="background-color: #0284c7;">Yes, Submit Finally</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load Questions data (works offline, locally via file://, and with server) -->
+  <script src="questions.js"></script>
+  <!-- Main Exam Engine Script -->
+  <script src="app.js"></script>
+</body>
+</html>
