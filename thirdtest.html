@@ -1,0 +1,5119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NTA 200Q Python Assessment Portal (280 Mins)</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>">
+  <style>
+
+/* NTA 200-Question Exam Portal CSS */
+:root {
+  --nta-blue: #0b3b60;
+  --nta-dark-blue: #06233b;
+  --nta-light-blue: #1976d2;
+  --nta-header-bg: #ffffff;
+  --nta-accent: #ff9800;
+  --bg-page: #eef2f6;
+  --bg-card: #ffffff;
+  --text-dark: #212529;
+  --text-muted: #6c757d;
+  --border-color: #d1d5db;
+  --status-answered: #228b22;
+  --status-not-answered: #dc3545;
+  --status-not-visited: #6c757d;
+  --status-marked-review: #6f42c1;
+  --status-review-evaluated: #6f42c1;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+body {
+  background-color: var(--bg-page);
+  color: var(--text-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.code-snippet, .explanation-box, .review-container {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  user-select: text !important;
+}
+
+.exam-header {
+  background: #ffffff;
+  border-bottom: 3px solid #0b3b60;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.tricolor-stripe {
+  height: 4px;
+  background: linear-gradient(90deg, #ff9933 33.3%, #ffffff 33.3%, #ffffff 66.6%, #138808 66.6%);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nta-badge {
+  background: var(--nta-blue);
+  color: #fff;
+  font-weight: 800;
+  font-size: 18px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+
+.exam-info h1 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--nta-dark-blue);
+  line-height: 1.2;
+}
+
+.exam-info .subtitle {
+  font-size: 11px;
+  color: #495057;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.timer-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8f9fa;
+  border: 1px solid #ced4da;
+  padding: 6px 14px;
+  border-radius: 6px;
+}
+
+.timer-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #495057;
+  text-transform: uppercase;
+}
+
+.timer-digits {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  color: #0b3b60;
+  letter-spacing: 1px;
+}
+
+.timer-warning {
+  background: #fff3cd !important;
+  border-color: #ffeeba !important;
+  color: #856404 !important;
+}
+
+.timer-danger {
+  background: #f8d7da !important;
+  border-color: #f5c6cb !important;
+  color: #721c24 !important;
+  animation: pulse-danger 1s infinite alternate;
+}
+
+@keyframes pulse-danger {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.03); }
+}
+
+.proctor-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.proctor-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #2e7d32;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #2e7d32;
+  animation: blink-dot 1.5s infinite;
+}
+
+@keyframes blink-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.proctor-warning {
+  background: #ffebee;
+  color: #c62828;
+  border-color: #ffcdd2;
+}
+
+.proctor-warning .proctor-dot {
+  background-color: #c62828;
+  box-shadow: 0 0 6px #c62828;
+}
+
+.candidate-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #e9ecef;
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: 1px solid #ced4da;
+}
+
+.candidate-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--nta-blue);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.candidate-details {
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.candidate-details .name {
+  font-weight: 700;
+  color: #212529;
+}
+
+.candidate-details .roll {
+  font-size: 11px;
+  color: #6c757d;
+}
+
+.section-nav-bar {
+  background: #34495e;
+  padding: 6px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.section-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+}
+
+.section-tab {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.section-tab:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.section-tab.active {
+  background: #27ae60;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-secondary-nav {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-secondary-nav:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.main-exam-container {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 110px);
+  overflow: hidden;
+}
+
+.question-viewport {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-right: 1px solid var(--border-color);
+  overflow-y: auto;
+}
+
+.question-meta-header {
+  padding: 10px 24px;
+  border-bottom: 2px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.question-identity {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.question-number-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--nta-blue);
+}
+
+.question-type-badge {
+  font-size: 12px;
+  background: #e2e8f0;
+  color: #334155;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.question-topic-badge {
+  font-size: 12px;
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.marking-scheme {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  display: flex;
+  gap: 8px;
+}
+
+.marks-pos {
+  color: #15803d;
+  background: #dcfce7;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.marks-neg {
+  color: #b91c1c;
+  background: #fee2e2;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.question-content-box {
+  padding: 24px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.question-text {
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 16px;
+}
+
+.code-container {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+  font-size: 14.5px;
+  line-height: 1.5;
+  overflow-x: auto;
+  border: 1px solid #333;
+}
+
+.code-container pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.option-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 16px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.option-item:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.option-item.selected {
+  background-color: #e0f2fe;
+  border-color: #0284c7;
+  box-shadow: 0 0 0 1px #0284c7;
+}
+
+.option-radio {
+  margin-top: 3px;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #0284c7;
+}
+
+.option-label {
+  font-weight: 700;
+  font-size: 14px;
+  color: #475569;
+  min-width: 24px;
+}
+
+.option-text {
+  font-size: 15px;
+  color: #1e293b;
+  line-height: 1.4;
+}
+
+.bottom-action-bar {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.action-left-group, .action-right-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 8px 16px;
+  font-size: 13.5px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+}
+
+.btn-save-next { background-color: #2e7d32; color: #ffffff; }
+.btn-save-next:hover { background-color: #1b5e20; }
+.btn-save-review { background-color: #f57c00; color: #ffffff; }
+.btn-save-review:hover { background-color: #e65100; }
+.btn-clear { background-color: #ffffff; color: #475569; border: 1px solid #cbd5e1; }
+.btn-clear:hover { background-color: #f1f5f9; }
+.btn-review-next { background-color: #673ab7; color: #ffffff; }
+.btn-review-next:hover { background-color: #512da8; }
+.btn-nav { background-color: #ffffff; color: #1e293b; border: 1px solid #94a3b8; }
+.btn-nav:hover { background-color: #e2e8f0; }
+.btn-submit-exam { background-color: #0284c7; color: #ffffff; font-weight: 700; padding: 9px 22px; }
+.btn-submit-exam:hover { background-color: #0369a1; }
+
+/* Palette Sidebar for 200 Questions */
+.palette-sidebar {
+  width: 360px;
+  background: #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  border-left: 1px solid #cbd5e1;
+}
+
+.legend-card {
+  background: #ffffff;
+  padding: 10px 14px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.legend-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #334155;
+}
+
+.nta-shape {
+  width: 26px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.shape-answered { background-color: var(--status-answered); border-radius: 4px; }
+.shape-not-answered { background-color: var(--status-not-answered); border-radius: 4px; }
+.shape-not-visited { background-color: var(--status-not-visited); border-radius: 4px; }
+.shape-review { background-color: var(--status-marked-review); border-radius: 50%; width: 24px; height: 24px; }
+.shape-review-evaluated {
+  background-color: var(--status-review-evaluated);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  position: relative;
+}
+.shape-review-evaluated::after {
+  content: "";
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  width: 7px;
+  height: 7px;
+  background-color: #4caf50;
+  border-radius: 2px;
+  border: 1px solid #fff;
+}
+
+.palette-body {
+  padding: 12px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.palette-filter-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+/* 6 columns grid for compact 200 questions */
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+
+.palette-btn {
+  height: 34px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.1s;
+}
+
+.palette-btn:hover {
+  transform: scale(1.08);
+}
+
+.palette-btn.active-question {
+  outline: 3px solid #0284c7;
+  outline-offset: 1px;
+  z-index: 2;
+}
+
+.palette-footer {
+  padding: 10px 14px;
+  background: #ffffff;
+  border-top: 1px solid #cbd5e1;
+}
+
+.btn-sidebar-submit {
+  width: 100%;
+  padding: 10px;
+  background: #0284c7;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 4px;
+}
+.btn-sidebar-submit:hover { background: #0369a1; }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(3px);
+}
+
+.modal-card {
+  background: #ffffff;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 650px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  padding: 14px 20px;
+  border-bottom: 2px solid #0b3b60;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+}
+
+.modal-header h2 {
+  font-size: 18px;
+  color: var(--nta-dark-blue);
+  font-weight: 700;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #64748b;
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  line-height: 1.6;
+  font-size: 14px;
+  color: #334155;
+}
+
+.modal-footer {
+  padding: 12px 20px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  background: #f8fafc;
+}
+
+.security-alert-card {
+  max-width: 500px;
+  border: 3px solid #dc2626;
+  background: #fff;
+}
+
+.security-alert-header {
+  background: #fee2e2;
+  color: #991b1b;
+  border-bottom: 2px solid #ef4444;
+}
+
+.security-badge-big {
+  background: #dc2626;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.violation-counter {
+  font-size: 15px;
+  font-weight: 700;
+  color: #dc2626;
+  margin: 12px 0;
+  padding: 8px 12px;
+  background: #fef2f2;
+  border-left: 4px solid #dc2626;
+  border-radius: 4px;
+}
+
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+}
+
+.summary-table th, .summary-table td {
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  text-align: left;
+}
+
+.summary-table th {
+  background: #f1f5f9;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.result-container {
+  max-width: 1050px;
+  margin: 24px auto;
+  padding: 20px;
+  width: 95%;
+}
+
+.scorecard-header {
+  background: #ffffff;
+  border: 2px solid #0b3b60;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  margin-bottom: 20px;
+}
+
+.scorecard-header h2 {
+  color: #0b3b60;
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.score-highlight {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.score-box {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  padding: 12px 20px;
+  border-radius: 8px;
+  min-width: 150px;
+  text-align: center;
+}
+
+.score-box .num {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0b3b60;
+  margin-bottom: 4px;
+}
+
+.score-box .desc {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.review-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.review-tab-btn {
+  padding: 8px 14px;
+  background: #e2e8f0;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #334155;
+  font-size: 13px;
+}
+
+.review-tab-btn.active {
+  background: #0b3b60;
+  color: #fff;
+}
+
+.review-card {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 14px;
+}
+
+.review-card.status-correct { border-left: 6px solid #228b22; }
+.review-card.status-incorrect { border-left: 6px solid #dc3545; }
+.review-card.status-skipped { border-left: 6px solid #6c757d; }
+
+.review-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.explanation-box {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin-top: 10px;
+  font-size: 13.5px;
+  color: #166534;
+}
+
+.start-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #0b3b60;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.start-modal {
+  background: #ffffff;
+  color: #1e293b;
+  border-radius: 10px;
+  max-width: 650px;
+  width: 92%;
+  padding: 26px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+}
+
+.start-modal h2 { color: #0b3b60; margin-bottom: 6px; }
+
+.start-instructions {
+  background: #f8fafc;
+  padding: 14px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  margin: 14px 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.start-instructions ul { padding-left: 18px; margin-top: 6px; }
+
+.btn-start-exam {
+  width: 100%;
+  padding: 12px;
+  background: #2e7d32;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-start-exam:hover { background: #1b5e20; }
+
+@media (max-width: 992px) {
+  .main-exam-container { flex-direction: column; height: auto; }
+  .palette-sidebar { width: 100%; border-left: none; border-top: 2px solid #cbd5e1; }
+}
+
+  </style>
+</head>
+<body oncontextmenu="return false;">
+
+  <!-- START OVERLAY -->
+  <div id="startOverlay" class="start-overlay">
+    <div class="start-modal">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
+        <span class="nta-badge">NTA</span>
+        <div>
+          <h2 style="margin: 0; font-size: 19px;">NATIONAL TESTING AGENCY</h2>
+          <p style="font-size: 12px; color: #64748b;">National Python Eligibility & Comprehensive Assessment (200Q Edition)</p>
+        </div>
+      </div>
+      <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 10px 0;">
+      
+      <div class="start-instructions">
+        <strong>Important Examination Instructions:</strong>
+        <ul>
+          <li><strong>Total Questions:</strong> 200 Questions (Multiple Choice Format).</li>
+          <li><strong>Difficulty Breakdown:</strong> Basic: 20% (40 Qs), Medium: 50% (100 Qs), Advanced: 30% (60 Qs).</li>
+          <li><strong>Duration:</strong> 280 Minutes countdown timer (4 Hours 40 Minutes).</li>
+          <li><strong>Marking Scheme:</strong> <span style="color: #15803d; font-weight: 700;">+4.00</span> for each correct answer; <span style="color: #b91c1c; font-weight: 700;">-1.00</span> for each incorrect answer; <span style="color: #64748b; font-weight: 700;">0</span> for unattempted. (Max Marks: 800).</li>
+          <li><strong>Anti-Cheating & Proctoring Protocol:</strong>
+            <ul style="margin-top: 4px; color: #b91c1c;">
+              <li>The exam runs in Fullscreen Mode.</li>
+              <li>Switching tabs, minimizing the browser, or clicking outside will trigger an immediate <strong>PROCTORING SECURITY WARNING</strong> and an audible alarm.</li>
+              <li>A maximum of <strong>3 Warnings</strong> are permitted before your test is automatically submitted!</li>
+            </ul>
+          </li>
+          <li><strong>Syllabus:</strong> Intro to Python, Variables, Data Types, Arithmetic & Edge Cases, String Operations, Booleans, I/O & Formatting, Conditionals, Problem Solving, Loops.</li>
+        </ul>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0;">
+        <div>
+          <label style="font-size: 12.5px; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">Candidate Name:</label>
+          <input type="text" id="inputCandidateName" placeholder="Enter Full Name" value="Sanjeev Kumar" style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+        </div>
+        <div>
+          <label style="font-size: 12.5px; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">Roll Number / Student ID:</label>
+          <input type="text" id="inputRollNumber" placeholder="Enter Roll Number" value="NTA-PY2026-2001" style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+        </div>
+      </div>
+
+      <div style="margin-bottom: 14px;">
+        <label style="font-size: 13px; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" id="consentCheckbox" style="width: 16px; height: 16px;">
+          <span>I have read all instructions and agree to the proctoring regulations.</span>
+        </label>
+      </div>
+
+      <button id="btnStartExam" class="btn-start-exam" disabled>START EXAM NOW</button>
+    </div>
+  </div>
+
+  <!-- EXAM TOP HEADER -->
+  <header class="exam-header">
+    <div class="tricolor-stripe"></div>
+    <div class="header-content">
+      <div class="logo-section">
+        <span class="nta-badge">NTA</span>
+        <div class="exam-info">
+          <h1>NATIONAL TESTING AGENCY (EXAM SERVICES)</h1>
+          <div class="subtitle">Python Comprehensive Assessment (200 Questions &bull; 280 Minutes &bull; Max Marks: 800)</div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div id="proctorStatusBadge" class="proctor-badge">
+          <span class="proctor-dot"></span>
+          <span>Proctor Active | Warnings: <span id="warningCountText">0</span>/3</span>
+        </div>
+
+        <div id="timerContainer" class="timer-container">
+          <span class="timer-label">Time Left:</span>
+          <span id="timerDisplay" class="timer-digits">04:40:00</span>
+        </div>
+
+        <div class="candidate-box">
+          <div class="candidate-avatar">SK</div>
+          <div class="candidate-details">
+            <div class="name">Sanjeev Kumar</div>
+            <div class="roll">Roll: NTA-PY2026-2001</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SUB-HEADER / SECTION & NAVIGATION BAR -->
+  <nav class="section-nav-bar">
+    <div class="section-tabs" id="sectionTabs">
+      <button class="section-tab active" data-section="all">All Questions (1-200)</button>
+      <button class="section-tab" data-section="Section 1">Sec 1: Fundamentals (1-30)</button>
+      <button class="section-tab" data-section="Section 2">Sec 2: Data & Arithmetic (31-75)</button>
+      <button class="section-tab" data-section="Section 3">Sec 3: Strings & Booleans (76-130)</button>
+      <button class="section-tab" data-section="Section 4">Sec 4: I/O, Logic & Loops (131-200)</button>
+    </div>
+
+    <div class="nav-actions">
+      <button id="btnQuestionPaper" class="btn-secondary-nav">
+        <span>📄 Question Paper</span>
+      </button>
+      <button id="btnInstructions" class="btn-secondary-nav">
+        <span>ℹ️ Instructions</span>
+      </button>
+      <button id="btnFullscreenToggle" class="btn-secondary-nav">
+        <span>⛶ Fullscreen</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MAIN EXAM AREA -->
+  <main class="main-exam-container" id="examMainContainer">
+    <!-- LEFT: Question Viewport -->
+    <section class="question-viewport">
+      <div class="question-meta-header">
+        <div class="question-identity">
+          <span class="question-number-title" id="qNumberTitle">Question No. 1 of 200</span>
+          <span class="question-type-badge">Multiple Choice (Single Option)</span>
+          <span class="question-topic-badge" id="qTopicBadge">01_Intro to Python</span>
+          <span class="question-type-badge" id="qDifficultyBadge">Basic</span>
+        </div>
+        <div class="marking-scheme">
+          <span class="marks-pos">Correct: +4.00</span>
+          <span class="marks-neg">Incorrect: -1.00</span>
+        </div>
+      </div>
+
+      <div class="question-content-box">
+        <div class="question-text" id="questionText">Loading question statement...</div>
+        
+        <div id="codeSnippetContainer" class="code-container" style="display: none;">
+          <pre><code id="codeSnippetText"></code></pre>
+        </div>
+
+        <div class="options-list" id="optionsContainer"></div>
+      </div>
+
+      <!-- Action Navigation Toolbar -->
+      <footer class="bottom-action-bar">
+        <div class="action-left-group">
+          <button id="btnSaveNext" class="btn btn-save-next">Save & Next</button>
+          <button id="btnSaveMarkReview" class="btn btn-save-review">Save & Mark for Review</button>
+          <button id="btnClearResponse" class="btn btn-clear">Clear Response</button>
+          <button id="btnMarkReviewNext" class="btn btn-review-next">Mark for Review & Next</button>
+        </div>
+        <div class="action-right-group">
+          <button id="btnPrev" class="btn btn-nav">&laquo; Previous</button>
+          <button id="btnNext" class="btn btn-nav">Next &raquo;</button>
+          <button id="btnSubmitBottom" class="btn btn-submit-exam">Submit</button>
+        </div>
+      </footer>
+    </section>
+
+    <!-- RIGHT: Question Palette -->
+    <aside class="palette-sidebar">
+      <div class="legend-card">
+        <div class="legend-title">Question Status Palette</div>
+        <div class="legend-grid">
+          <div class="legend-item">
+            <span class="nta-shape shape-answered" id="countAnswered">0</span>
+            <span>Answered</span>
+          </div>
+          <div class="legend-item">
+            <span class="nta-shape shape-not-answered" id="countNotAnswered">0</span>
+            <span>Not Answered</span>
+          </div>
+          <div class="legend-item">
+            <span class="nta-shape shape-not-visited" id="countNotVisited">200</span>
+            <span>Not Visited</span>
+          </div>
+          <div class="legend-item">
+            <span class="nta-shape shape-review" id="countMarkedReview">0</span>
+            <span>Marked for Review</span>
+          </div>
+          <div class="legend-item" style="grid-column: span 2;">
+            <span class="nta-shape shape-review-evaluated" id="countReviewEvaluated">0</span>
+            <span style="font-size: 11px;">Answered &amp; Marked for Review (Evaluated)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="palette-body">
+        <div class="palette-filter-title">Choose Question (1 - 200):</div>
+        <div class="palette-grid" id="paletteGrid"></div>
+      </div>
+
+      <div class="palette-footer">
+        <button id="btnSubmitSidebar" class="btn btn-sidebar-submit">Submit Exam (200 Qs)</button>
+      </div>
+    </aside>
+  </main>
+
+  <!-- RESULT DASHBOARD -->
+  <div id="resultDashboard" class="result-container" style="display: none;">
+    <div class="scorecard-header">
+      <span class="nta-badge" style="font-size: 15px;">NTA RESULT</span>
+      <h2 style="margin-top: 8px;">NATIONAL TESTING AGENCY - OFFICIAL SCORECARD</h2>
+      <p style="color: #64748b; font-size: 13px;">National Python Comprehensive Assessment (200 Questions Edition)</p>
+      
+      <div style="margin: 16px 0; font-size: 14px; color: #334155; display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+        <div><strong>Candidate Name:</strong> <span id="resCandidateName">Sanjeev Kumar</span></div>
+        <div><strong>Roll Number:</strong> <span id="resRollNumber">NTA-PY2026-2001</span></div>
+        <div><strong>Exam Date:</strong> <span id="resExamDate">2026-10-01</span></div>
+        <div><strong>Proctor Status:</strong> <span id="resProctorStatus" style="font-weight: 700; color: #15803d;">Clean</span></div>
+      </div>
+
+      <div class="score-highlight">
+        <div class="score-box">
+          <div class="num" id="resTotalScore">0</div>
+          <div class="desc">Score Out of 800</div>
+        </div>
+        <div class="score-box">
+          <div class="num" id="resPercentage">0%</div>
+          <div class="desc">Percentage</div>
+        </div>
+        <div class="score-box">
+          <div class="num" id="resAccuracy">0%</div>
+          <div class="desc">Accuracy</div>
+        </div>
+        <div class="score-box">
+          <div class="num" id="resTimeTaken">0m</div>
+          <div class="desc">Time Taken</div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 16px; margin-top: 14px; flex-wrap: wrap;">
+        <span style="color: #15803d; font-weight: 600;">✓ Correct: <span id="resCorrectCount">0</span></span>
+        <span style="color: #b91c1c; font-weight: 600;">✗ Incorrect: <span id="resIncorrectCount">0</span></span>
+        <span style="color: #64748b; font-weight: 600;">○ Unattempted: <span id="resUnattemptedCount">0</span></span>
+      </div>
+    </div>
+
+    <!-- Review Section -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+      <h3 style="color: #0b3b60;">Detailed Solutions & Explanations (All 200 Questions)</h3>
+      <div class="review-tabs">
+        <button class="review-tab-btn active" data-filter="all">All (200)</button>
+        <button class="review-tab-btn" data-filter="correct">Correct</button>
+        <button class="review-tab-btn" data-filter="incorrect">Incorrect</button>
+        <button class="review-tab-btn" data-filter="unattempted">Unattempted</button>
+      </div>
+    </div>
+
+    <div id="reviewQuestionsContainer" class="review-container"></div>
+
+    <div style="text-align: center; margin: 30px 0; display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
+      <button onclick="window.print()" class="btn btn-nav" style="padding: 10px 20px;">🖨️ Print / Save Scorecard</button>
+      <button id="btnDownloadJson" class="btn btn-nav" style="padding: 10px 20px;">📥 Download Submission (JSON)</button>
+      <button id="btnRetakeExam" class="btn btn-save-next" style="padding: 10px 20px;">↺ Retake Exam</button>
+    </div>
+  </div>
+
+  <!-- SECURITY WARNING MODAL -->
+  <div id="securityModal" class="modal-overlay" style="display: none;">
+    <div class="modal-card security-alert-card">
+      <div class="modal-header security-alert-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="security-badge-big">SECURITY ALERT</span>
+          <h2 style="font-size: 17px; color: #991b1b;">EXAM PROCTORING VIOLATION</h2>
+        </div>
+      </div>
+      <div class="modal-body">
+        <p><strong>Warning! Tab switch, window minimization, or focus change detected.</strong></p>
+        <div class="violation-counter" id="violationCounterText">WARNING #1 OF 3</div>
+        <p style="font-size: 13.5px; color: #4b5563;">
+          Leaving the exam window or switching tabs is strictly forbidden under NTA exam proctoring guidelines.
+          If you receive <strong>3 warnings</strong>, your exam will be automatically submitted immediately.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button id="btnAcknowledgeSecurity" class="btn btn-submit-exam" style="background-color: #dc2626; width: 100%;">
+          I UNDERSTAND & RESUME IN FULLSCREEN
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTION PAPER MODAL -->
+  <div id="questionPaperModal" class="modal-overlay" style="display: none;">
+    <div class="modal-card" style="max-width: 850px;">
+      <div class="modal-header">
+        <h2>Question Paper (All 200 Questions)</h2>
+        <button class="modal-close" onclick="closeModal('questionPaperModal')">&times;</button>
+      </div>
+      <div class="modal-body" id="qpModalBody"></div>
+      <div class="modal-footer">
+        <button class="btn btn-nav" onclick="closeModal('questionPaperModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSTRUCTIONS MODAL -->
+  <div id="instructionsModal" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>General Examination Instructions (200 Questions &bull; 280 Mins)</h2>
+        <button class="modal-close" onclick="closeModal('instructionsModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h4>Examination Scheme:</h4>
+        <p>1. Total Questions: <strong>200</strong>.</p>
+        <p>2. Total Time: <strong>280 Minutes</strong>.</p>
+        <p>3. Marking: <strong>+4.00</strong> for correct answer, <strong>-1.00</strong> for incorrect, <strong>0</strong> for skipped.</p>
+        <p>4. Max Marks: <strong>800</strong>.</p>
+        <hr style="margin: 12px 0; border: 0; border-top: 1px solid #e2e8f0;">
+        <h4>Question Palette Color Scheme:</h4>
+        <ul style="list-style: none; padding: 0; margin: 10px 0; display: flex; flex-direction: column; gap: 6px;">
+          <li style="display: flex; align-items: center; gap: 8px;"><span class="nta-shape shape-not-visited">1</span> Not Visited</li>
+          <li style="display: flex; align-items: center; gap: 8px;"><span class="nta-shape shape-not-answered">2</span> Not Answered</li>
+          <li style="display: flex; align-items: center; gap: 8px;"><span class="nta-shape shape-answered">3</span> Answered</li>
+          <li style="display: flex; align-items: center; gap: 8px;"><span class="nta-shape shape-review">4</span> Marked for Review</li>
+          <li style="display: flex; align-items: center; gap: 8px;"><span class="nta-shape shape-review-evaluated">5</span> Answered & Marked for Review (Evaluated)</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-nav" onclick="closeModal('instructionsModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBMIT CONFIRMATION MODAL -->
+  <div id="submitConfirmModal" class="modal-overlay" style="display: none;">
+    <div class="modal-card" style="max-width: 550px;">
+      <div class="modal-header">
+        <h2>Submit Examination Confirmation</h2>
+        <button class="modal-close" onclick="closeModal('submitConfirmModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-weight: 600; color: #1e293b;">Summary of your responses (Total 200 Questions):</p>
+        
+        <table class="summary-table">
+          <thead>
+            <tr><th>Status</th><th style="width: 100px; text-align: center;">Count</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Answered</td><td style="text-align: center; font-weight: 700; color: #2e7d32;" id="modalSumAnswered">0</td></tr>
+            <tr><td>Not Answered</td><td style="text-align: center; font-weight: 700; color: #dc3545;" id="modalSumNotAnswered">0</td></tr>
+            <tr><td>Not Visited</td><td style="text-align: center; font-weight: 700; color: #6c757d;" id="modalSumNotVisited">200</td></tr>
+            <tr><td>Marked for Review</td><td style="text-align: center; font-weight: 700; color: #6f42c1;" id="modalSumReview">0</td></tr>
+            <tr><td>Answered &amp; Marked for Review (Evaluated)</td><td style="text-align: center; font-weight: 700; color: #6f42c1;" id="modalSumReviewEval">0</td></tr>
+          </tbody>
+        </table>
+
+        <div style="background: #fff3cd; color: #856404; padding: 10px 14px; border-radius: 6px; font-size: 13px; border: 1px solid #ffeeba;">
+          ⚠️ <strong>Attention:</strong> Once submitted, you cannot change your answers. Do you want to submit your exam finally?
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-clear" onclick="closeModal('submitConfirmModal')">No, Return to Exam</button>
+        <button id="btnFinalSubmitConfirm" class="btn btn-save-next" style="background-color: #0284c7;">Yes, Submit Finally</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+(function () {
+  "use strict";
+
+  const questions = [
+  {
+    "topic": "01_Intro to Python",
+    "difficulty": "Basic",
+    "question": "Which of the following describes Python's programming paradigm support?",
+    "code": null,
+    "options": [
+      "Purely functional only",
+      "Multi-paradigm (supports object-oriented, procedural, and functional programming)",
+      "Only procedural like C",
+      "Only logic-based like Prolog"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Python is a multi-paradigm programming language supporting object-oriented, procedural, and functional programming styles.",
+    "id": 1,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "01_Intro to Python",
+    "difficulty": "Basic",
+    "question": "What is the name of the official standard Python implementation written in C?",
+    "code": null,
+    "options": [
+      "CPython",
+      "Jython",
+      "PyPy",
+      "IronPython"
+    ],
+    "correctAnswer": 0,
+    "explanation": "CPython is the reference and default implementation of Python written in C.",
+    "id": 2,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "01_Intro to Python",
+    "difficulty": "Basic",
+    "question": "Which command-line flag is used to check the installed Python version?",
+    "code": null,
+    "options": [
+      "python -v",
+      "python --version",
+      "python -check",
+      "python -ver"
+    ],
+    "correctAnswer": 1,
+    "explanation": "'python --version' or 'python -V' displays the current Python version.",
+    "id": 3,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "01_Intro to Python",
+    "difficulty": "Basic",
+    "question": "How are code blocks defined in Python instead of curly braces {}?",
+    "code": null,
+    "options": [
+      "Begin and End keywords",
+      "Square brackets []",
+      "Indentation (whitespace spaces or tabs)",
+      "Semicolons at the end of each statement"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Python uses indentation (standard 4 spaces) rather than curly braces to delimit control flow and function blocks.",
+    "id": 4,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "01_Intro to Python",
+    "difficulty": "Medium",
+    "question": "What is the role of the Python Virtual Machine (PVM)?",
+    "code": null,
+    "options": [
+      "To convert Python source code directly into hardware machine instructions",
+      "To execute the platform-independent bytecode instructions generated by the compiler",
+      "To manage database transactions",
+      "To check network sockets"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The PVM is the runtime engine of Python that loops through and executes compiled bytecode instructions.",
+    "id": 5,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "01_Intro to Python",
+    "difficulty": "Medium",
+    "question": "Which of the following is true about Python comments?",
+    "code": null,
+    "options": [
+      "Single-line comments start with //",
+      "Single-line comments start with # and multiline docstrings use triple quotes",
+      "Comments must end with a semicolon ;",
+      "Python does not support single-line comments"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Python single-line comments start with '#'. Triple-quoted strings ('\"\"\"' or '''''') are used for documentation and multiline strings.",
+    "id": 6,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "01_Intro to Python",
+    "difficulty": "Medium",
+    "question": "What is the output of importing the 'this' module in Python?",
+    "code": "import this",
+    "options": [
+      "ModuleNotFoundError",
+      "Prints 'The Zen of Python' by Tim Peters",
+      "Displays the current directory path",
+      "Initializes the 'this' pointer"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Executing 'import this' prints 'The Zen of Python', a collection of 19 guiding design aphorisms by Tim Peters.",
+    "id": 7,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "01_Intro to Python",
+    "difficulty": "Medium",
+    "question": "What is PEP in the context of Python development?",
+    "code": null,
+    "options": [
+      "Python Execution Protocol",
+      "Python Enhancement Proposal",
+      "Program Entry Point",
+      "Python Extension Package"
+    ],
+    "correctAnswer": 1,
+    "explanation": "PEP stands for Python Enhancement Proposal, a design document providing information or describing a new feature for Python (e.g., PEP 8 for style guidelines).",
+    "id": 8,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "01_Intro to Python",
+    "difficulty": "Medium",
+    "question": "What does PEP 8 primarily specify?",
+    "code": null,
+    "options": [
+      "Memory management algorithms",
+      "Style Guide for Python Code (formatting, naming conventions, indentation)",
+      "Network communication standards",
+      "Bytecode compilation specification"
+    ],
+    "correctAnswer": 1,
+    "explanation": "PEP 8 is the official Style Guide for Python Code, advising 4-space indentation, snake_case for functions/variables, etc.",
+    "id": 9,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "01_Intro to Python",
+    "difficulty": "Medium",
+    "question": "Which statement best describes garbage collection in CPython?",
+    "code": null,
+    "options": [
+      "Manual memory deallocation only with 'free()'",
+      "Primary reference counting augmented by a cyclic garbage collector",
+      "Stop-the-world generational mark-and-sweep only",
+      "Memory is never reclaimed until program terminates"
+    ],
+    "correctAnswer": 1,
+    "explanation": "CPython uses reference counting as its main memory management mechanism along with an automatic cyclic garbage collector to detect reference cycles.",
+    "id": 10,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "01_Intro to Python",
+    "difficulty": "Medium",
+    "question": "What is the REPL in Python?",
+    "code": null,
+    "options": [
+      "Run-time Error Prevention Layer",
+      "Read-Eval-Print Loop interactive shell",
+      "Recursion Elimination Parsing Logic",
+      "Remote Execution Protocol Listener"
+    ],
+    "correctAnswer": 1,
+    "explanation": "REPL stands for Read-Eval-Print Loop, the interactive command-line environment for executing Python commands on the fly.",
+    "id": 11,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "01_Intro to Python",
+    "difficulty": "Medium",
+    "question": "What happens if you run a Python file with the '-O' optimization flag?",
+    "code": null,
+    "options": [
+      "Converts all variables to float",
+      "Removes assert statements and writes optimized bytecode (.opt-1.pyc)",
+      "Disables all loops",
+      "Turns Python into a compiled C binary"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The '-O' flag disables 'assert' statements and writes optimized bytecode with the '.opt-1.pyc' tag.",
+    "id": 12,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "01_Intro to Python",
+    "difficulty": "Advanced",
+    "question": "What does the '__debug__' built-in constant evaluate to under normal Python execution?",
+    "code": "print(__debug__)",
+    "options": [
+      "False",
+      "True",
+      "None",
+      "Raises NameError"
+    ],
+    "correctAnswer": 1,
+    "explanation": "'__debug__' is a built-in constant that is True unless Python is started with the -O flag, in which case it is False. Assignment to '__debug__' is illegal.",
+    "id": 13,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "01_Intro to Python",
+    "difficulty": "Advanced",
+    "question": "Which module in Python allows you to disassemble bytecode and inspect PVM opcodes?",
+    "code": "import dis\ndef add(a, b): return a + b\ndis.dis(add)",
+    "options": [
+      "sys",
+      "dis",
+      "opcode",
+      "inspect"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The 'dis' module is Python's built-in disassembler, converting functions and bytecode into human-readable PVM instruction opcodes like BINARY_OP.",
+    "id": 14,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "01_Intro to Python",
+    "difficulty": "Advanced",
+    "question": "In Python, which of the following is true about the Global Interpreter Lock (GIL)?",
+    "code": null,
+    "options": [
+      "It speeds up CPU-bound multithreaded programs across multiple cores",
+      "It is a mutex in CPython that prevents multiple native threads from executing Python bytecodes simultaneously",
+      "It is present in all Python implementations including Jython and IronPython",
+      "It prohibits running asynchronous coroutines"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The GIL is a mutex in CPython that restricts execution of Python bytecode to a single OS thread at a time, protecting CPython memory management.",
+    "id": 15,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "02_Variables",
+    "difficulty": "Basic",
+    "question": "Which of the following is an invalid variable name in Python?",
+    "code": null,
+    "options": [
+      "_score_100",
+      "total_marks$",
+      "studentName",
+      "CLASS_ROOM"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Variable names in Python cannot contain special characters like '$'. Only letters, digits, and underscores are allowed.",
+    "id": 16,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "02_Variables",
+    "difficulty": "Basic",
+    "question": "What is the result of assigning multiple variables simultaneously?",
+    "code": "p, q, r = 10, 20, 30\nprint(q)",
+    "options": [
+      "10",
+      "20",
+      "30",
+      "ValueError"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In simultaneous assignment 'p, q, r = 10, 20, 30', 'q' corresponds to 20.",
+    "id": 17,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "02_Variables",
+    "difficulty": "Basic",
+    "question": "What is the convention for variable names that should be treated as constants in Python?",
+    "code": null,
+    "options": [
+      "Prefix with @ symbol",
+      "ALL_CAPITAL_LETTERS (e.g., MAX_LIMIT = 100)",
+      "Surround with brackets [CONSTANT]",
+      "Use the 'const' keyword"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Python does not have a 'const' keyword; by PEP 8 convention, constants are written in ALL_CAPS with underscores.",
+    "id": 18,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "02_Variables",
+    "difficulty": "Basic",
+    "question": "What will happen if you access a variable before assigning any value to it?",
+    "code": "print(unknown_var)",
+    "options": [
+      "Prints None",
+      "Prints 0",
+      "Raises NameError: name 'unknown_var' is not defined",
+      "Creates the variable automatically"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Accessing an unassigned identifier raises a 'NameError'.",
+    "id": 19,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "02_Variables",
+    "difficulty": "Medium",
+    "question": "What will be printed by the following multiple reassignment code?",
+    "code": "a = 5\nb = a\na = a + 2\nprint(a, b)",
+    "options": [
+      "7 7",
+      "7 5",
+      "5 5",
+      "5 7"
+    ],
+    "correctAnswer": 1,
+    "explanation": "'b = a' assigns 'b' to 5. When 'a' is reassigned to 5 + 2 = 7, 'b' remains 5 because integers are immutable objects.",
+    "id": 20,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "02_Variables",
+    "difficulty": "Medium",
+    "question": "What will be the output of unpacking a collection into variables?",
+    "code": "values = [100, 200]\nx, y = values\nprint(x + y)",
+    "options": [
+      "300",
+      "[100, 200]",
+      "TypeError",
+      "100200"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Python unpacks the list elements into 'x' (100) and 'y' (200). 100 + 200 = 300.",
+    "id": 21,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "02_Variables",
+    "difficulty": "Medium",
+    "question": "How many keywords are reserved in modern Python 3 (approx 35), and how can you inspect them programmatically?",
+    "code": "import keyword\nprint(keyword.iskeyword('nonlocal'))",
+    "options": [
+      "True",
+      "False",
+      "AttributeError",
+      "None"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'keyword.iskeyword('nonlocal')' returns True because 'nonlocal' is one of Python's reserved keywords.",
+    "id": 22,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "02_Variables",
+    "difficulty": "Medium",
+    "question": "What is the output of the following chained reassignment?",
+    "code": "m = n = 50\nm += 10\nprint(m, n)",
+    "options": [
+      "60 60",
+      "60 50",
+      "50 50",
+      "50 60"
+    ],
+    "correctAnswer": 1,
+    "explanation": "'m += 10' reassigns 'm' to point to a new integer object 60. 'n' continues to point to 50.",
+    "id": 23,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "02_Variables",
+    "difficulty": "Medium",
+    "question": "What does Python's built-in id() function return for a variable?",
+    "code": "x = 42\nprint(type(id(x)))",
+    "options": [
+      "<class 'str'>",
+      "<class 'int'> representing the unique object identity (memory address in CPython)",
+      "<class 'float'>",
+      "<class 'hex'>"
+    ],
+    "correctAnswer": 1,
+    "explanation": "'id()' returns an integer representing the object's identity, which in CPython corresponds to its memory address.",
+    "id": 24,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "02_Variables",
+    "difficulty": "Medium",
+    "question": "What will be printed when swapping 3 variables simultaneously?",
+    "code": "a, b, c = 1, 2, 3\na, b, c = c, a, b\nprint(a, b, c)",
+    "options": [
+      "3 1 2",
+      "3 2 1",
+      "1 2 3",
+      "2 3 1"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The right-hand side tuple (c, a, b) evaluates to (3, 1, 2). Unpacking assigns a=3, b=1, c=2.",
+    "id": 25,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "02_Variables",
+    "difficulty": "Medium",
+    "question": "What is the purpose of the 'del' statement on a variable?",
+    "code": "x = 10\ndel x\nprint(x)",
+    "options": [
+      "Sets x to None",
+      "Sets x to 0",
+      "Removes the name 'x' from the namespace, causing NameError on subsequent access",
+      "Clears the system RAM"
+    ],
+    "correctAnswer": 2,
+    "explanation": "'del x' unbinds the name 'x' from the current namespace. Accessing 'x' after deletion raises NameError.",
+    "id": 26,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "02_Variables",
+    "difficulty": "Medium",
+    "question": "Which of the following is allowed as a variable name in Python 3?",
+    "code": null,
+    "options": [
+      "global",
+      "return",
+      "_24_hours",
+      "24_hours"
+    ],
+    "correctAnswer": 2,
+    "explanation": "'_24_hours' begins with an underscore, which is valid. 'global' and 'return' are reserved keywords; '24_hours' begins with a digit.",
+    "id": 27,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "02_Variables",
+    "difficulty": "Advanced",
+    "question": "What is the output of extended iterable unpacking using the asterisk '*' operator?",
+    "code": "first, *rest, last = [1, 2, 3, 4, 5]\nprint(first, rest, last)",
+    "options": [
+      "1 [2, 3, 4] 5",
+      "1 (2, 3, 4) 5",
+      "1 2 5",
+      "ValueError: too many values to unpack"
+    ],
+    "correctAnswer": 0,
+    "explanation": "In Python 3 extended unpacking, '*rest' collects all unassigned middle elements as a list: [2, 3, 4].",
+    "id": 28,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "02_Variables",
+    "difficulty": "Advanced",
+    "question": "What is small integer caching (interning) in CPython?",
+    "code": "x = 256\ny = 256\nprint(x is y)",
+    "options": [
+      "False, because they are separate assignments",
+      "True, because CPython pre-allocates and caches integers in the range [-5, 256]",
+      "TypeError: 'is' cannot compare integers",
+      "None"
+    ],
+    "correctAnswer": 1,
+    "explanation": "CPython caches integer objects from -5 to 256 inclusive. Variables referencing 256 point to the identical cached object in memory.",
+    "id": 29,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "02_Variables",
+    "difficulty": "Advanced",
+    "question": "What happens when using the walrus operator ':=' inside an expression?",
+    "code": "if (n := len('Python')) > 5:\n    print(n)",
+    "options": [
+      "SyntaxError in Python 3.8+",
+      "Prints 6",
+      "Prints True",
+      "NameError: n is not defined"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The walrus operator ':=' (introduced in Python 3.8) assigns the value of the expression (6) to 'n' and returns it simultaneously.",
+    "id": 30,
+    "section": "Section 1: Fundamentals & Variables (Q1-Q30)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Basic",
+    "question": "Which of the following is an immutable data type in Python?",
+    "code": null,
+    "options": [
+      "list",
+      "dict",
+      "int",
+      "set"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Numbers (int, float, complex), strings (str), and tuples are immutable in Python. Lists, dictionaries, and sets are mutable.",
+    "id": 31,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Basic",
+    "question": "What is the output of checking the type of a boolean literal?",
+    "code": "print(type(False))",
+    "options": [
+      "<class 'bool'>",
+      "<class 'int'>",
+      "<class 'boolean'>",
+      "<class 'bit'>"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Booleans in Python belong to '<class 'bool'>'.",
+    "id": 32,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Basic",
+    "question": "How do you represent a complex number with real part 3 and imaginary part 4 in Python?",
+    "code": null,
+    "options": [
+      "3 + 4i",
+      "3 + 4j",
+      "complex(3, 4i)",
+      "3 + 4k"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Python uses 'j' or 'J' as the imaginary unit suffix (e.g. 3 + 4j).",
+    "id": 33,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Basic",
+    "question": "What is the value of 'bool(None)' in Python?",
+    "code": "print(bool(None))",
+    "options": [
+      "True",
+      "False",
+      "None",
+      "TypeError"
+    ],
+    "correctAnswer": 1,
+    "explanation": "'None' has a boolean truth value of 'False'.",
+    "id": 34,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Basic",
+    "question": "Which built-in function returns the type of any object in Python?",
+    "code": null,
+    "options": [
+      "typeof()",
+      "type()",
+      "class()",
+      "instance()"
+    ],
+    "correctAnswer": 1,
+    "explanation": "'type(object)' inspects and returns the type/class of the object.",
+    "id": 35,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Medium",
+    "question": "What is the output of converting a float to an integer in Python?",
+    "code": "print(int(9.99), int(-9.99))",
+    "options": [
+      "10 -10",
+      "9 -9",
+      "9 -10",
+      "10 -9"
+    ],
+    "correctAnswer": 1,
+    "explanation": "'int()' on a float truncates towards zero. So int(9.99) is 9 and int(-9.99) is -9.",
+    "id": 36,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Medium",
+    "question": "What is the maximum integer limit in Python 3?",
+    "code": null,
+    "options": [
+      "2^31 - 1",
+      "2^63 - 1",
+      "Python 3 integers have arbitrary precision (limited only by available system memory)",
+      "10^18"
+    ],
+    "correctAnswer": 2,
+    "explanation": "In Python 3, integers have arbitrary precision and do not overflow to a 32-bit or 64-bit bound; they expand as large as memory permits.",
+    "id": 37,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Medium",
+    "question": "What will be printed by the following type comparison?",
+    "code": "a = 5\nprint(isinstance(a, (float, str, int)))",
+    "options": [
+      "True",
+      "False",
+      "TypeError",
+      "int"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'isinstance(obj, (type1, type2, ...))' accepts a tuple of types and returns True if obj is an instance of any of them.",
+    "id": 38,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Medium",
+    "question": "What is the result of using scientific notation for floating point numbers in Python?",
+    "code": "val = 2.5e3\nprint(val, type(val))",
+    "options": [
+      "2500 <class 'int'>",
+      "2500.0 <class 'float'>",
+      "2.500 <class 'float'>",
+      "SyntaxError"
+    ],
+    "correctAnswer": 1,
+    "explanation": "'2.5e3' means 2.5 * 10^3 = 2500.0, which is always stored as a float.",
+    "id": 39,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Medium",
+    "question": "What is the output of converting binary literal '0b1010' to int?",
+    "code": "print(0b1010)",
+    "options": [
+      "10",
+      "1010",
+      "0b1010",
+      "SyntaxError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'0b' is the binary prefix in Python. 1010 in binary equals (1*8 + 0*4 + 1*2 + 0*1) = 10.",
+    "id": 40,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Medium",
+    "question": "What is the output of hexadecimal literal '0x1F'?",
+    "code": "print(0x1F)",
+    "options": [
+      "15",
+      "31",
+      "19",
+      "21"
+    ],
+    "correctAnswer": 1,
+    "explanation": "'0x' prefix denotes hexadecimal. 1F in hex = 1*16 + 15 = 31.",
+    "id": 41,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Medium",
+    "question": "What will be the result of the following None check?",
+    "code": "x = None\nprint(x is None, x == None)",
+    "options": [
+      "True True",
+      "True False",
+      "False True",
+      "False False"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Both 'x is None' and 'x == None' evaluate to True. PEP 8 strongly recommends using 'is None' for identity comparison.",
+    "id": 42,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Medium",
+    "question": "What will float('inf') represent in Python?",
+    "code": "x = float('inf')\nprint(x > 10**100)",
+    "options": [
+      "True",
+      "False",
+      "ValueError",
+      "None"
+    ],
+    "correctAnswer": 0,
+    "explanation": "float('inf') creates positive floating-point infinity, which is greater than any finite number.",
+    "id": 43,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Medium",
+    "question": "What is the output of float('nan') == float('nan')?",
+    "code": "import math\nprint(float('nan') == float('nan'))",
+    "options": [
+      "True",
+      "False",
+      "None",
+      "TypeError"
+    ],
+    "correctAnswer": 1,
+    "explanation": "According to IEEE 754 floating point standard, NaN (Not a Number) is never equal to anything, including itself. Use 'math.isnan()' to test for NaN.",
+    "id": 44,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Medium",
+    "question": "What will be the output of converting a string with underscores to an int?",
+    "code": "amount = int('1_000_000')\nprint(amount)",
+    "options": [
+      "ValueError",
+      "1000000",
+      "1_000_000",
+      "1000"
+    ],
+    "correctAnswer": 1,
+    "explanation": "PEP 515 introduced underscores in numeric literals and string conversions for readability. '1_000_000' parses cleanly to 1000000.",
+    "id": 45,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Advanced",
+    "question": "What will be printed when checking memory identity with 'is' on floats?",
+    "code": "a = 2.0\nb = 2.0\nprint(a == b, a is b)",
+    "options": [
+      "True True",
+      "True False (in typical interactive REPL execution)",
+      "False False",
+      "TypeError"
+    ],
+    "correctAnswer": 1,
+    "explanation": "'a == b' checks value equality (True). 'a is b' checks object identity. Unlike small integers, CPython does not intern arbitrary floats, so they occupy separate memory addresses.",
+    "id": 46,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Advanced",
+    "question": "What does sys.getsizeof() return?",
+    "code": "import sys\nprint(type(sys.getsizeof(100)))",
+    "options": [
+      "<class 'str'>",
+      "<class 'int'> representing the memory size in bytes",
+      "<class 'float'>",
+      "<class 'NoneType'>"
+    ],
+    "correctAnswer": 1,
+    "explanation": "'sys.getsizeof()' returns the size of an object in bytes, including CPython object header overhead.",
+    "id": 47,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Advanced",
+    "question": "Why is 'hash(100)' equal to 'hash(100.0)' in Python?",
+    "code": "print(hash(100) == hash(100.0))",
+    "options": [
+      "False",
+      "True, because equal objects of different numerical types must produce equal hash values in Python",
+      "Raises TypeError",
+      "Only on 64-bit systems"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Python's data model requires that if two objects compare equal (100 == 100.0 is True), they MUST have the same hash value so dict lookups and sets function correctly.",
+    "id": 48,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Advanced",
+    "question": "What is the return value of round(2.5) vs round(3.5) in Python 3?",
+    "code": "print(round(2.5), round(3.5))",
+    "options": [
+      "3 4",
+      "2 4 (Banker's rounding to nearest even integer)",
+      "2 3",
+      "3 3"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Python 3 uses 'round half to even' (Banker's rounding) to eliminate statistical bias. Halfway numbers round towards the nearest even integer: round(2.5) is 2, round(3.5) is 4.",
+    "id": 49,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "03_data",
+    "difficulty": "Advanced",
+    "question": "What is the result of using complex conjugation in Python?",
+    "code": "z = 3 + 4j\nprint(z.conjugate())",
+    "options": [
+      "3 - 4j",
+      "-3 + 4j",
+      "-3 - 4j",
+      "5.0"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'z.conjugate()' flips the sign of the imaginary part, yielding (3 - 4j).",
+    "id": 50,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Basic",
+    "question": "What is the result of adding an integer and a float in Python?",
+    "code": "res = 10 + 5.5\nprint(type(res), res)",
+    "options": [
+      "<class 'int'> 15",
+      "<class 'float'> 15.5",
+      "<class 'double'> 15.5",
+      "TypeError"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Implicit type promotion coerces the integer to a float, producing 15.5 (<class 'float'>).",
+    "id": 51,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Basic",
+    "question": "Which operator is used to compute the remainder of division in Python?",
+    "code": null,
+    "options": [
+      "%",
+      "//",
+      "/",
+      "rem"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The modulus operator '%' calculates the remainder of division.",
+    "id": 52,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Basic",
+    "question": "What is the output of 15 % 4?",
+    "code": "print(15 % 4)",
+    "options": [
+      "3",
+      "3.75",
+      "2",
+      "1"
+    ],
+    "correctAnswer": 0,
+    "explanation": "15 divided by 4 is 3 with a remainder of 3. 15 = 4 * 3 + 3.",
+    "id": 53,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Basic",
+    "question": "What will 4 ** 0.5 evaluate to in Python?",
+    "code": "print(4 ** 0.5)",
+    "options": [
+      "2",
+      "2.0",
+      "16",
+      "TypeError"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Raising a number to the power of 0.5 computes its square root, returning float 2.0.",
+    "id": 54,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Basic",
+    "question": "What will be the output of evaluating parentheses first?",
+    "code": "print((2 + 3) * (4 + 1))",
+    "options": [
+      "15",
+      "25",
+      "21",
+      "14"
+    ],
+    "correctAnswer": 1,
+    "explanation": "(2 + 3) = 5 and (4 + 1) = 5. 5 * 5 = 25.",
+    "id": 55,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Medium",
+    "question": "What is the output of '-10 // 3' in Python?",
+    "code": "print(-10 // 3)",
+    "options": [
+      "-3",
+      "-4",
+      "-3.33",
+      "3"
+    ],
+    "correctAnswer": 1,
+    "explanation": "-10 / 3 = -3.333... Floor division rounds down towards negative infinity, which gives -4.",
+    "id": 56,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Medium",
+    "question": "What is the output of '10 // -3' in Python?",
+    "code": "print(10 // -3)",
+    "options": [
+      "-3",
+      "-4",
+      "-3.33",
+      "4"
+    ],
+    "correctAnswer": 1,
+    "explanation": "10 / -3 = -3.333... Floor division rounds down to -4.",
+    "id": 57,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Medium",
+    "question": "What is the output of '-10 // -3' in Python?",
+    "code": "print(-10 // -3)",
+    "options": [
+      "3",
+      "-3",
+      "4",
+      "-4"
+    ],
+    "correctAnswer": 0,
+    "explanation": "-10 / -3 = +3.333... Floor of +3.333 is 3.",
+    "id": 58,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Medium",
+    "question": "What is the output of '-10 % 3' in Python?",
+    "code": "print(-10 % 3)",
+    "options": [
+      "-1",
+      "2",
+      "1",
+      "-2"
+    ],
+    "correctAnswer": 1,
+    "explanation": "-10 // 3 = -4. Modulo formula: a % b = a - b * (a // b) = -10 - 3 * (-4) = -10 - (-12) = 2.",
+    "id": 59,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Medium",
+    "question": "What is the output of '10 % -3' in Python?",
+    "code": "print(10 % -3)",
+    "options": [
+      "1",
+      "-2",
+      "-1",
+      "2"
+    ],
+    "correctAnswer": 1,
+    "explanation": "10 // -3 = -4. Then 10 - (-3 * -4) = 10 - 12 = -2. The sign matches the divisor -3.",
+    "id": 60,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Medium",
+    "question": "What is the output of '-10 % -3' in Python?",
+    "code": "print(-10 % -3)",
+    "options": [
+      "-1",
+      "1",
+      "-2",
+      "2"
+    ],
+    "correctAnswer": 0,
+    "explanation": "-10 // -3 = 3. Then -10 - (-3 * 3) = -10 - (-9) = -1.",
+    "id": 61,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Medium",
+    "question": "What is the output of divmod(17, 5) in Python?",
+    "code": "print(divmod(17, 5))",
+    "options": [
+      "(3, 2)",
+      "[3, 2]",
+      "(2, 3)",
+      "3.4"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'divmod(a, b)' returns a tuple containing the floor quotient (a // b) and remainder (a % b), so (3, 2).",
+    "id": 62,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Medium",
+    "question": "What will be printed by the following operator precedence code?",
+    "code": "print(10 - 3 * 2 + 8 // 4)",
+    "options": [
+      "6",
+      "16",
+      "8",
+      "4"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Multiplication and floor division evaluate first: 3 * 2 = 6 and 8 // 4 = 2. Then addition/subtraction from left to right: 10 - 6 + 2 = 4 + 2 = 6.",
+    "id": 63,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Medium",
+    "question": "What is the output of 'print(True + True + True)'?",
+    "code": "print(True + True + True)",
+    "options": [
+      "3",
+      "True",
+      "1",
+      "TypeError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "True evaluates to integer 1 in numeric addition, so 1 + 1 + 1 = 3.",
+    "id": 64,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Medium",
+    "question": "What is the output of 'print(False - True)'?",
+    "code": "print(False - True)",
+    "options": [
+      "-1",
+      "0",
+      "1",
+      "False"
+    ],
+    "correctAnswer": 0,
+    "explanation": "False is 0 and True is 1. 0 - 1 = -1.",
+    "id": 65,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Medium",
+    "question": "What is the output of multiplying a string by 0 or a negative integer?",
+    "code": "print(repr('Python' * 0), repr('Python' * -2))",
+    "options": [
+      "'' ''",
+      "'Python' 'Python'",
+      "0 -2",
+      "ValueError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Multiplying a sequence by zero or any negative integer produces an empty sequence (empty string '').",
+    "id": 66,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Medium",
+    "question": "What is the result of adding two negative integers: -15 + -25?",
+    "code": "print(-15 + -25)",
+    "options": [
+      "-40",
+      "40",
+      "-10",
+      "10"
+    ],
+    "correctAnswer": 0,
+    "explanation": "-15 + (-25) = -40.",
+    "id": 67,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Medium",
+    "question": "What is the output of chained augmented assignments in Python?",
+    "code": "x = 10\nx += 5\nx *= 2\nx -= 6\nx //= 4\nprint(x)",
+    "options": [
+      "6",
+      "24",
+      "4",
+      "8"
+    ],
+    "correctAnswer": 0,
+    "explanation": "x = 10 -> x += 5 (15) -> x *= 2 (30) -> x -= 6 (24) -> x //= 4 (6).",
+    "id": 68,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Advanced",
+    "question": "What is the output of the expression 'print(~5)' using bitwise NOT in Python?",
+    "code": "print(~5)",
+    "options": [
+      "-6",
+      "-5",
+      "6",
+      "4"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Bitwise NOT in two's complement arithmetic calculates '~x = -(x + 1)'. So ~5 = -(5 + 1) = -6.",
+    "id": 69,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Advanced",
+    "question": "What is the output of bitwise shifts 'print(1 << 4, 32 >> 2)'?",
+    "code": "print(1 << 4, 32 >> 2)",
+    "options": [
+      "16 8",
+      "4 16",
+      "8 16",
+      "16 16"
+    ],
+    "correctAnswer": 0,
+    "explanation": "1 << 4 = 1 * (2^4) = 16. 32 >> 2 = 32 // (2^2) = 8.",
+    "id": 70,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Advanced",
+    "question": "What is the result of the bitwise XOR operation 'print(6 ^ 3)'?",
+    "code": "print(6 ^ 3)",
+    "options": [
+      "5",
+      "7",
+      "9",
+      "18"
+    ],
+    "correctAnswer": 0,
+    "explanation": "6 is 110 in binary, 3 is 011 in binary. 110 ^ 011 = 101 in binary, which is 5.",
+    "id": 71,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Advanced",
+    "question": "What will be printed by the following expression involving unary minus and exponentiation?",
+    "code": "print(-3 ** 2, (-3) ** 2)",
+    "options": [
+      "-9 9",
+      "9 9",
+      "-9 -9",
+      "9 -9"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Exponentiation '**' has higher precedence than unary minus '-'. Thus '-3 ** 2' is '-(3 ** 2) = -9'. With parentheses, '(-3) ** 2 = 9'.",
+    "id": 72,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Advanced",
+    "question": "What is the output of the 3-argument pow() function in Python?",
+    "code": "print(pow(2, 5, 7))",
+    "options": [
+      "4",
+      "32",
+      "7",
+      "2"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'pow(base, exp, mod)' calculates (base^exp) % mod efficiently: (2^5) % 7 = 32 % 7 = 4.",
+    "id": 73,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Advanced",
+    "question": "What will 'math.fmod(-10, 3)' return compared to Python's '-10 % 3'?",
+    "code": "import math\nprint(math.fmod(-10, 3), -10 % 3)",
+    "options": [
+      "-1.0 2",
+      "2.0 2",
+      "-1.0 -1",
+      "2.0 -1"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'math.fmod(x, y)' follows C library semantics where the sign matches the dividend (-1.0). Python's '%' matches the divisor (2).",
+    "id": 74,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "04_Arithmetic",
+    "difficulty": "Advanced",
+    "question": "What happens when you divide a float by zero in Python?",
+    "code": "print(10.0 / 0.0)",
+    "options": [
+      "float('inf')",
+      "ZeroDivisionError: float division by zero",
+      "NaN",
+      "None"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Unlike C or JavaScript where float division by zero yields Infinity, Python always raises a 'ZeroDivisionError'.",
+    "id": 75,
+    "section": "Section 2: Data Types & Arithmetic (Q31-Q75)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Basic",
+    "question": "What is the index of the first character in any Python string?",
+    "code": null,
+    "options": [
+      "1",
+      "0",
+      "-1",
+      "None"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Python sequences use 0-based indexing.",
+    "id": 76,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Basic",
+    "question": "What does negative indexing allow you to do in Python strings?",
+    "code": "s = 'Code'\nprint(s[-1])",
+    "options": [
+      "Access elements from right to left starting from the end (-1)",
+      "Reverse the entire string automatically",
+      "Raises IndexError for negative numbers",
+      "Prints empty string"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Negative indexing accesses characters from the end of the string, with -1 being the last character.",
+    "id": 77,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Basic",
+    "question": "Which string method converts all uppercase characters to lowercase?",
+    "code": null,
+    "options": [
+      "toLower()",
+      "lower()",
+      "casefold_lower()",
+      "down()"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The 'lower()' method returns a copy of the string converted to lowercase.",
+    "id": 78,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Basic",
+    "question": "What is the output of concatenating two strings with '+'?",
+    "code": "print('Super' + 'Hero')",
+    "options": [
+      "Super Hero",
+      "SuperHero",
+      "('Super', 'Hero')",
+      "TypeError"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The '+' operator concatenates strings directly without inserting spaces: 'SuperHero'.",
+    "id": 79,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Basic",
+    "question": "How do you check if the character 'x' is present in a string?",
+    "code": null,
+    "options": [
+      "s.contains('x')",
+      "'x' in s",
+      "s.has('x')",
+      "s.exists('x')"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The 'in' membership operator tests if a substring exists within a string.",
+    "id": 80,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Basic",
+    "question": "What does the 'upper()' method do to a string in Python?",
+    "code": "print('python'.upper())",
+    "options": [
+      "PYTHON",
+      "Python",
+      "pYTHON",
+      "Throws TypeError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'upper()' converts all lowercase letters in the string to uppercase: 'PYTHON'.",
+    "id": 81,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Basic",
+    "question": "What is the result of using triple quotes for string declaration in Python?",
+    "code": "s = '''Line1\nLine2'''",
+    "options": [
+      "Creates multiline string preserving newlines and formatting",
+      "Causes a SyntaxError",
+      "Converts the string into a list of words",
+      "Converts the string into a comment"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Triple quotes (''' or \"\"\") allow defining multiline strings in Python.",
+    "id": 82,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Medium",
+    "question": "What is the output of slicing with omitted stop index?",
+    "code": "lang = 'PythonProgramming'\nprint(lang[6:])",
+    "options": [
+      "Programming",
+      "Python",
+      "nProgramming",
+      "Program"
+    ],
+    "correctAnswer": 0,
+    "explanation": "lang[6:] slices from index 6 to the end of the string: 'Programming'.",
+    "id": 83,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Medium",
+    "question": "What is the output of slicing with omitted start index?",
+    "code": "lang = 'PythonProgramming'\nprint(lang[:6])",
+    "options": [
+      "Python",
+      "PythonP",
+      "rogramming",
+      "Pytho"
+    ],
+    "correctAnswer": 0,
+    "explanation": "lang[:6] slices from index 0 up to (but not including) index 6: 'Python'.",
+    "id": 84,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Medium",
+    "question": "What is the output of 's.split()' with no arguments?",
+    "code": "text = 'Learn   Python   Logic'\nprint(text.split())",
+    "options": [
+      "['Learn', 'Python', 'Logic']",
+      "['Learn', '', '', 'Python', '', '', 'Logic']",
+      "['Learn Python Logic']",
+      "TypeError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'split()' with no delimiter splits on runs of consecutive whitespace characters, discarding empty strings.",
+    "id": 85,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Medium",
+    "question": "What will be printed by 'join()' when combining elements of a list?",
+    "code": "words = ['Data', 'Science', 'AI']\nprint('-'.join(words))",
+    "options": [
+      "Data-Science-AI",
+      "['Data-Science-AI']",
+      "Data Science AI",
+      "Data-Science-AI-"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'-'.join(words) concatenates the list elements with '-' as the separator.",
+    "id": 86,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Medium",
+    "question": "What does the 'swapcase()' string method do?",
+    "code": "print('PyThOn 3.12'.swapcase())",
+    "options": [
+      "pYtHoN 3.12",
+      "PYTHON 3.12",
+      "python 3.12",
+      "PyThOn 3.12"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'swapcase()' inverts uppercase characters to lowercase and lowercase to uppercase; non-alphabetic characters remain unchanged.",
+    "id": 87,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Medium",
+    "question": "What will be printed by 'find()' when the substring occurs multiple times?",
+    "code": "s = 'banana'\nprint(s.find('an'))",
+    "options": [
+      "1",
+      "3",
+      "[1, 3]",
+      "2"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'find()' returns the lowest index where the substring is found. The first 'an' in 'banana' starts at index 1.",
+    "id": 88,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Medium",
+    "question": "What does the 'rfind()' method return?",
+    "code": "s = 'banana'\nprint(s.rfind('an'))",
+    "options": [
+      "3",
+      "1",
+      "5",
+      "-1"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'rfind()' returns the highest index (from the right) where the substring is found. The last 'an' in 'banana' starts at index 3.",
+    "id": 89,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Medium",
+    "question": "What is the output of 's.startswith()' with a tuple of prefixes?",
+    "code": "filename = 'report.pdf'\nprint(filename.startswith(('doc', 'data', 'rep')))",
+    "options": [
+      "True",
+      "False",
+      "TypeError: tuple not allowed",
+      "None"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'startswith()' can accept a tuple of prefixes and returns True if the string starts with any of them.",
+    "id": 90,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Medium",
+    "question": "What is the output of 's.isdigit()' vs 's.isnumeric()' on standard digits '123'?",
+    "code": "s = '123'\nprint(s.isdigit(), s.isnumeric())",
+    "options": [
+      "True True",
+      "True False",
+      "False True",
+      "False False"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Both 'isdigit()' and 'isnumeric()' return True for standard decimal ASCII digit strings.",
+    "id": 91,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Medium",
+    "question": "What is the output of 's.isalpha()' when the string contains a space?",
+    "code": "s = 'Hello World'\nprint(s.isalpha())",
+    "options": [
+      "False",
+      "True",
+      "TypeError",
+      "None"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'isalpha()' returns True only if ALL characters in the string are alphabetic. The space character makes it False.",
+    "id": 92,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Medium",
+    "question": "What will 's.lstrip()' remove?",
+    "code": "s = '   Python   '\nprint(repr(s.lstrip()))",
+    "options": [
+      "'Python   '",
+      "'   Python'",
+      "'Python'",
+      "''"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'lstrip()' strips leading whitespace from the left side only, preserving trailing spaces.",
+    "id": 93,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Medium",
+    "question": "What will 's.rstrip()' remove?",
+    "code": "s = '   Python   '\nprint(repr(s.rstrip()))",
+    "options": [
+      "'   Python'",
+      "'Python   '",
+      "'Python'",
+      "''"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'rstrip()' strips trailing whitespace from the right side only.",
+    "id": 94,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Medium",
+    "question": "What will be printed by 'zfill(5)' on string '42'?",
+    "code": "s = '42'\nprint(s.zfill(5))",
+    "options": [
+      "'00042'",
+      "'42000'",
+      "'   42'",
+      "ValueError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'zfill(width)' pads the string on the left with ASCII '0' digits until the given width is reached: '00042'.",
+    "id": 95,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Medium",
+    "question": "What is the output of 'center(10, '-')' on 'cat'?",
+    "code": "print('cat'.center(9, '-'))",
+    "options": [
+      "'---cat---'",
+      "'cat------'",
+      "'------cat'",
+      "ValueError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'center(width, fillchar)' centers the string with padding characters on both sides: '---cat---'.",
+    "id": 96,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Medium",
+    "question": "What will 's.partition(\"-\")' return?",
+    "code": "s = 'user-admin-root'\nprint(s.partition('-'))",
+    "options": [
+      "('user', '-', 'admin-root')",
+      "['user', 'admin', 'root']",
+      "('user', 'admin-root')",
+      "('admin-root', '-', 'user')"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'partition(sep)' splits the string at the first occurrence of sep and returns a 3-tuple: (before, sep, after).",
+    "id": 97,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Medium",
+    "question": "What will 's.rpartition(\"-\")' return?",
+    "code": "s = 'user-admin-root'\nprint(s.rpartition('-'))",
+    "options": [
+      "('user-admin', '-', 'root')",
+      "('user', '-', 'admin-root')",
+      "['user', 'admin', 'root']",
+      "('root', '-', 'user-admin')"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'rpartition(sep)' splits at the LAST occurrence of sep and returns a 3-tuple: (before, sep, after).",
+    "id": 98,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Medium",
+    "question": "What is the output of 'splitlines()' on a string containing newlines?",
+    "code": "s = 'A\\nB\\r\\nC'\nprint(s.splitlines())",
+    "options": [
+      "['A', 'B', 'C']",
+      "['A\\n', 'B\\r\\n', 'C']",
+      "['A', 'B\\r', 'C']",
+      "['ABC']"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'splitlines()' splits at line boundaries (\\n, \\r, \\r\\n) and returns a list of lines without line breaks by default.",
+    "id": 99,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Medium",
+    "question": "What is the output of 'ord('A')' and 'chr(65)' in Python?",
+    "code": "print(ord('A'), chr(65))",
+    "options": [
+      "65 A",
+      "97 a",
+      "65 65",
+      "A A"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'ord()' returns the integer Unicode code point (65 for 'A'), and 'chr()' returns the string character for that code point ('A').",
+    "id": 100,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Advanced",
+    "question": "What is the output of string slicing with a step of -2?",
+    "code": "s = '0123456789'\nprint(s[8:2:-2])",
+    "options": [
+      "'864'",
+      "'8642'",
+      "'9753'",
+      "''"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Starting at index 8 down to index 2 (stop is exclusive) with step -2 selects indices 8 ('8'), 6 ('6'), and 4 ('4'), yielding '864'.",
+    "id": 101,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Advanced",
+    "question": "What happens when 'start' is less than 'stop' in a slice with a negative step?",
+    "code": "s = 'Python'\nprint(repr(s[1:4:-1]))",
+    "options": [
+      "'' (empty string)",
+      "'yth'",
+      "'hty'",
+      "IndexError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "With a negative step, slicing moves backwards from start. Since index 1 cannot reach index 4 by moving backwards, it immediately returns an empty string ''.",
+    "id": 102,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Advanced",
+    "question": "What will 'str.casefold()' do compared to 'str.lower()'?",
+    "code": "print('\u00df'.lower(), '\u00df'.casefold())",
+    "options": [
+      "'\u00df' 'ss'",
+      "'ss' '\u00df'",
+      "'\u00df' '\u00df'",
+      "'B' 'b'"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'casefold()' performs aggressive caseless matching for international characters. German lowercase '\u00df' folds into 'ss', whereas 'lower()' leaves it as '\u00df'.",
+    "id": 103,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Advanced",
+    "question": "What is the result of using str.maketrans() and str.translate()?",
+    "code": "trans = str.maketrans('abc', '123')\nprint('cab'.translate(trans))",
+    "options": [
+      "'312'",
+      "'123'",
+      "'cab'",
+      "TypeError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'str.maketrans('abc', '123')' maps a->1, b->2, c->3. 'cab'.translate() transforms 'c' to '3', 'a' to '1', 'b' to '2' -> '312'.",
+    "id": 104,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Advanced",
+    "question": "What does the 'removeprefix()' method (Python 3.9+) do?",
+    "code": "s = 'Test_Result'\nprint(s.removeprefix('Test_'))",
+    "options": [
+      "'Result'",
+      "'Test_Result'",
+      "'_Result'",
+      "AttributeError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Introduced in Python 3.9, 'removeprefix(prefix)' safely strips the prefix if present without stripping arbitrary character sets like lstrip().",
+    "id": 105,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Advanced",
+    "question": "What does the 'removesuffix()' method (Python 3.9+) do if the suffix does not match?",
+    "code": "s = 'notes.txt'\nprint(s.removesuffix('.pdf'))",
+    "options": [
+      "'notes.txt' (original string unchanged)",
+      "''",
+      "ValueError",
+      "'notes'"
+    ],
+    "correctAnswer": 0,
+    "explanation": "If the string does not end with the specified suffix, 'removesuffix()' returns a copy of the original string unchanged.",
+    "id": 106,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Advanced",
+    "question": "What is raw string notation (r'...') used for?",
+    "code": "s = r'C:\\new\\test'\nprint(len(s))",
+    "options": [
+      "11",
+      "9",
+      "10",
+      "SyntaxError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "A raw string 'r...' disables escape sequence interpretation. '\\n' and '\\t' are treated as two literal characters each (backslash and letter). Total length is 11.",
+    "id": 107,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Advanced",
+    "question": "Can a raw string end with an odd number of backslashes?",
+    "code": "s = r'abc\\'",
+    "options": [
+      "Yes, it stores 'abc\\'",
+      "No, it raises a SyntaxError: unterminated string literal",
+      "It automatically appends a space",
+      "It causes a runtime crash"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In Python, raw strings cannot end with an odd number of backslashes because the trailing backslash escapes the closing quote character, triggering a SyntaxError.",
+    "id": 108,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Advanced",
+    "question": "What is the output of 's.encode(\"utf-8\")'?",
+    "code": "s = 'Hi'\nprint(type(s.encode('utf-8')))",
+    "options": [
+      "<class 'bytes'>",
+      "<class 'str'>",
+      "<class 'bytearray'>",
+      "<class 'int'>"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'str.encode()' encodes a Unicode string into a sequence of bytes (<class 'bytes'>).",
+    "id": 109,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "05_String_Operators",
+    "difficulty": "Advanced",
+    "question": "Why does string concatenation in a tight loop with '+=' have O(N^2) time complexity?",
+    "code": null,
+    "options": [
+      "Because Python strings are immutable, requiring allocating a new buffer and copying all characters on each iteration",
+      "Because '+' uses bubble sort internally",
+      "Because string hashing takes exponential time",
+      "It doesn't; concatenation is always O(1)"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Because strings are immutable, '+=' repeatedly allocates new memory and copies characters. Use `''.join(list)` for linear O(N) concatenation.",
+    "id": 110,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Basic",
+    "question": "What are the only two possible values of the bool type in Python?",
+    "code": null,
+    "options": [
+      "True and False (capitalized)",
+      "true and false (lowercase)",
+      "1 and 0 only",
+      "YES and NO"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Python's boolean literals are strictly capitalized: 'True' and 'False'.",
+    "id": 111,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Basic",
+    "question": "What is the truth value of an empty list '[]' in Python?",
+    "code": "print(bool([]))",
+    "options": [
+      "False",
+      "True",
+      "None",
+      "TypeError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Empty collections (empty list [], empty tuple (), empty dict {}) evaluate to False in boolean context.",
+    "id": 112,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Basic",
+    "question": "What will 'not True' and 'not False' return?",
+    "code": "print(not True, not False)",
+    "options": [
+      "False True",
+      "True False",
+      "False False",
+      "True True"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The 'not' operator inverts the boolean truth value: not True is False; not False is True.",
+    "id": 113,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Basic",
+    "question": "What is the result of 'True and True' vs 'True and False'?",
+    "code": "print(True and True, True and False)",
+    "options": [
+      "True False",
+      "True True",
+      "False False",
+      "False True"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'and' returns True only if both operands are truthy; otherwise False.",
+    "id": 114,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Medium",
+    "question": "What is the output of 'bool(\" \")' (a single space string)?",
+    "code": "print(bool(' '))",
+    "options": [
+      "True",
+      "False",
+      "None",
+      "ValueError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "A string containing a single space has length 1 (non-empty). Any non-empty string evaluates to True.",
+    "id": 115,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Medium",
+    "question": "What will be printed by 'bool(0.0)' and 'bool(-0.0)'?",
+    "code": "print(bool(0.0), bool(-0.0))",
+    "options": [
+      "False False",
+      "True True",
+      "False True",
+      "True False"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Zero of any numeric type (0, 0.0, 0j) evaluates to False.",
+    "id": 116,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Medium",
+    "question": "What is the output of 'bool(-1)' in Python?",
+    "code": "print(bool(-1))",
+    "options": [
+      "True",
+      "False",
+      "-1",
+      "TypeError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "All non-zero integers (positive or negative) evaluate to True.",
+    "id": 117,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Medium",
+    "question": "What will '10 and 20' evaluate to in Python?",
+    "code": "print(10 and 20)",
+    "options": [
+      "20",
+      "10",
+      "True",
+      "False"
+    ],
+    "correctAnswer": 0,
+    "explanation": "In 'x and y', if 'x' is truthy, Python evaluates and returns the value of 'y' (20).",
+    "id": 118,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Medium",
+    "question": "What will '10 or 20' evaluate to in Python?",
+    "code": "print(10 or 20)",
+    "options": [
+      "10",
+      "20",
+      "True",
+      "False"
+    ],
+    "correctAnswer": 0,
+    "explanation": "In 'x or y', if 'x' is truthy, short-circuit evaluation returns 'x' (10) immediately without evaluating 'y'.",
+    "id": 119,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Medium",
+    "question": "What will '' or 'Default' evaluate to?",
+    "code": "print('' or 'Default')",
+    "options": [
+      "'Default'",
+      "''",
+      "True",
+      "False"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The empty string '' is falsy. In an 'or' expression, it evaluates and returns the right operand ('Default').",
+    "id": 120,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Medium",
+    "question": "What is the output of 'None or 0 or False or 'Found''?",
+    "code": "print(None or 0 or False or 'Found')",
+    "options": [
+      "'Found'",
+      "None",
+      "0",
+      "True"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The chained 'or' operator searches from left to right for the first truthy value. Since None, 0, and False are all falsy, it returns 'Found'.",
+    "id": 121,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Medium",
+    "question": "What is the output of 'None and 'Python''?",
+    "code": "print(None and 'Python')",
+    "options": [
+      "None",
+      "'Python'",
+      "False",
+      "True"
+    ],
+    "correctAnswer": 0,
+    "explanation": "In 'x and y', if 'x' is falsy, Python returns 'x' immediately. None is falsy, so it returns None.",
+    "id": 122,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Medium",
+    "question": "What does the expression '1 in [1, 2] == True' evaluate to?",
+    "code": "print(1 in [1, 2] == True)",
+    "options": [
+      "False",
+      "True",
+      "TypeError",
+      "SyntaxError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Comparison chaining! '1 in [1, 2] == True' expands to '(1 in [1, 2]) and ([1, 2] == True)'. Since [1, 2] == True is False, the result is False!",
+    "id": 123,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Medium",
+    "question": "What is the output of 'print(True == 1, False == 0)'?",
+    "code": "print(True == 1, False == 0)",
+    "options": [
+      "True True",
+      "False False",
+      "True False",
+      "False True"
+    ],
+    "correctAnswer": 0,
+    "explanation": "In Python, booleans are instances of int with values 1 and 0. 'True == 1' and 'False == 0' are both True.",
+    "id": 124,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Advanced",
+    "question": "What is the difference between '==' and 'is' when comparing True and 1?",
+    "code": "print(True == 1, True is 1)",
+    "options": [
+      "True False",
+      "True True",
+      "False False",
+      "SyntaxWarning only"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'True == 1' is True because their values are numerically equal. 'True is 1' is False because they are distinct objects in memory (bool vs int).",
+    "id": 125,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Advanced",
+    "question": "What will be printed by the following logical expression?",
+    "code": "a = [0]\nprint(bool(a), bool(a[0]))",
+    "options": [
+      "True False",
+      "False False",
+      "True True",
+      "False True"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'a' is a list of length 1, so 'bool(a)' is True (non-empty list). 'a[0]' is integer 0, so 'bool(a[0])' is False.",
+    "id": 126,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Advanced",
+    "question": "What will be the output of short-circuit function execution?",
+    "code": "def func():\n    print('Executed')\n    return False\nres = True or func()",
+    "options": [
+      "Does not print 'Executed', res is True",
+      "Prints 'Executed', res is True",
+      "Prints 'Executed', res is False",
+      "TypeError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Because the left side of 'or' is True, Python short-circuits and never calls 'func()'.",
+    "id": 127,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Advanced",
+    "question": "What is the output of 'not '' and 5 or 0'?",
+    "code": "print(not '' and 5 or 0)",
+    "options": [
+      "5",
+      "True",
+      "0",
+      "False"
+    ],
+    "correctAnswer": 0,
+    "explanation": "1. 'not ''' is True. 2. 'True and 5' returns 5. 3. '5 or 0' returns 5.",
+    "id": 128,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Advanced",
+    "question": "What does 'all([])' and 'any([])' evaluate to on an empty iterable in Python?",
+    "code": "print(all([]), any([]))",
+    "options": [
+      "True False",
+      "False False",
+      "True True",
+      "False True"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Vacuous truth! 'all([])' returns True (no element is False). 'any([])' returns False (no element is True).",
+    "id": 129,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "06_Boolean",
+    "difficulty": "Advanced",
+    "question": "What will 'all([1, 2, 0])' return?",
+    "code": "print(all([1, 2, 0]))",
+    "options": [
+      "False",
+      "True",
+      "0",
+      "TypeError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'all()' returns True only if ALL elements in the iterable are truthy. Since 0 is falsy, it returns False.",
+    "id": 130,
+    "section": "Section 3: Strings & Booleans (Q76-Q130)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Basic",
+    "question": "What is the default separator used by the print() function between multiple arguments?",
+    "code": null,
+    "options": [
+      "A single space (' ')",
+      "A comma (',')",
+      "No space ('')",
+      "A newline ('\\n')"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The default value of the 'sep' parameter in 'print(*objects, sep=' ', end='\\n')' is a single space ' '.",
+    "id": 131,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Basic",
+    "question": "What is the default end character printed by print()?",
+    "code": null,
+    "options": [
+      "Newline character ('\\n')",
+      "Empty string ('')",
+      "Space (' ')",
+      "Semicolon (';')"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The default value of the 'end' parameter in print() is '\\n'.",
+    "id": 132,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Basic",
+    "question": "How do you display an f-string in Python 3.6+?",
+    "code": "name = 'Alice'\nscore = 95\nprint(f'{name} scored {score}')",
+    "options": [
+      "Alice scored 95",
+      "{name} scored {score}",
+      "f'Alice scored 95'",
+      "SyntaxError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "f-strings (formatted string literals) evaluate expressions inside curly braces {} at runtime.",
+    "id": 133,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Basic",
+    "question": "What built-in function is used to accept user input from standard input?",
+    "code": null,
+    "options": [
+      "scanf()",
+      "input()",
+      "read()",
+      "get()"
+    ],
+    "correctAnswer": 1,
+    "explanation": "'input([prompt])' reads a line from input and returns it as a string.",
+    "id": 134,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Medium",
+    "question": "What will be printed when specifying 'sep=\"*\"' with 4 arguments?",
+    "code": "print(1, 2, 3, 4, sep='*')",
+    "options": [
+      "1*2*3*4",
+      "*1*2*3*4*",
+      "1 2 3 4*",
+      "24"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'sep='*'' places an asterisk between each argument: '1*2*3*4'.",
+    "id": 135,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Medium",
+    "question": "What will be printed when 'sep=\"\"' is passed to print()?",
+    "code": "print('Py', 'th', 'on', sep='')",
+    "options": [
+      "Python",
+      "Py th on",
+      "Py,th,on",
+      "SyntaxError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'sep=''' joins the printed arguments with no separator between them: 'Python'.",
+    "id": 136,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Medium",
+    "question": "What will be printed by the following code with custom 'end'?",
+    "code": "for i in [1, 2, 3]:\n    print(i, end='-')",
+    "options": [
+      "1-2-3-",
+      "1-2-3",
+      "1\\n2\\n3\\n",
+      "-1-2-3"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Each print call appends '-' instead of a newline, producing '1-2-3-'.",
+    "id": 137,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Medium",
+    "question": "How do you read two integers entered on a single line separated by space?",
+    "code": null,
+    "options": [
+      "a, b = map(int, input().split())",
+      "a, b = int(input().split())",
+      "a, b = input().split(int)",
+      "a, b = int(input()), int(input())"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'input().split()' splits the input string into tokens, and 'map(int, ...)' converts each token into an integer.",
+    "id": 138,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Medium",
+    "question": "What is the output of 'f\"{1234567:,}\"' using comma formatting in f-strings?",
+    "code": "print(f'{1234567:,}')",
+    "options": [
+      "'1,234,567'",
+      "'1234567,'",
+      "',1234567'",
+      "ValueError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The ',' format specifier in an f-string adds commas as thousands separators: '1,234,567'.",
+    "id": 139,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Medium",
+    "question": "What will 'f\"{0.75:.1%}\"' format to?",
+    "code": "print(f'{0.75:.1%}')",
+    "options": [
+      "'75.0%'",
+      "'0.8%'",
+      "'75%'",
+      "'0.75%'"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The '%' specifier multiplies the number by 100, formats it with 1 decimal place, and adds a percent sign: '75.0%'.",
+    "id": 140,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Medium",
+    "question": "What is the output of using string formatting with padding in f-strings: 'f\"{42:>5}\"'?",
+    "code": "print(repr(f'{42:>5}'))",
+    "options": [
+      "'   42'",
+      "'42   '",
+      "'00042'",
+      "'>542'"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'>5' right-aligns the value within a field of width 5, padding with 3 leading spaces: '   42'.",
+    "id": 141,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Medium",
+    "question": "What will 'f\"{42:<5}\"' produce?",
+    "code": "print(repr(f'{42:<5}'))",
+    "options": [
+      "'42   '",
+      "'   42'",
+      "'42000'",
+      "'<542'"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'<5' left-aligns the value within a field of width 5, padding with 3 trailing spaces: '42   '.",
+    "id": 142,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Medium",
+    "question": "What will 'f\"{42:^7}\"' produce?",
+    "code": "print(repr(f'{42:^7}'))",
+    "options": [
+      "'  42   '",
+      "'   42  '",
+      "'42     '",
+      "'     42'"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'^7' centers the value in a field of width 7, adding padding spaces on both sides: '  42   '.",
+    "id": 143,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Medium",
+    "question": "What is the output of the str.format() method with positional arguments?",
+    "code": "print('{1} and {0}'.format('Tea', 'Coffee'))",
+    "options": [
+      "Coffee and Tea",
+      "Tea and Coffee",
+      "{1} and {0}",
+      "IndexError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Index 1 is 'Coffee' and index 0 is 'Tea'. So '{1} and {0}' produces 'Coffee and Tea'.",
+    "id": 144,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Advanced",
+    "question": "What does the self-documenting expression format 'f\"{x=}\"' (Python 3.8+) produce?",
+    "code": "x = 42\nprint(f'{x=}')",
+    "options": [
+      "x=42",
+      "42",
+      "x = 42",
+      "SyntaxError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "In Python 3.8+, adding '=' inside an f-string prints the variable name, equal sign, and its value: 'x=42'.",
+    "id": 145,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Advanced",
+    "question": "How can you escape literal curly braces inside an f-string?",
+    "code": "val = 10\nprint(f'{{val}} = {val}')",
+    "options": [
+      "{val} = 10",
+      "10 = 10",
+      "{{val}} = 10",
+      "SyntaxError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Doubling curly braces '{{' and '}}' escapes them in an f-string, printing literal braces: '{val} = 10'.",
+    "id": 146,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Advanced",
+    "question": "What does the 'flush=True' argument in print() do?",
+    "code": "print('Loading...', end='', flush=True)",
+    "options": [
+      "Immediately forces writing the buffered output to the console/stream",
+      "Clears the terminal screen",
+      "Deletes previous printed output",
+      "Suppresses errors"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'flush=True' forcibly flushes the internal I/O buffer to the underlying stream immediately without waiting for a newline or buffer fill.",
+    "id": 147,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Advanced",
+    "question": "How does print() redirect output directly to a file?",
+    "code": "with open('out.txt', 'w') as f:\n    print('Hello File', file=f)",
+    "options": [
+      "The 'file' parameter redirects the printed output to the opened file object",
+      "print() cannot write to files; this raises a TypeError",
+      "It only writes to standard error",
+      "It deletes the file after printing"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The 'file=f' keyword parameter directs print() output to any object with a 'write(string)' method.",
+    "id": 148,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Advanced",
+    "question": "What is the difference between 'str()' and 'repr()' in Python?",
+    "code": "import datetime\nd = datetime.date(2026, 1, 1)\n# str(d) vs repr(d)",
+    "options": [
+      "str() returns an informal human-readable string; repr() returns an unambiguous developer representation",
+      "str() is for numbers; repr() is for strings",
+      "Both always return identical strings",
+      "repr() is deprecated in Python 3"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'str()' is intended to be readable by end users ('2026-01-01'); 'repr()' is intended for debugging and often valid Python code to recreate the object ('datetime.date(2026, 1, 1)').",
+    "id": 149,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "07_Input_Output",
+    "difficulty": "Advanced",
+    "question": "What happens if sys.stdout is redirected in Python?",
+    "code": "import sys, io\nold_out = sys.stdout\nsys.stdout = io.StringIO()\nprint('Hidden')\nval = sys.stdout.getvalue()\nsys.stdout = old_out\nprint(val.strip())",
+    "options": [
+      "Prints 'Hidden'",
+      "Raises AttributeError",
+      "Silently ignores the print",
+      "Terminates execution"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'sys.stdout' is standard output. Reassigning it to an 'io.StringIO()' buffer intercepts and captures print statements in memory.",
+    "id": 150,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "08_Conditional_statements",
+    "difficulty": "Basic",
+    "question": "What is the mandatory keyword used to begin a conditional decision structure in Python?",
+    "code": null,
+    "options": [
+      "if",
+      "when",
+      "case",
+      "check"
+    ],
+    "correctAnswer": 0,
+    "explanation": "In Python, conditional statements begin with the 'if' keyword.",
+    "id": 151,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "08_Conditional_statements",
+    "difficulty": "Basic",
+    "question": "What character MUST terminate the header line of an if, elif, or else statement in Python?",
+    "code": null,
+    "options": [
+      "Colon (:)",
+      "Semicolon (;)",
+      "Left brace ({)",
+      "Arrow (->)"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Compound statements in Python (if, elif, else, for, while, def, class) must end their header with a colon ':'.",
+    "id": 152,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "08_Conditional_statements",
+    "difficulty": "Basic",
+    "question": "What will happen if an 'if' block has inconsistent indentation?",
+    "code": "if True:\n    x = 1\n      y = 2",
+    "options": [
+      "IndentationError: unexpected indent",
+      "Executes normally",
+      "y is placed outside the block",
+      "SyntaxWarning only"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Python requires consistent indentation within the same block; mismatching indentation raises an 'IndentationError'.",
+    "id": 153,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "08_Conditional_statements",
+    "difficulty": "Medium",
+    "question": "What will be printed by the following conditional block?",
+    "code": "score = 82\nif score >= 90:\n    grade = 'A'\nelif score >= 80:\n    grade = 'B'\nelif score >= 70:\n    grade = 'C'\nelse:\n    grade = 'F'\nprint(grade)",
+    "options": [
+      "B",
+      "C",
+      "A",
+      "F"
+    ],
+    "correctAnswer": 0,
+    "explanation": "82 satisfies 'score >= 80', assigning grade = 'B'. The remaining elif and else branches are skipped.",
+    "id": 154,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "08_Conditional_statements",
+    "difficulty": "Medium",
+    "question": "What is the output of Python's ternary conditional expression?",
+    "code": "status = 'Pass' if 65 >= 50 else 'Fail'\nprint(status)",
+    "options": [
+      "Pass",
+      "Fail",
+      "True",
+      "SyntaxError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Python's ternary operator syntax is 'X if Condition else Y'. Since 65 >= 50 is True, it evaluates to 'Pass'.",
+    "id": 155,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "08_Conditional_statements",
+    "difficulty": "Medium",
+    "question": "What will be printed by the nested conditional check?",
+    "code": "x, y = 10, 20\nif x > 5:\n    if y < 15:\n        print('One')\n    else:\n        print('Two')\nelse:\n    print('Three')",
+    "options": [
+      "Two",
+      "One",
+      "Three",
+      "No output"
+    ],
+    "correctAnswer": 0,
+    "explanation": "x > 5 (10 > 5) is True, entering outer if. Inside, y < 15 (20 < 15) is False, executing the inner else which prints 'Two'.",
+    "id": 156,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "08_Conditional_statements",
+    "difficulty": "Medium",
+    "question": "What is the output of the chained comparison below?",
+    "code": "a = 25\nprint(20 <= a <= 30)",
+    "options": [
+      "True",
+      "False",
+      "25",
+      "SyntaxError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "In Python, '20 <= a <= 30' is evaluated as '(20 <= a) and (a <= 30)'. Since 25 is between 20 and 30, it is True.",
+    "id": 157,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "08_Conditional_statements",
+    "difficulty": "Medium",
+    "question": "Can an 'else' block exist without an 'if' in Python conditional logic?",
+    "code": null,
+    "options": [
+      "No, an 'else' statement in conditional logic requires a preceding 'if' or 'elif'",
+      "Yes, 'else' can stand alone anywhere",
+      "Yes, if preceded by pass",
+      "Only in functions"
+    ],
+    "correctAnswer": 0,
+    "explanation": "In conditional logic, 'else' cannot stand on its own and requires a matching 'if' (or loop/try structure).",
+    "id": 158,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "08_Conditional_statements",
+    "difficulty": "Medium",
+    "question": "What is the output when an empty dictionary is evaluated in an if statement?",
+    "code": "config = {}\nif config:\n    print('Active')\nelse:\n    print('Default')",
+    "options": [
+      "Default",
+      "Active",
+      "TypeError",
+      "None"
+    ],
+    "correctAnswer": 0,
+    "explanation": "An empty dictionary '{}' is falsy in Python, so the else branch executes, printing 'Default'.",
+    "id": 159,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "08_Conditional_statements",
+    "difficulty": "Medium",
+    "question": "What will be printed by the following code testing multiple if statements?",
+    "code": "x = 10\ncount = 0\nif x > 5:\n    count += 1\nif x > 8:\n    count += 1\nif x > 15:\n    count += 1\nprint(count)",
+    "options": [
+      "2",
+      "1",
+      "3",
+      "0"
+    ],
+    "correctAnswer": 0,
+    "explanation": "These are independent 'if' statements (not elif). x > 5 is True (count=1), x > 8 is True (count=2), x > 15 is False. Total count is 2.",
+    "id": 160,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "08_Conditional_statements",
+    "difficulty": "Medium",
+    "question": "What is the output of checking membership in a conditional statement?",
+    "code": "role = 'editor'\nif role in ('admin', 'superuser'):\n    print('Access Granted')\nelse:\n    print('Access Denied')",
+    "options": [
+      "Access Denied",
+      "Access Granted",
+      "TypeError",
+      "None"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'editor' is not in the tuple ('admin', 'superuser'), so it prints 'Access Denied'.",
+    "id": 161,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "08_Conditional_statements",
+    "difficulty": "Advanced",
+    "question": "What is structural pattern matching introduced in Python 3.10?",
+    "code": "status = 404\nmatch status:\n    case 200: msg = 'OK'\n    case 404: msg = 'Not Found'\n    case _: msg = 'Other'\nprint(msg)",
+    "options": [
+      "Not Found",
+      "OK",
+      "Other",
+      "SyntaxError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Python 3.10 introduced the 'match-case' statement for structural pattern matching. Case 404 matches, setting msg to 'Not Found'.",
+    "id": 162,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "08_Conditional_statements",
+    "difficulty": "Advanced",
+    "question": "What does the wildcard pattern '_' represent in a Python match-case statement?",
+    "code": null,
+    "options": [
+      "The default / catch-all case similar to 'default:' in switch-case",
+      "Matches only None",
+      "Throws an exception",
+      "Skips to the next file"
+    ],
+    "correctAnswer": 0,
+    "explanation": "In structural pattern matching, 'case _:' acts as a wildcard that matches any value not caught by earlier cases.",
+    "id": 163,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "08_Conditional_statements",
+    "difficulty": "Advanced",
+    "question": "What is the output of the chained comparison 'print(5 > 3 == 3)'?",
+    "code": "print(5 > 3 == 3)",
+    "options": [
+      "True",
+      "False",
+      "TypeError",
+      "SyntaxError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'5 > 3 == 3' chains to '(5 > 3) and (3 == 3)'. Both 5 > 3 (True) and 3 == 3 (True) are True, so the result is True!",
+    "id": 164,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "08_Conditional_statements",
+    "difficulty": "Advanced",
+    "question": "What will be printed by the nested ternary conditional?",
+    "code": "n = 0\nres = 'Positive' if n > 0 else ('Negative' if n < 0 else 'Zero')\nprint(res)",
+    "options": [
+      "Zero",
+      "Positive",
+      "Negative",
+      "SyntaxError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "n = 0: n > 0 is False. In the else branch, n < 0 is False, so it evaluates the inner else returning 'Zero'.",
+    "id": 165,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "09_Problem_Solving",
+    "difficulty": "Basic",
+    "question": "How do you test if an integer 'n' is even in Python?",
+    "code": null,
+    "options": [
+      "n % 2 == 0",
+      "n // 2 == 0",
+      "n / 2 == 0",
+      "n ** 2 == 0"
+    ],
+    "correctAnswer": 0,
+    "explanation": "An integer is even if its remainder when divided by 2 is 0: 'n % 2 == 0'.",
+    "id": 166,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "09_Problem_Solving",
+    "difficulty": "Basic",
+    "question": "Which Python built-in function returns the absolute value of a number without a sign?",
+    "code": "print(abs(-25))",
+    "options": [
+      "25",
+      "-25",
+      "0",
+      "TypeError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'abs(x)' returns the non-negative magnitude (absolute value) of x.",
+    "id": 167,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "09_Problem_Solving",
+    "difficulty": "Medium",
+    "question": "What is the correct algorithm to check whether a year is a Leap Year in the Gregorian calendar?",
+    "code": null,
+    "options": [
+      "(year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)",
+      "year % 4 == 0 only",
+      "year % 400 == 0 only",
+      "year % 100 == 0"
+    ],
+    "correctAnswer": 0,
+    "explanation": "A year is a leap year if it is divisible by 4 but not by 100, UNLESS it is also divisible by 400.",
+    "id": 168,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "09_Problem_Solving",
+    "difficulty": "Medium",
+    "question": "What will be printed for year = 1900 according to the leap year algorithm?",
+    "code": "year = 1900\nis_leap = (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)\nprint(is_leap)",
+    "options": [
+      "False",
+      "True",
+      "None",
+      "TypeError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "1900 is divisible by 4, but also divisible by 100 and NOT by 400. Therefore, 1900 is NOT a leap year (False).",
+    "id": 169,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "09_Problem_Solving",
+    "difficulty": "Medium",
+    "question": "What will be printed for year = 2000 according to the leap year algorithm?",
+    "code": "year = 2000\nis_leap = (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)\nprint(is_leap)",
+    "options": [
+      "True",
+      "False",
+      "None",
+      "ZeroDivisionError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "2000 is divisible by 400, so it IS a leap year (True).",
+    "id": 170,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "09_Problem_Solving",
+    "difficulty": "Medium",
+    "question": "How do you find the maximum of three numbers without the built-in max() function?",
+    "code": "a, b, c = 45, 78, 62\nif a >= b and a >= c: m = a\nelif b >= a and b >= c: m = b\nelse: m = c\nprint(m)",
+    "options": [
+      "78",
+      "45",
+      "62",
+      "None"
+    ],
+    "correctAnswer": 0,
+    "explanation": "b (78) is greater than both a (45) and c (62), so m is assigned 78.",
+    "id": 171,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "09_Problem_Solving",
+    "difficulty": "Medium",
+    "question": "What is the output of the following digit extraction code?",
+    "code": "n = 582\nunits = n % 10\ntens = (n // 10) % 10\nhundreds = n // 100\nprint(hundreds, tens, units)",
+    "options": [
+      "5 8 2",
+      "2 8 5",
+      "5 82 2",
+      "58 8 2"
+    ],
+    "correctAnswer": 0,
+    "explanation": "units = 582 % 10 = 2. tens = (58) % 10 = 8. hundreds = 582 // 100 = 5.",
+    "id": 172,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "09_Problem_Solving",
+    "difficulty": "Medium",
+    "question": "What will the following number reversal algorithm output for n = 1234?",
+    "code": "n = 1234\nrev = 0\nwhile n > 0:\n    rev = rev * 10 + n % 10\n    n //= 10\nprint(rev)",
+    "options": [
+      "4321",
+      "1234",
+      "10",
+      "4"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Extracting last digits with '% 10' and appending with '* 10' reverses the integer to 4321.",
+    "id": 173,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "09_Problem_Solving",
+    "difficulty": "Medium",
+    "question": "What will be printed by the following sum of digits algorithm for n = 456?",
+    "code": "n = 456\ntotal = 0\nwhile n > 0:\n    total += n % 10\n    n //= 10\nprint(total)",
+    "options": [
+      "15",
+      "456",
+      "6",
+      "24"
+    ],
+    "correctAnswer": 0,
+    "explanation": "6 + 5 + 4 = 15.",
+    "id": 174,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "09_Problem_Solving",
+    "difficulty": "Advanced",
+    "question": "What is the output of the Euclidean algorithm for greatest common divisor (GCD)?",
+    "code": "a, b = 48, 18\nwhile b != 0:\n    a, b = b, a % b\nprint(a)",
+    "options": [
+      "6",
+      "18",
+      "12",
+      "3"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Iteration 1: a=18, b=48%18=12. Iteration 2: a=12, b=18%12=6. Iteration 3: a=6, b=12%6=0. Loop terminates with a = 6.",
+    "id": 175,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "09_Problem_Solving",
+    "difficulty": "Advanced",
+    "question": "What is the output of computing the Least Common Multiple (LCM) of 12 and 15 using gcd?",
+    "code": "import math\na, b = 12, 15\nlcm = abs(a * b) // math.gcd(a, b)\nprint(lcm)",
+    "options": [
+      "60",
+      "180",
+      "30",
+      "3"
+    ],
+    "correctAnswer": 0,
+    "explanation": "math.gcd(12, 15) is 3. LCM = (12 * 15) // 3 = 180 // 3 = 60.",
+    "id": 176,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "09_Problem_Solving",
+    "difficulty": "Advanced",
+    "question": "What will be printed when checking whether n = 29 is a prime number?",
+    "code": "n = 29\nis_prime = n > 1 and all(n % i != 0 for i in range(2, int(n**0.5) + 1))\nprint(is_prime)",
+    "options": [
+      "True",
+      "False",
+      "None",
+      "TypeError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The square root of 29 is ~5.38. Testing divisors 2, 3, 4, 5 yields no factor. 29 is prime (True).",
+    "id": 177,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "09_Problem_Solving",
+    "difficulty": "Advanced",
+    "question": "What is the output of the bitwise parity check to see if an integer is odd?",
+    "code": "n = 47\nprint('Odd' if n & 1 else 'Even')",
+    "options": [
+      "Odd",
+      "Even",
+      "1",
+      "0"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'n & 1' tests the least significant bit. For odd numbers, the LSB is 1 (truthy), printing 'Odd'.",
+    "id": 178,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "09_Problem_Solving",
+    "difficulty": "Advanced",
+    "question": "What will be the output of checking if a number is a power of 2 using bitwise operations?",
+    "code": "def is_power_of_two(n):\n    return n > 0 and (n & (n - 1)) == 0\nprint(is_power_of_two(16), is_power_of_two(18))",
+    "options": [
+      "True False",
+      "True True",
+      "False True",
+      "False False"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Powers of 2 have exactly one '1' bit (16 = 10000). 16 - 1 = 15 (01111). 10000 & 01111 == 0 (True). 18 & 17 != 0 (False).",
+    "id": 179,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "09_Problem_Solving",
+    "difficulty": "Advanced",
+    "question": "What is the output of swapping two variables using bitwise XOR without a temporary variable?",
+    "code": "a = 25\nb = 40\na = a ^ b\nb = a ^ b\na = a ^ b\nprint(a, b)",
+    "options": [
+      "40 25",
+      "25 40",
+      "65 15",
+      "0 0"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The XOR swap algorithm cleanly exchanges the values: a becomes 40 and b becomes 25.",
+    "id": 180,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Basic",
+    "question": "What is the purpose of the 'while' loop in Python?",
+    "code": null,
+    "options": [
+      "Repeats a block of code as long as a specified boolean condition remains True",
+      "Iterates over fixed files only",
+      "Runs code in a parallel CPU thread",
+      "Terminates execution immediately"
+    ],
+    "correctAnswer": 0,
+    "explanation": "A 'while' loop evaluates its condition before each iteration and continues looping until the condition becomes False.",
+    "id": 181,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Basic",
+    "question": "Which keyword immediately exits and terminates the nearest enclosing loop?",
+    "code": null,
+    "options": [
+      "break",
+      "stop",
+      "exit",
+      "return"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'break' immediately terminates the current loop and resumes execution at the statement following the loop.",
+    "id": 182,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Medium",
+    "question": "Which keyword skips the remainder of the current iteration and jumps to the next loop iteration?",
+    "code": null,
+    "options": [
+      "continue",
+      "pass",
+      "skip",
+      "next"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'continue' discards any remaining statements in the current iteration and begins the next iteration of the loop.",
+    "id": 183,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Medium",
+    "question": "What does the 'pass' statement do inside a loop body?",
+    "code": null,
+    "options": [
+      "Acts as a syntactic placeholder that does nothing (a no-op)",
+      "Terminates the loop like break",
+      "Skips to the next iteration like continue",
+      "Raises an exception"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'pass' is a null statement in Python; it does nothing and serves as a placeholder where code is syntactically required.",
+    "id": 184,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Medium",
+    "question": "What sequence is generated by range(4, 10, 2)?",
+    "code": "print(list(range(4, 10, 2)))",
+    "options": [
+      "[4, 6, 8]",
+      "[4, 6, 8, 10]",
+      "[4, 5, 6, 7, 8, 9]",
+      "[6, 8]"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Starting at 4, incrementing by 2 up to (but not including) 10 produces [4, 6, 8].",
+    "id": 185,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Medium",
+    "question": "What will be printed by the following accumulator while loop?",
+    "code": "total = 0\ni = 1\nwhile i <= 4:\n    total += i\n    i += 1\nprint(total)",
+    "options": [
+      "10",
+      "15",
+      "4",
+      "0"
+    ],
+    "correctAnswer": 0,
+    "explanation": "1 + 2 + 3 + 4 = 10.",
+    "id": 186,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Medium",
+    "question": "What will be the output of iterating over a dictionary with a for loop?",
+    "code": "d = {'a': 1, 'b': 2}\nkeys = []\nfor k in d:\n    keys.append(k)\nprint(keys)",
+    "options": [
+      "['a', 'b']",
+      "[1, 2]",
+      "[('a', 1), ('b', 2)]",
+      "TypeError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Iterating over a dictionary directly loops over its keys: ['a', 'b'].",
+    "id": 187,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Medium",
+    "question": "What is the output of using enumerate() in a for loop?",
+    "code": "langs = ['Py', 'JS']\nfor idx, val in enumerate(langs):\n    print(idx, val, end=' ')",
+    "options": [
+      "0 Py 1 JS ",
+      "1 Py 2 JS ",
+      "Py 0 JS 1 ",
+      "['0 Py', '1 JS']"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'enumerate(iterable)' yields (index, value) pairs starting from 0: '0 Py 1 JS '.",
+    "id": 188,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Medium",
+    "question": "What is the output of enumerate() with a custom start index?",
+    "code": "items = ['apple', 'banana']\nfor idx, item in enumerate(items, start=1):\n    print(idx, end=' ')",
+    "options": [
+      "1 2 ",
+      "0 1 ",
+      "1 apple 2 banana ",
+      "2 3 "
+    ],
+    "correctAnswer": 0,
+    "explanation": "'enumerate(items, start=1)' begins the counter at 1, outputting '1 2 '.",
+    "id": 189,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Medium",
+    "question": "What will be the output of the zip() function in a for loop?",
+    "code": "names = ['Alice', 'Bob']\nages = [25, 30]\nfor n, a in zip(names, ages):\n    print(f'{n}:{a}', end=' ')",
+    "options": [
+      "Alice:25 Bob:30 ",
+      "Alice:Bob 25:30 ",
+      "Alice:30 Bob:25 ",
+      "TypeError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'zip()' aggregates elements from each of the iterables in parallel tuples: 'Alice:25 Bob:30 '.",
+    "id": 190,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Advanced",
+    "question": "What is the output of the 'else' block in a loop that is terminated by 'break'?",
+    "code": "for i in range(5):\n    if i == 2:\n        break\nelse:\n    print('Loop Finished')",
+    "options": [
+      "No output (the else block is skipped)",
+      "Prints 'Loop Finished'",
+      "SyntaxError",
+      "Prints 2"
+    ],
+    "correctAnswer": 0,
+    "explanation": "A loop's 'else' suite is SKIPPED if the loop terminates via a 'break' statement.",
+    "id": 191,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Advanced",
+    "question": "What is the output of the 'else' block when the loop condition becomes False naturally?",
+    "code": "i = 0\nwhile i < 3:\n    i += 1\nelse:\n    print('Done', i)",
+    "options": [
+      "Done 3",
+      "Done 2",
+      "No output",
+      "Done 0"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Because the loop terminated naturally when i < 3 became False (at i=3) without a break, the else block executes, printing 'Done 3'.",
+    "id": 192,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Advanced",
+    "question": "What will be the output of this nested loop calculating a product?",
+    "code": "prod = 1\nfor i in range(1, 3):\n    for j in range(1, 3):\n        prod *= (i + j)\nprint(prod)",
+    "options": [
+      "72",
+      "36",
+      "24",
+      "144"
+    ],
+    "correctAnswer": 0,
+    "explanation": "i=1,j=1: 1+1=2. i=1,j=2: 1+2=3. i=2,j=1: 2+1=3. i=2,j=2: 2+2=4. prod = 2 * 3 * 3 * 4 = 72.",
+    "id": 193,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Advanced",
+    "question": "What will be printed by the following pyramid star pattern row generator?",
+    "code": "res = []\nfor row in range(1, 4):\n    res.append('*' * row)\nprint('-'.join(res))",
+    "options": [
+      "*-**-***",
+      "***-**-*",
+      "*-*-*",
+      "***"
+    ],
+    "correctAnswer": 0,
+    "explanation": "row=1: '*'. row=2: '**'. row=3: '***'. Joined by '-' produces '*-**-***'.",
+    "id": 194,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Advanced",
+    "question": "What is the output of modifying a list while iterating over it with a standard for loop?",
+    "code": "nums = [1, 2, 3, 4]\nfor n in nums:\n    if n == 2:\n        nums.remove(n)\nprint(nums)",
+    "options": [
+      "[1, 3, 4] (item 3 is skipped during iteration due to index shift)",
+      "[1, 4]",
+      "[1, 2, 3, 4]",
+      "RuntimeError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Modifying a list during iteration shifts the indices. Removing 2 at index 1 shifts 3 to index 1, so the iterator advances to index 2 (which is 4), skipping 3. The resulting list is [1, 3, 4].",
+    "id": 195,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Advanced",
+    "question": "What is the value of the loop variable 'i' after a for loop completes normally?",
+    "code": "for i in range(5):\n    pass\nprint(i)",
+    "options": [
+      "4",
+      "5",
+      "None",
+      "NameError: i is not defined"
+    ],
+    "correctAnswer": 0,
+    "explanation": "In Python, for loop variables do NOT have local block scope; 'i' leaks into the surrounding scope and retains its last assigned value (4).",
+    "id": 196,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Advanced",
+    "question": "What will be printed by the following nested loop with break?",
+    "code": "s = ''\nfor i in range(2):\n    for j in range(2):\n        if j == 1:\n            break\n        s += f'{i}{j}'\nprint(s)",
+    "options": [
+      "'0010'",
+      "'00011011'",
+      "'00'",
+      "'01'"
+    ],
+    "correctAnswer": 0,
+    "explanation": "i=0: j=0 -> s='00', j=1 -> break inner loop. i=1: j=0 -> s='0010', j=1 -> break inner loop. Result: '0010'.",
+    "id": 197,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Advanced",
+    "question": "What is the result of using zip(strict=True) in Python 3.10+ when iterables have unequal lengths?",
+    "code": "a = [1, 2, 3]\nb = ['x', 'y']\n# list(zip(a, b, strict=True))",
+    "options": [
+      "Raises ValueError: zip() argument 2 is shorter than argument 1",
+      "Truncates to [ (1, 'x'), (2, 'y') ]",
+      "Pads with None",
+      "SyntaxError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "In Python 3.10+, 'strict=True' enforces that all iterables must be of equal length; otherwise, a 'ValueError' is raised.",
+    "id": 198,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Advanced",
+    "question": "What does itertools.count(start=5, step=3) generate?",
+    "code": "import itertools\nc = itertools.count(5, 3)\nprint([next(c), next(c), next(c)])",
+    "options": [
+      "[5, 8, 11]",
+      "[5, 3, 1]",
+      "[5, 6, 7]",
+      "TypeError"
+    ],
+    "correctAnswer": 0,
+    "explanation": "'itertools.count(start, step)' generates an infinite arithmetic progression: 5, 8, 11, ...",
+    "id": 199,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  },
+  {
+    "topic": "10_Loop",
+    "difficulty": "Advanced",
+    "question": "What will be printed by the following list comprehension with nested loops?",
+    "code": "grid = [(x, y) for x in range(2) for y in range(2) if x != y]\nprint(grid)",
+    "options": [
+      "[(0, 1), (1, 0)]",
+      "[(0, 0), (1, 1)]",
+      "[(0, 1)]",
+      "[(1, 0)]"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Pairs generated: (0,0), (0,1), (1,0), (1,1). Filter 'if x != y' keeps only (0, 1) and (1, 0).",
+    "id": 200,
+    "section": "Section 4: I/O, Conditionals & Loops (Q131-Q200)"
+  }
+];
+  let currentIndex = 0;
+  let userResponses = [];
+  const totalTimeSeconds = 280 * 60; // 280 Minutes = 16,800 seconds
+  let timeRemaining = totalTimeSeconds;
+  let timerInterval = null;
+  let examStarted = false;
+  let examSubmitted = false;
+  let currentSectionFilter = "all";
+
+  let warningCount = 0;
+  const maxWarnings = 3;
+  let violationLog = [];
+  let isCooldown = false;
+  let audioCtx = null;
+
+  let candidateName = "Sanjeev Kumar";
+  let candidateRoll = "NTA-PY2026-2001";
+
+  const startOverlay = document.getElementById("startOverlay");
+  const consentCheckbox = document.getElementById("consentCheckbox");
+  const btnStartExam = document.getElementById("btnStartExam");
+
+  const timerDisplay = document.getElementById("timerDisplay");
+  const timerContainer = document.getElementById("timerContainer");
+  const proctorStatusBadge = document.getElementById("proctorStatusBadge");
+  const warningCountText = document.getElementById("warningCountText");
+
+  const qNumberTitle = document.getElementById("qNumberTitle");
+  const qTopicBadge = document.getElementById("qTopicBadge");
+  const qDifficultyBadge = document.getElementById("qDifficultyBadge");
+  const questionText = document.getElementById("questionText");
+  const codeSnippetContainer = document.getElementById("codeSnippetContainer");
+  const codeSnippetText = document.getElementById("codeSnippetText");
+  const optionsContainer = document.getElementById("optionsContainer");
+
+  const btnPrev = document.getElementById("btnPrev");
+  const btnNext = document.getElementById("btnNext");
+  const btnSaveNext = document.getElementById("btnSaveNext");
+  const btnSaveMarkReview = document.getElementById("btnSaveMarkReview");
+  const btnClearResponse = document.getElementById("btnClearResponse");
+  const btnMarkReviewNext = document.getElementById("btnMarkReviewNext");
+  const btnSubmitBottom = document.getElementById("btnSubmitBottom");
+  const btnSubmitSidebar = document.getElementById("btnSubmitSidebar");
+
+  const paletteGrid = document.getElementById("paletteGrid");
+  const sectionTabs = document.getElementById("sectionTabs");
+
+  const countAnswered = document.getElementById("countAnswered");
+  const countNotAnswered = document.getElementById("countNotAnswered");
+  const countNotVisited = document.getElementById("countNotVisited");
+  const countMarkedReview = document.getElementById("countMarkedReview");
+  const countReviewEvaluated = document.getElementById("countReviewEvaluated");
+
+  const securityModal = document.getElementById("securityModal");
+  const violationCounterText = document.getElementById("violationCounterText");
+  const btnAcknowledgeSecurity = document.getElementById("btnAcknowledgeSecurity");
+  const questionPaperModal = document.getElementById("questionPaperModal");
+  const qpModalBody = document.getElementById("qpModalBody");
+  const instructionsModal = document.getElementById("instructionsModal");
+  const submitConfirmModal = document.getElementById("submitConfirmModal");
+  const btnFinalSubmitConfirm = document.getElementById("btnFinalSubmitConfirm");
+
+  const resultDashboard = document.getElementById("resultDashboard");
+  const examMainContainer = document.getElementById("examMainContainer");
+  const btnRetakeExam = document.getElementById("btnRetakeExam");
+
+  function initAudio() {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (AudioContext) audioCtx = new AudioContext();
+    } catch (e) {}
+  }
+
+  function playSecurityAlarm() {
+    if (!audioCtx) return;
+    try {
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+      osc.frequency.setValueAtTime(440, audioCtx.currentTime + 0.15);
+      osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.3);
+
+      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.5);
+    } catch (err) {}
+  }
+
+  function initExam() {
+    userResponses = questions.map((q, idx) => ({
+      questionId: q.id,
+      selectedOption: null,
+      status: idx === 0 ? "NOT_ANSWERED" : "NOT_VISITED",
+      visited: idx === 0
+    }));
+
+    renderPalette();
+    renderCurrentQuestion();
+    updateStatusCounts();
+  }
+
+  consentCheckbox.addEventListener("change", function () {
+    btnStartExam.disabled = !this.checked;
+  });
+
+  btnStartExam.addEventListener("click", function () {
+    const nameInput = document.getElementById("inputCandidateName");
+    const rollInput = document.getElementById("inputRollNumber");
+    if (nameInput && nameInput.value.trim()) candidateName = nameInput.value.trim();
+    if (rollInput && rollInput.value.trim()) candidateRoll = rollInput.value.trim();
+
+    const nameDisplay = document.querySelector(".candidate-details .name");
+    const rollDisplay = document.querySelector(".candidate-details .roll");
+    const avatarDisplay = document.querySelector(".candidate-avatar");
+    if (nameDisplay) nameDisplay.innerText = candidateName;
+    if (rollDisplay) rollDisplay.innerText = "Roll: " + candidateRoll;
+    if (avatarDisplay) {
+      const parts = candidateName.split(" ").filter(Boolean);
+      const initials = parts.length > 1 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : candidateName.slice(0, 2).toUpperCase();
+      avatarDisplay.innerText = initials || "SK";
+    }
+
+    initAudio();
+    enterFullscreen();
+    startOverlay.style.display = "none";
+    examStarted = true;
+    startTimer();
+    bindAntiCheatListeners();
+  });
+
+  function enterFullscreen() {
+    const docElm = document.documentElement;
+    if (docElm.requestFullscreen) docElm.requestFullscreen().catch(() => {});
+    else if (docElm.webkitRequestFullscreen) docElm.webkitRequestFullscreen();
+    else if (docElm.msRequestFullscreen) docElm.msRequestFullscreen();
+  }
+
+  document.getElementById("btnFullscreenToggle").addEventListener("click", () => {
+    if (!document.fullscreenElement) enterFullscreen();
+    else if (document.exitFullscreen) document.exitFullscreen();
+  });
+
+  function bindAntiCheatListeners() {
+    document.addEventListener("visibilitychange", () => {
+      if (!examStarted || examSubmitted) return;
+      if (document.hidden) triggerSecurityViolation("Switched browser tab or minimized window");
+    });
+
+    window.addEventListener("blur", () => {
+      if (!examStarted || examSubmitted) return;
+      triggerSecurityViolation("Window focus lost / application switched");
+    });
+
+    document.addEventListener("fullscreenchange", () => {
+      if (!examStarted || examSubmitted) return;
+      if (!document.fullscreenElement) triggerSecurityViolation("Exited Fullscreen mode");
+    });
+
+    window.addEventListener("beforeunload", (e) => {
+      if (examStarted && !examSubmitted) {
+        e.preventDefault();
+        e.returnValue = "Are you sure you want to leave the exam?";
+        return e.returnValue;
+      }
+    });
+  }
+
+  function triggerSecurityViolation(reason) {
+    if (isCooldown || examSubmitted) return;
+    isCooldown = true;
+    setTimeout(() => { isCooldown = false; }, 2000);
+
+    warningCount++;
+    const timestamp = new Date().toLocaleTimeString();
+    violationLog.push({ warning: warningCount, reason, timestamp });
+
+    playSecurityAlarm();
+    warningCountText.innerText = warningCount;
+    proctorStatusBadge.classList.add("proctor-warning");
+
+    violationCounterText.innerText = `WARNING #${warningCount} OF ${maxWarnings}`;
+    securityModal.style.display = "flex";
+
+    if (warningCount >= maxWarnings) {
+      setTimeout(() => {
+        alert("CRITICAL VIOLATION: Maximum permitted proctoring warnings (3) reached. The exam is being submitted immediately.");
+        securityModal.style.display = "none";
+        submitExam("Malpractice violation: 3 warnings reached");
+      }, 500);
+    }
+  }
+
+  btnAcknowledgeSecurity.addEventListener("click", () => {
+    securityModal.style.display = "none";
+    enterFullscreen();
+  });
+
+  function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+      if (timeRemaining > 0) {
+        timeRemaining--;
+        updateTimerDisplay();
+        if (timeRemaining <= 600) timerContainer.className = "timer-container timer-danger";
+        else if (timeRemaining <= 1800) timerContainer.className = "timer-container timer-warning";
+      } else {
+        clearInterval(timerInterval);
+        alert("Time Up! 280 minutes have expired. Your responses are being automatically submitted.");
+        submitExam("Time expired (280 Minutes)");
+      }
+    }, 1000);
+  }
+
+  function updateTimerDisplay() {
+    const hours = Math.floor(timeRemaining / 3600);
+    const minutes = Math.floor((timeRemaining % 3600) / 60);
+    const seconds = timeRemaining % 60;
+    const pad = (n) => (n < 10 ? "0" + n : n);
+    timerDisplay.innerText = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+  }
+
+  function renderCurrentQuestion() {
+    const q = questions[currentIndex];
+    const resp = userResponses[currentIndex];
+
+    resp.visited = true;
+    if (resp.status === "NOT_VISITED") resp.status = "NOT_ANSWERED";
+
+    qNumberTitle.innerText = `Question No. ${q.id} of 200`;
+    qTopicBadge.innerText = q.topic;
+    qDifficultyBadge.innerText = q.difficulty;
+    questionText.innerText = q.question;
+
+    if (q.code) {
+      codeSnippetText.innerText = q.code;
+      codeSnippetContainer.style.display = "block";
+    } else {
+      codeSnippetContainer.style.display = "none";
+    }
+
+    const optionLetters = ["A", "B", "C", "D"];
+    optionsContainer.innerHTML = "";
+
+    q.options.forEach((optText, optIdx) => {
+      const isSelected = resp.selectedOption === optIdx;
+      const optDiv = document.createElement("div");
+      optDiv.className = `option-item ${isSelected ? "selected" : ""}`;
+      optDiv.innerHTML = `
+        <input type="radio" name="optRadio" class="option-radio" id="opt_${optIdx}" ${isSelected ? "checked" : ""}>
+        <span class="option-label">(${optionLetters[optIdx]})</span>
+        <span class="option-text">${escapeHtml(optText)}</span>
+      `;
+      optDiv.addEventListener("click", () => selectOption(optIdx));
+      optionsContainer.appendChild(optDiv);
+    });
+
+    updatePaletteActiveState();
+    updateStatusCounts();
+
+    btnPrev.disabled = currentIndex === 0;
+    btnNext.disabled = currentIndex === questions.length - 1;
+  }
+
+  function selectOption(optIdx) {
+    userResponses[currentIndex].selectedOption = optIdx;
+    const items = optionsContainer.querySelectorAll(".option-item");
+    items.forEach((item, idx) => {
+      const radio = item.querySelector("input[type=radio]");
+      if (idx === optIdx) {
+        item.classList.add("selected");
+        radio.checked = true;
+      } else {
+        item.classList.remove("selected");
+        radio.checked = false;
+      }
+    });
+  }
+
+  function escapeHtml(text) {
+    if (!text) return "";
+    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+  }
+
+  function renderPalette() {
+    paletteGrid.innerHTML = "";
+    questions.forEach((q, idx) => {
+      const btn = document.createElement("button");
+      btn.className = `palette-btn ${getStatusShapeClass(userResponses[idx].status)}`;
+      btn.id = `palette_btn_${idx}`;
+      btn.innerText = q.id;
+      btn.addEventListener("click", () => navigateToQuestion(idx));
+      paletteGrid.appendChild(btn);
+    });
+  }
+
+  function getStatusShapeClass(status) {
+    switch (status) {
+      case "ANSWERED": return "shape-answered";
+      case "NOT_ANSWERED": return "shape-not-answered";
+      case "MARKED_REVIEW": return "shape-review";
+      case "REVIEW_EVALUATED": return "shape-review-evaluated";
+      default: return "shape-not-visited";
+    }
+  }
+
+  function updatePaletteActiveState() {
+    const allBtns = paletteGrid.querySelectorAll(".palette-btn");
+    allBtns.forEach((btn, idx) => {
+      btn.className = `palette-btn ${getStatusShapeClass(userResponses[idx].status)}`;
+      if (idx === currentIndex) {
+        btn.classList.add("active-question");
+        btn.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    });
+  }
+
+  function updateStatusCounts() {
+    let answered = 0, notAnswered = 0, notVisited = 0, markedReview = 0, reviewEvaluated = 0;
+    userResponses.forEach((r) => {
+      switch (r.status) {
+        case "ANSWERED": answered++; break;
+        case "NOT_ANSWERED": notAnswered++; break;
+        case "MARKED_REVIEW": markedReview++; break;
+        case "REVIEW_EVALUATED": reviewEvaluated++; break;
+        default: notVisited++; break;
+      }
+    });
+    countAnswered.innerText = answered;
+    countNotAnswered.innerText = notAnswered;
+    countNotVisited.innerText = notVisited;
+    countMarkedReview.innerText = markedReview;
+    countReviewEvaluated.innerText = reviewEvaluated;
+  }
+
+  function navigateToQuestion(newIndex) {
+    if (newIndex < 0 || newIndex >= questions.length) return;
+    currentIndex = newIndex;
+    renderCurrentQuestion();
+  }
+
+  btnSaveNext.addEventListener("click", () => {
+    const currentResp = userResponses[currentIndex];
+    currentResp.status = currentResp.selectedOption !== null ? "ANSWERED" : "NOT_ANSWERED";
+    if (currentIndex < questions.length - 1) currentIndex++;
+    renderCurrentQuestion();
+  });
+
+  btnSaveMarkReview.addEventListener("click", () => {
+    const currentResp = userResponses[currentIndex];
+    currentResp.status = currentResp.selectedOption !== null ? "REVIEW_EVALUATED" : "MARKED_REVIEW";
+    if (currentIndex < questions.length - 1) currentIndex++;
+    renderCurrentQuestion();
+  });
+
+  btnClearResponse.addEventListener("click", () => {
+    userResponses[currentIndex].selectedOption = null;
+    userResponses[currentIndex].status = "NOT_ANSWERED";
+    renderCurrentQuestion();
+  });
+
+  btnMarkReviewNext.addEventListener("click", () => {
+    const currentResp = userResponses[currentIndex];
+    currentResp.status = currentResp.selectedOption !== null ? "REVIEW_EVALUATED" : "MARKED_REVIEW";
+    if (currentIndex < questions.length - 1) currentIndex++;
+    renderCurrentQuestion();
+  });
+
+  btnPrev.addEventListener("click", () => {
+    if (currentIndex > 0) { currentIndex--; renderCurrentQuestion(); }
+  });
+
+  btnNext.addEventListener("click", () => {
+    if (currentIndex < questions.length - 1) { currentIndex++; renderCurrentQuestion(); }
+  });
+
+  sectionTabs.addEventListener("click", (e) => {
+    const tab = e.target.closest(".section-tab");
+    if (!tab) return;
+    sectionTabs.querySelectorAll(".section-tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    const sectionName = tab.getAttribute("data-section");
+    currentSectionFilter = sectionName;
+
+    if (sectionName === "all") navigateToQuestion(0);
+    else {
+      const firstInSec = questions.findIndex(q => q.section.startsWith(sectionName));
+      if (firstInSec !== -1) navigateToQuestion(firstInSec);
+    }
+  });
+
+  window.closeModal = function (modalId) {
+    document.getElementById(modalId).style.display = "none";
+  };
+
+  document.getElementById("btnQuestionPaper").addEventListener("click", () => {
+    renderQuestionPaper();
+    questionPaperModal.style.display = "flex";
+  });
+
+  function renderQuestionPaper() {
+    qpModalBody.innerHTML = "";
+    questions.forEach((q) => {
+      const qDiv = document.createElement("div");
+      qDiv.style.marginBottom = "20px";
+      qDiv.style.paddingBottom = "14px";
+      qDiv.style.borderBottom = "1px solid #e2e8f0";
+
+      let codeHtml = q.code ? `<div class="code-container" style="margin: 8px 0;"><pre><code>${escapeHtml(q.code)}</code></pre></div>` : "";
+      let optionsHtml = q.options.map((opt, oIdx) => {
+        const letters = ["A", "B", "C", "D"];
+        return `<div style="margin-left: 16px; margin-top: 4px; font-size: 13.5px;">(${letters[oIdx]}) ${escapeHtml(opt)}</div>`;
+      }).join("");
+
+      qDiv.innerHTML = `
+        <div style="font-weight: 700; color: #0b3b60; margin-bottom: 6px;">Q${q.id}. [${q.topic}] (${q.difficulty})</div>
+        <div style="font-size: 14.5px; color: #1e293b; margin-bottom: 6px;">${escapeHtml(q.question)}</div>
+        ${codeHtml}
+        ${optionsHtml}
+      `;
+      qpModalBody.appendChild(qDiv);
+    });
+  }
+
+  document.getElementById("btnInstructions").addEventListener("click", () => {
+    instructionsModal.style.display = "flex";
+  });
+
+  function openSubmitConfirmation() {
+    updateStatusCounts();
+    document.getElementById("modalSumAnswered").innerText = countAnswered.innerText;
+    document.getElementById("modalSumNotAnswered").innerText = countNotAnswered.innerText;
+    document.getElementById("modalSumNotVisited").innerText = countNotVisited.innerText;
+    document.getElementById("modalSumReview").innerText = countMarkedReview.innerText;
+    document.getElementById("modalSumReviewEval").innerText = countReviewEvaluated.innerText;
+    submitConfirmModal.style.display = "flex";
+  }
+
+  btnSubmitBottom.addEventListener("click", openSubmitConfirmation);
+  btnSubmitSidebar.addEventListener("click", openSubmitConfirmation);
+
+  btnFinalSubmitConfirm.addEventListener("click", () => {
+    submitConfirmModal.style.display = "none";
+    submitExam("Normal submission by candidate");
+  });
+
+  function submitExam(reason = "Completed") {
+    examSubmitted = true;
+    clearInterval(timerInterval);
+
+    let correctCount = 0;
+    let incorrectCount = 0;
+    let unattemptedCount = 0;
+
+    userResponses.forEach((resp, idx) => {
+      const q = questions[idx];
+      if (resp.selectedOption !== null) {
+        if (resp.selectedOption === q.correctAnswer) correctCount++;
+        else incorrectCount++;
+      } else {
+        unattemptedCount++;
+      }
+    });
+
+    const totalQuestions = questions.length; // 200
+    const maxScore = totalQuestions * 4;     // 800
+    const calculatedScore = (correctCount * 4) - (incorrectCount * 1);
+    const percentage = ((calculatedScore / maxScore) * 100).toFixed(1);
+    const attemptedCount = correctCount + incorrectCount;
+    const accuracy = attemptedCount > 0 ? ((correctCount / attemptedCount) * 100).toFixed(1) : 0;
+    const timeSpentSeconds = totalTimeSeconds - timeRemaining;
+    const timeSpentMins = Math.floor(timeSpentSeconds / 60);
+    const timeSpentSecs = timeSpentSeconds % 60;
+
+    examMainContainer.style.display = "none";
+    document.querySelector(".section-nav-bar").style.display = "none";
+    document.getElementById("timerContainer").style.display = "none";
+    resultDashboard.style.display = "block";
+
+    document.getElementById("resCandidateName").innerText = candidateName;
+    document.getElementById("resRollNumber").innerText = candidateRoll;
+    document.getElementById("resExamDate").innerText = new Date().toLocaleString();
+    document.getElementById("resTotalScore").innerText = `${calculatedScore}`;
+    document.getElementById("resPercentage").innerText = `${percentage}%`;
+    document.getElementById("resAccuracy").innerText = `${accuracy}%`;
+    document.getElementById("resTimeTaken").innerText = `${timeSpentMins}m ${timeSpentSecs}s`;
+    document.getElementById("resCorrectCount").innerText = correctCount;
+    document.getElementById("resIncorrectCount").innerText = incorrectCount;
+    document.getElementById("resUnattemptedCount").innerText = unattemptedCount;
+
+    const resProctorStatus = document.getElementById("resProctorStatus");
+    if (warningCount === 0) {
+      resProctorStatus.innerText = "Clean (0 Warnings)";
+      resProctorStatus.style.color = "#15803d";
+    } else {
+      resProctorStatus.innerText = `Recorded ${warningCount} Violation(s)`;
+      resProctorStatus.style.color = "#dc2626";
+    }
+
+    const submissionData = {
+      candidate: candidateName,
+      roll: candidateRoll,
+      exam: "Python 200Q (280 Mins)",
+      submittedAt: new Date().toISOString(),
+      score: calculatedScore,
+      maxScore: maxScore,
+      percentage: percentage,
+      correct: correctCount,
+      incorrect: incorrectCount,
+      unattempted: unattemptedCount,
+      warningsCount: warningCount,
+      violationLog: violationLog,
+      responses: userResponses
+    };
+
+    try {
+      const savedList = JSON.parse(localStorage.getItem("nta_submissions_200q") || "[]");
+      savedList.push(submissionData);
+      localStorage.setItem("nta_submissions_200q", JSON.stringify(savedList));
+    } catch (e) {}
+
+    const btnDownloadJson = document.getElementById("btnDownloadJson");
+    if (btnDownloadJson) {
+      btnDownloadJson.onclick = () => {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(submissionData, null, 2));
+        const dlAnchor = document.createElement("a");
+        dlAnchor.setAttribute("href", dataStr);
+        const safeRoll = candidateRoll.replace(/[^a-zA-Z0-9_-]/g, "_");
+        dlAnchor.setAttribute("download", `NTA_Scorecard_200Q_${safeRoll}.json`);
+        document.body.appendChild(dlAnchor);
+        dlAnchor.click();
+        dlAnchor.remove();
+      };
+    }
+
+    renderReviewSolutions("all");
+    setupReviewFilterTabs();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function renderReviewSolutions(filter = "all") {
+    const container = document.getElementById("reviewQuestionsContainer");
+    container.innerHTML = "";
+    const letters = ["A", "B", "C", "D"];
+
+    questions.forEach((q, idx) => {
+      const resp = userResponses[idx];
+      const isAttempted = resp.selectedOption !== null;
+      const isCorrect = isAttempted && resp.selectedOption === q.correctAnswer;
+      const isIncorrect = isAttempted && resp.selectedOption !== q.correctAnswer;
+
+      if (filter === "correct" && !isCorrect) return;
+      if (filter === "incorrect" && !isIncorrect) return;
+      if (filter === "unattempted" && isAttempted) return;
+
+      let statusBadge = "";
+      let cardClass = "";
+
+      if (isCorrect) {
+        statusBadge = '<span style="color: #15803d; background: #dcfce7; padding: 2px 8px; border-radius: 4px; font-weight: 700;">✓ Correct (+4.00)</span>';
+        cardClass = "status-correct";
+      } else if (isIncorrect) {
+        statusBadge = '<span style="color: #b91c1c; background: #fee2e2; padding: 2px 8px; border-radius: 4px; font-weight: 700;">✗ Incorrect (-1.00)</span>';
+        cardClass = "status-incorrect";
+      } else {
+        statusBadge = '<span style="color: #475569; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-weight: 700;">○ Skipped (0.00)</span>';
+        cardClass = "status-skipped";
+      }
+
+      let codeHtml = q.code ? `<div class="code-container"><pre><code>${escapeHtml(q.code)}</code></pre></div>` : "";
+
+      let optionsHtml = q.options.map((opt, oIdx) => {
+        let optStyle = "padding: 8px 12px; margin-bottom: 6px; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 14px;";
+        if (oIdx === q.correctAnswer) {
+          optStyle += " background: #dcfce7; border-color: #86efac; font-weight: 600; color: #166534;";
+        } else if (isAttempted && resp.selectedOption === oIdx) {
+          optStyle += " background: #fee2e2; border-color: #fca5a5; font-weight: 600; color: #991b1b;";
+        }
+        return `
+          <div style="${optStyle}">
+            <strong>(${letters[oIdx]})</strong> ${escapeHtml(opt)}
+            ${oIdx === q.correctAnswer ? '<span style="float: right; color: #166534; font-weight: 700;">[Correct Option]</span>' : ''}
+            ${(isAttempted && resp.selectedOption === oIdx && oIdx !== q.correctAnswer) ? '<span style="float: right; color: #991b1b; font-weight: 700;">[Your Option]</span>' : ''}
+          </div>
+        `;
+      }).join("");
+
+      const card = document.createElement("div");
+      card.className = `review-card ${cardClass}`;
+      card.innerHTML = `
+        <div class="review-meta">
+          <div>
+            <span style="font-size: 15px; font-weight: 700; color: #0b3b60;">Question ${q.id}</span>
+            <span style="color: #64748b; margin-left: 8px; font-size: 12px;">[${q.topic}]</span>
+            <span style="color: #64748b; margin-left: 4px; font-size: 12px;">(${q.difficulty})</span>
+          </div>
+          <div>${statusBadge}</div>
+        </div>
+        <div style="font-size: 15px; color: #1e293b; margin-bottom: 10px; font-weight: 500;">${escapeHtml(q.question)}</div>
+        ${codeHtml}
+        <div style="margin: 12px 0;">${optionsHtml}</div>
+        <div class="explanation-box">
+          <strong>💡 Solution & Explanation:</strong><br>
+          ${escapeHtml(q.explanation)}
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function setupReviewFilterTabs() {
+    const tabs = document.querySelectorAll(".review-tab-btn");
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        tabs.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        const filter = tab.getAttribute("data-filter");
+        renderReviewSolutions(filter);
+      });
+    });
+  }
+
+  btnRetakeExam.addEventListener("click", () => {
+    if (confirm("Are you sure you want to retake the exam? Your current responses will be reset.")) {
+      window.location.reload();
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", initExam);
+})();
+
+  </script>
+</body>
+</html>
