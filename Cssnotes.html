@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🚀 CSS Hackathon Master Revision & Visual Guide (Modules 01 - 28)</title>
+  <style>
+    :root {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-card: #1e293b;
+      --bg-card-hover: #243247;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --border-color: #334155;
+      --accent-primary: #3b82f6;
+      --accent-primary-hover: #2563eb;
+      --accent-cyan: #06b6d4;
+      --accent-purple: #8b5cf6;
+      --accent-success: #10b981;
+      --accent-warning: #f59e0b;
+      --accent-danger: #ef4444;
+      --code-bg: #0b1120;
+      --sidebar-width: 290px;
+      --header-height: 64px;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --border-color: #e2e8f0;
+      --code-bg: #1e293b;
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Universal Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-main);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-primary);
+    }
+
+    /* Header */
+    header.top-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      height: var(--header-height);
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    .brand-badge {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-purple));
+      color: white;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .search-box input {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 8px 14px 8px 36px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      width: 260px;
+      transition: all 0.2s ease;
+    }
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+      width: 320px;
+    }
+    .search-icon {
+      position: absolute;
+      left: 10px;
+      color: var(--text-secondary);
+      pointer-events: none;
+      font-size: 0.9rem;
+    }
+
+    .btn-action {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-action:hover {
+      background: var(--accent-primary);
+      color: white;
+      border-color: var(--accent-primary);
+    }
+
+    /* Layout */
+    .app-layout {
+      display: flex;
+      flex: 1;
+      width: 100%;
+    }
+
+    /* Sidebar Navigation */
+    aside.sidebar {
+      width: var(--sidebar-width);
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border-color);
+      position: sticky;
+      top: var(--header-height);
+      height: calc(100vh - var(--header-height));
+      overflow-y: auto;
+      padding: 20px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .nav-group-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      font-weight: 700;
+      margin: 14px 8px 4px 8px;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 12px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    .sidebar-link:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+    .sidebar-link.active {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--accent-primary);
+      font-weight: 600;
+      border-left: 3px solid var(--accent-primary);
+    }
+    .badge-num {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      font-size: 0.7rem;
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--text-secondary);
+    }
+
+    /* Main Content */
+    main.content-area {
+      flex: 1;
+      padding: 32px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-banner h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      background: linear-gradient(90deg, #60a5fa, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-banner p {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      max-width: 800px;
+      margin-bottom: 20px;
+    }
+    .hero-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .hero-chip {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* Emergency Alert Box */
+    .emergency-card {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-left: 6px solid var(--accent-danger);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 40px;
+    }
+    .emergency-card h2 {
+      color: var(--accent-danger);
+      font-size: 1.3rem;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Modules */
+    .module-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow-md);
+      transition: border-color 0.2s;
+    }
+    .module-card:hover {
+      border-color: rgba(59, 130, 246, 0.5);
+    }
+
+    .module-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+    .module-title-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .module-badge {
+      background: var(--accent-primary);
+      color: white;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+    }
+    .module-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+
+    /* Section Subheadings */
+    h3.subhead {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      margin: 24px 0 12px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h4.subhead-small {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 16px 0 8px 0;
+    }
+
+    /* Diagram Containers */
+    .diagram-container {
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin: 18px 0;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: #38bdf8;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.45;
+    }
+
+    /* Tables */
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      font-size: 0.9rem;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+    .custom-table th {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      text-align: left;
+      padding: 12px 16px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .custom-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-secondary);
+    }
+    .custom-table tr:last-child td {
+      border-bottom: none;
+    }
+    .custom-table tr:hover td {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    /* Code Blocks */
+    .code-wrapper {
+      position: relative;
+      margin: 16px 0;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+    .code-header {
+      background: #1e293b;
+      padding: 8px 16px;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: var(--text-primary);
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .copy-btn:hover {
+      background: var(--accent-primary);
+      color: white;
+    }
+    pre.code-block {
+      background: var(--code-bg);
+      padding: 16px;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+
+    /* Callouts */
+    .callout {
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin: 18px 0;
+      display: flex;
+      gap: 14px;
+      font-size: 0.92rem;
+    }
+    .callout.tip {
+      background: rgba(16, 185, 129, 0.1);
+      border-left: 4px solid var(--accent-success);
+      color: #a7f3d0;
+    }
+    .callout.warning {
+      background: rgba(245, 158, 11, 0.1);
+      border-left: 4px solid var(--accent-warning);
+      color: #fde68a;
+    }
+    .callout.alert {
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 4px solid var(--accent-danger);
+      color: #fecaca;
+    }
+    .callout.info {
+      background: rgba(59, 130, 246, 0.1);
+      border-left: 4px solid var(--accent-primary);
+      color: #bfdbfe;
+    }
+    .callout-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    /* Interactive Playgrounds */
+    .playground-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin: 24px 0;
+    }
+    .playground-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .control-item label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .control-item input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent-primary);
+    }
+    .control-item select, .control-item input[type="text"] {
+      width: 100%;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+    }
+
+    .interactive-canvas {
+      min-height: 220px;
+      background: var(--bg-primary);
+      border: 1px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    /* Live Box Model Visualizer */
+    #box-demo-outer {
+      background: rgba(245, 158, 11, 0.3); /* Margin yellow */
+      border: 2px dashed #f59e0b;
+      padding: 20px;
+      transition: all 0.2s;
+    }
+    #box-demo-border {
+      background: rgba(59, 130, 246, 0.4); /* Border blue */
+      border: 6px solid #3b82f6;
+      padding: 20px;
+      transition: all 0.2s;
+    }
+    #box-demo-padding {
+      background: rgba(16, 185, 129, 0.4); /* Padding green */
+      padding: 20px;
+      transition: all 0.2s;
+    }
+    #box-demo-content {
+      background: #8b5cf6;
+      color: white;
+      font-weight: 700;
+      padding: 20px 30px;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    /* Transform Live Box */
+    #transform-target-box {
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+      transition: transform 0.1s ease-out;
+    }
+
+    /* Specificity Meter */
+    .specificity-meter {
+      display: flex;
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .spec-block {
+      flex: 1;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      text-align: center;
+    }
+    .spec-num {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--accent-primary);
+    }
+    .spec-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    /* Back to Top */
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--accent-primary);
+      color: white;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: var(--shadow-lg);
+      font-size: 1.2rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+      z-index: 999;
+    }
+    .back-to-top.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #10b981;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      box-shadow: var(--shadow-lg);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 10000;
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      aside.sidebar {
+        display: none;
+      }
+      main.content-area {
+        padding: 20px 16px;
+      }
+      .search-box input {
+        width: 180px;
+      }
+      .search-box input:focus {
+        width: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Navigation -->
+  <header class="top-header">
+    <a href="#" class="brand">
+      <span>🚀 CSS HACKATHON MASTER</span>
+      <span class="brand-badge">Modules 01–28</span>
+    </a>
+    <div class="header-actions">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="module-search" placeholder="Quick search modules (e.g. margin, z-index)...">
+      </div>
+      <button class="btn-action" id="theme-toggle">🌓 Toggle Theme</button>
+      <a href="#panic-fixes" class="btn-action" style="background: var(--accent-danger); color: white; border: none;">⚡ Panic Fixes</a>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar-nav">
+      <div class="nav-group-title">Interactive Tools</div>
+      <a href="#box-model-tool" class="sidebar-link"><span>📦 Box Model Visualizer</span></a>
+      <a href="#specificity-tool" class="sidebar-link"><span>⚖️ Specificity Calculator</span></a>
+      <a href="#transforms-tool" class="sidebar-link"><span>🔄 2D Transform Playground</span></a>
+      <a href="#panic-fixes" class="sidebar-link"><span>⚡ 5 Panic CSS Bug Fixes</span></a>
+      <a href="#centering-cheatsheet" class="sidebar-link"><span>🎯 4 Holy Ways to Center</span></a>
+
+      <div class="nav-group-title">Modules 01 – 10</div>
+      <a href="#mod-01" class="sidebar-link"><span>01. Introduction to CSS</span><span class="badge-num">01</span></a>
+      <a href="#mod-02" class="sidebar-link"><span>02. CSS Selectors</span><span class="badge-num">02</span></a>
+      <a href="#mod-03" class="sidebar-link"><span>03. CSS Comments</span><span class="badge-num">03</span></a>
+      <a href="#mod-04" class="sidebar-link"><span>04. CSS Errors & Debug</span><span class="badge-num">04</span></a>
+      <a href="#mod-05" class="sidebar-link"><span>05. CSS Border</span><span class="badge-num">05</span></a>
+      <a href="#mod-06" class="sidebar-link"><span>06. CSS Background</span><span class="badge-num">06</span></a>
+      <a href="#mod-07" class="sidebar-link"><span>07. Margin & Padding</span><span class="badge-num">07</span></a>
+      <a href="#mod-08" class="sidebar-link"><span>08. Width & Height</span><span class="badge-num">08</span></a>
+      <a href="#mod-09" class="sidebar-link"><span>09. Box Model</span><span class="badge-num">09</span></a>
+      <a href="#mod-09b" class="sidebar-link"><span>09. CSS Outline</span><span class="badge-num">09b</span></a>
+
+      <div class="nav-group-title">Modules 11 – 20</div>
+      <a href="#mod-11" class="sidebar-link"><span>11. CSS Text</span><span class="badge-num">11</span></a>
+      <a href="#mod-12" class="sidebar-link"><span>12. CSS Fonts</span><span class="badge-num">12</span></a>
+      <a href="#mod-13" class="sidebar-link"><span>13. Links & Cursor</span><span class="badge-num">13</span></a>
+      <a href="#mod-14" class="sidebar-link"><span>14. CSS Table</span><span class="badge-num">14</span></a>
+      <a href="#mod-15" class="sidebar-link"><span>15. CSS Display</span><span class="badge-num">15</span></a>
+      <a href="#mod-16" class="sidebar-link"><span>16. CSS List</span><span class="badge-num">16</span></a>
+      <a href="#mod-17" class="sidebar-link"><span>17. CSS Positions</span><span class="badge-num">17</span></a>
+      <a href="#mod-18" class="sidebar-link"><span>18. CSS Combinators</span><span class="badge-num">18</span></a>
+      <a href="#mod-19" class="sidebar-link"><span>19. Pseudo-Classes</span><span class="badge-num">19</span></a>
+      <a href="#mod-20" class="sidebar-link"><span>20. Pseudo-Elements</span><span class="badge-num">20</span></a>
+
+      <div class="nav-group-title">Modules 21 – 28</div>
+      <a href="#mod-21" class="sidebar-link"><span>21. Attribute Selector</span><span class="badge-num">21</span></a>
+      <a href="#mod-22" class="sidebar-link"><span>22. CSS Navbar</span><span class="badge-num">22</span></a>
+      <a href="#mod-23" class="sidebar-link"><span>23. CSS Float & Clearfix</span><span class="badge-num">23</span></a>
+      <a href="#mod-24" class="sidebar-link"><span>24. CSS Dropdown</span><span class="badge-num">24</span></a>
+      <a href="#mod-25" class="sidebar-link"><span>25. CSS Units</span><span class="badge-num">25</span></a>
+      <a href="#mod-26" class="sidebar-link"><span>26. Media Queries</span><span class="badge-num">26</span></a>
+      <a href="#mod-27" class="sidebar-link"><span>27. Specificity Math</span><span class="badge-num">27</span></a>
+      <a href="#mod-28" class="sidebar-link"><span>28. 2D Transforms</span><span class="badge-num">28</span></a>
+
+      <div class="nav-group-title">Snippets & Checklist</div>
+      <a href="#master-snippets" class="sidebar-link"><span>💎 Ready UI Snippets</span></a>
+      <a href="#hackathon-checklist" class="sidebar-link"><span>🏁 Day-of-Hack Checklist</span></a>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="content-area">
+
+      <!-- Hero Banner -->
+      <section class="hero-banner">
+        <h1>Ultimate CSS Hackathon Revision Guide</h1>
+        <p>Complete core theory, mental models, interactive visualizers, and battle-tested code blueprints covering all 28 modules. Built specifically for high-speed hackathon implementation.</p>
+        <div class="hero-chips">
+          <span class="hero-chip">✨ 28 Modules Covered</span>
+          <span class="hero-chip">🎨 Interactive Visualizers</span>
+          <span class="hero-chip">⚡ 1-Click Code Copy</span>
+          <span class="hero-chip">📱 100% Mobile Responsive</span>
+          <span class="hero-chip">🔒 Zero External Dependencies</span>
+        </div>
+      </section>
+
+      <!-- Panic Fixes -->
+      <section id="panic-fixes" class="emergency-card">
+        <h2>⚡ The Top 5 CSS Panic Bugs & 1-Line Fixes</h2>
+        <p style="margin-bottom: 16px; color: var(--text-secondary);">When something looks completely broken during the hackathon, check these 5 lines first:</p>
+        <table class="custom-table" style="background: var(--bg-card);">
+          <thead>
+            <tr>
+              <th>Panic Bug</th>
+              <th>Root Cause</th>
+              <th>Instant 1-Line Fix</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Box blows up on adding padding</strong></td>
+              <td>Browser uses <code>box-sizing: content-box</code></td>
+              <td><code>* { box-sizing: border-box; }</code></td>
+            </tr>
+            <tr>
+              <td><strong><code>z-index: 9999</code> does nothing</strong></td>
+              <td>Element has default <code>position: static</code></td>
+              <td><code>position: relative; z-index: 10;</code></td>
+            </tr>
+            <tr>
+              <td><strong>Parent container has 0 height</strong></td>
+              <td>Floated children leave block flow</td>
+              <td><code>.parent { display: flow-root; }</code></td>
+            </tr>
+            <tr>
+              <td><strong>Vertical margins mysteriously overlap</strong></td>
+              <td>CSS Margin Collapse in normal flow</td>
+              <td><code>padding-top: 1px;</code> or use Flexbox</td>
+            </tr>
+            <tr>
+              <td><strong>Centering absolute element is off-target</strong></td>
+              <td>Offsets measure from top-left corner</td>
+              <td><code>top: 50%; left: 50%; transform: translate(-50%, -50%);</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 4 Holy Ways to Center -->
+      <section id="centering-cheatsheet" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">🎯 MUST-KNOW</span>
+            <h2 class="module-title">The 4 Holy Ways to Center Anything in CSS</h2>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+          <div style="background: var(--bg-primary); padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+            <h4 style="color: var(--accent-primary); margin-bottom: 8px;">1. Modern Flexbox (Best for Divs)</h4>
+            <pre class="code-block" style="padding: 10px;">.parent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}</pre>
+          </div>
+          <div style="background: var(--bg-primary); padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+            <h4 style="color: var(--accent-cyan); margin-bottom: 8px;">2. Ultra-Fast Grid (2 Lines)</h4>
+            <pre class="code-block" style="padding: 10px;">.parent {
+  display: grid;
+  place-items: center;
+}</pre>
+          </div>
+          <div style="background: var(--bg-primary); padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+            <h4 style="color: var(--accent-purple); margin-bottom: 8px;">3. Absolute + Transform (Modals)</h4>
+            <pre class="code-block" style="padding: 10px;">.child {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}</pre>
+          </div>
+          <div style="background: var(--bg-primary); padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+            <h4 style="color: var(--accent-success); margin-bottom: 8px;">4. Margin Auto (Block Containers)</h4>
+            <pre class="code-block" style="padding: 10px;">.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- INTERACTIVE TOOLS                         -->
+      <!-- ========================================== -->
+
+      <!-- Box Model Tool -->
+      <section id="box-model-tool" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">INTERACTIVE</span>
+            <h2 class="module-title">Live Box Model Playground</h2>
+          </div>
+        </div>
+        <p style="color: var(--text-secondary); margin-bottom: 16px;">Test how padding, border, margin, and <code>box-sizing</code> dynamically impact the computed size of elements.</p>
+
+        <div class="playground-box">
+          <div class="playground-controls">
+            <div class="control-item">
+              <label>box-sizing Mode</label>
+              <select id="ctrl-box-sizing">
+                <option value="content-box">content-box (Old Default)</option>
+                <option value="border-box" selected>border-box (Modern Standard)</option>
+              </select>
+            </div>
+            <div class="control-item">
+              <label>Padding: <span id="val-padding">20px</span></label>
+              <input type="range" id="ctrl-padding" min="0" max="60" value="20">
+            </div>
+            <div class="control-item">
+              <label>Border Width: <span id="val-border">6px</span></label>
+              <input type="range" id="ctrl-border" min="0" max="25" value="6">
+            </div>
+            <div class="control-item">
+              <label>Margin: <span id="val-margin">20px</span></label>
+              <input type="range" id="ctrl-margin" min="0" max="50" value="20">
+            </div>
+          </div>
+
+          <div class="interactive-canvas">
+            <div id="box-demo-outer">
+              <div style="font-size: 0.75rem; color: #f59e0b; margin-bottom: 4px; font-weight: 700;">MARGIN</div>
+              <div id="box-demo-border">
+                <div style="font-size: 0.75rem; color: #3b82f6; margin-bottom: 4px; font-weight: 700;">BORDER</div>
+                <div id="box-demo-padding">
+                  <div style="font-size: 0.75rem; color: #10b981; margin-bottom: 4px; font-weight: 700;">PADDING</div>
+                  <div id="box-demo-content">CONTENT (200px)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top: 14px; text-align: center; font-size: 0.95rem; font-weight: 600; color: var(--text-primary);">
+            Total Rendered Box Width: <span id="computed-box-width" style="color: var(--accent-cyan);">200px</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Specificity Calculator -->
+      <section id="specificity-tool" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">INTERACTIVE</span>
+            <h2 class="module-title">Live Specificity Calculator (I, A, B, C)</h2>
+          </div>
+        </div>
+        <p style="color: var(--text-secondary); margin-bottom: 16px;">Type any CSS selector to inspect its exact Specificity tuple in real time.</p>
+
+        <div class="playground-box">
+          <div class="control-item">
+            <label>Test Selector:</label>
+            <input type="text" id="spec-input" value="nav.main-nav ul li a:hover" style="font-family: var(--font-mono); font-size: 1rem;">
+          </div>
+
+          <div class="specificity-meter">
+            <div class="spec-block">
+              <div class="spec-num" id="spec-inline">0</div>
+              <div class="spec-label">Inline (I)</div>
+            </div>
+            <div class="spec-block">
+              <div class="spec-num" id="spec-id">0</div>
+              <div class="spec-label">IDs (A)</div>
+            </div>
+            <div class="spec-block">
+              <div class="spec-num" id="spec-class">2</div>
+              <div class="spec-label">Class / Pseudo (B)</div>
+            </div>
+            <div class="spec-block">
+              <div class="spec-num" id="spec-element">4</div>
+              <div class="spec-label">Elements (C)</div>
+            </div>
+          </div>
+          <div id="spec-verdict" style="margin-top: 14px; font-weight: 600; color: var(--accent-success); text-align: center;">
+            Calculated Specificity: (0, 0, 2, 4)
+          </div>
+        </div>
+      </section>
+
+      <!-- 2D Transform Playground -->
+      <section id="transforms-tool" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">INTERACTIVE</span>
+            <h2 class="module-title">Live 2D Transform Playground</h2>
+          </div>
+        </div>
+        <div class="playground-box">
+          <div class="playground-controls">
+            <div class="control-item">
+              <label>Rotate: <span id="val-rot">0deg</span></label>
+              <input type="range" id="ctrl-rot" min="-180" max="180" value="0">
+            </div>
+            <div class="control-item">
+              <label>Scale: <span id="val-scale">1.0</span></label>
+              <input type="range" id="ctrl-scale" min="0.5" max="1.8" step="0.1" value="1.0">
+            </div>
+            <div class="control-item">
+              <label>Skew X: <span id="val-skew">0deg</span></label>
+              <input type="range" id="ctrl-skew" min="-45" max="45" value="0">
+            </div>
+            <div class="control-item">
+              <label>Translate X: <span id="val-tx">0px</span></label>
+              <input type="range" id="ctrl-tx" min="-80" max="80" value="0">
+            </div>
+          </div>
+
+          <div class="interactive-canvas">
+            <div id="transform-target-box">TRANSFORM</div>
+          </div>
+          <div style="margin-top: 14px; text-align: center; font-family: var(--font-mono); color: var(--accent-cyan);" id="transform-code-display">
+            transform: rotate(0deg) scale(1) skewX(0deg) translateX(0px);
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- MODULES 01 TO 28                           -->
+      <!-- ========================================== -->
+
+      <!-- MODULE 01 -->
+      <section id="mod-01" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">01</span>
+            <h2 class="module-title">Introduction to CSS</h2>
+          </div>
+        </div>
+        <h3 class="subhead">Core Theory & Mental Model</h3>
+        <p><strong>Cascading Style Sheets (CSS)</strong> is the presentation layer separating HTML structure from visual styling. The cascade determines which styles win based on importance, specificity, and order of declaration.</p>
+
+        <div class="diagram-container">
+           Selector ──┐
+                      ▼
+                   h1 {
+                     color: #2563eb;       ◄── Declaration (Property : Value;)
+                     font-size: 2rem;      ◄── Semicolon terminates declaration
+                   }
+                   ▲               ▲
+                   └───────────────┴── Declaration Block Enclosed in {}</div>
+
+        <h3 class="subhead">The 3 Ways to Apply CSS</h3>
+        <table class="custom-table">
+          <thead>
+            <tr><th>Method</th><th>Where It Lives</th><th>Specificity Score</th><th>Hackathon Recommendation</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Inline</strong></td><td><code>style=""</code> attribute</td><td>(1, 0, 0, 0)</td><td>⚠️ Use strictly for rapid 5-sec debugging</td></tr>
+            <tr><td><strong>Internal</strong></td><td><code>&lt;style&gt;</code> in <code>&lt;head&gt;</code></td><td>(0, A, B, C)</td><td>Good for single-file demos & mockups</td></tr>
+            <tr><td><strong>External</strong></td><td><code>&lt;link rel="stylesheet"&gt;</code></td><td>(0, A, B, C)</td><td>✅ <strong>Recommended Standard</strong></td></tr>
+          </tbody>
+        </table>
+
+        <div class="code-wrapper">
+          <div class="code-header"><span>HTML & CSS Blueprint</span><button class="copy-btn">Copy</button></div>
+          <pre class="code-block">&lt;!-- Linking an External CSS File --&gt;
+&lt;head&gt;
+  &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;</pre>
+        </div>
+      </section>
+
+      <!-- MODULE 02 -->
+      <section id="mod-02" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">02</span>
+            <h2 class="module-title">CSS Selectors</h2>
+          </div>
+        </div>
+        <h3 class="subhead">Core Theory</h3>
+        <p>Selectors target DOM nodes to apply styles. Mastering selectors prevents messy code and unnecessary class pollution.</p>
+
+        <div class="diagram-container">
+┌──────────────────────┬──────────────────────┬──────────────────────────┐
+│ Selector Type        │ Syntax Example       │ Targets                  │
+├──────────────────────┼──────────────────────┼──────────────────────────┤
+│ Universal Selector   │ *                    │ Every single DOM node    │
+│ Element Selector     │ p, div, h1           │ All matching HTML tags   │
+│ Class Selector       │ .btn, .card          │ Reusable components      │
+│ ID Selector          │ #navbar, #app        │ Single unique page node  │
+│ Grouping Selector    │ h1, h2, h3           │ Multiple shared targets  │
+│ Chained Selector     │ button.primary.large │ Matches ALL on same tag  │
+└──────────────────────┴──────────────────────┴──────────────────────────┘</div>
+
+        <div class="callout warning">
+          <span class="callout-icon">⚠️</span>
+          <div><strong>Spacing Trap:</strong> <code>.btn.primary</code> (no space) targets an element having BOTH classes. <code>.btn .primary</code> (with space) targets <code>.primary</code> nested INSIDE <code>.btn</code>!</div>
+        </div>
+
+        <div class="code-wrapper">
+          <div class="code-header"><span>CSS Selector Examples</span><button class="copy-btn">Copy</button></div>
+          <pre class="code-block">/* Universal reset */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Grouping selector: DRY typography */
+h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+
+/* Chained class selector */
+.btn.primary { background: #2563eb; color: white; }</pre>
+        </div>
+      </section>
+
+      <!-- MODULE 03 -->
+      <section id="mod-03" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">03</span>
+            <h2 class="module-title">CSS Comments</h2>
+          </div>
+        </div>
+        <h3 class="subhead">Syntax & The Single-Line Trap</h3>
+        <p>Comments document intentions and toggle styles. Standard CSS only supports <code>/* comment */</code> blocks.</p>
+        <div class="callout alert">
+          <span class="callout-icon">🚨</span>
+          <div><strong>Fatal Trap:</strong> <code>// comment</code> is NOT valid standard CSS! It will silently break following rules in browsers!</div>
+        </div>
+
+        <div class="code-wrapper">
+          <div class="code-header"><span>Hackathon Clean Comment Structure</span><button class="copy-btn">Copy</button></div>
+          <pre class="code-block">/* ==========================================================================
+   01. DESIGN TOKENS & RESET
+   ========================================================================== */
+:root {
+  --primary-color: #3b82f6;
+}
+
+/* Temporary debug toggle */
+/* .hero-section { display: none; } */</pre>
+        </div>
+      </section>
+
+      <!-- MODULE 04 -->
+      <section id="mod-04" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">04</span>
+            <h2 class="module-title">CSS Errors & Debugging</h2>
+          </div>
+        </div>
+        <h3 class="subhead">The Silent Failure Model</h3>
+        <p>CSS never throws a console runtime exception. If a rule has a typo, the browser silently ignores that line and proceeds, causing invisible bugs.</p>
+
+        <div class="diagram-container">
+┌────────────────────────┬───────────────────────────────────────────────┐
+│ Common Mistake         │ How to Detect & Solve                         │
+├────────────────────────┼───────────────────────────────────────────────┤
+│ Missing Semicolon (;)  │ The property BELOW it also stops working!     │
+│ Space in Unit          │ '10 px' is INVALID. Must be '10px' (no space) │
+│ Wrong Selector Prefix  │ Using .header when HTML is id="header" (#)    │
+│ Specificity Conflict   │ Look for strikethrough in Chrome DevTools F12 │
+└────────────────────────┴───────────────────────────────────────────────┘</div>
+      </section>
+
+      <!-- MODULE 05 -->
+      <section id="mod-05" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">05</span>
+            <h2 class="module-title">CSS Border</h2>
+          </div>
+        </div>
+        <h3 class="subhead">Border Styles & Shorthand</h3>
+        <p>Borders wrap outside padding and inside margin. Shorthand: <code>border: [width] [style] [color];</code></p>
+        <div class="diagram-container">
+solid     : ────────────────
+dashed    : - - - - - - - -
+dotted    : • • • • • • • •
+double    : ════════════════
+groove    : 3D Inset Carved
+ridge     : 3D Outset Raised</div>
+
+        <div class="code-wrapper">
+          <div class="code-header"><span>Border Radius Hacks</span><button class="copy-btn">Copy</button></div>
+          <pre class="code-block">/* Perfect Circle Avatar */
+.avatar { width: 80px; height: 80px; border-radius: 50%; }
+
+/* Pill Button */
+.btn-pill { border-radius: 9999px; padding: 8px 24px; }</pre>
+        </div>
+      </section>
+
+      <!-- MODULE 06 -->
+      <section id="mod-06" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">06</span>
+            <h2 class="module-title">CSS Background</h2>
+          </div>
+        </div>
+        <h3 class="subhead">Multi-Layer Stacking & Sizing</h3>
+        <p>Backgrounds stack top-to-bottom. The master shorthand: <code>background: color image position/size repeat origin clip attachment;</code></p>
+
+        <div class="diagram-container">
+┌──────────────────────────────────────────────┐
+│ TOP LAYER:    Image 1 (e.g. badge/star)      │
+├──────────────────────────────────────────────┤
+│ MIDDLE LAYER: Image 2 (e.g. dark overlay)    │
+├──────────────────────────────────────────────┤
+│ BOTTOM LAYER: background-color (fallback)    │
+└──────────────────────────────────────────────┘</div>
+
+        <h3 class="subhead">Cover vs Contain</h3>
+        <table class="custom-table">
+          <thead><tr><th>Value</th><th>Behavior</th><th>Best For</th></tr></thead>
+          <tbody>
+            <tr><td><code>cover</code></td><td>Fills entire container, clips overflowing edges</td><td>Hero banners & full cards</td></tr>
+            <tr><td><code>contain</code></td><td>Entire image is visible without cropping; letterboxes</td><td>Logos, product shots</td></tr>
+          </tbody>
+        </table>
+
+        <div class="code-wrapper">
+          <div class="code-header"><span>Hero Section with Dark Overlay</span><button class="copy-btn">Copy</button></div>
+          <pre class="code-block">.hero {
+  min-height: 80vh;
+  /* Dark tint layer + background image */
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+              url('hero.jpg') center/cover no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}</pre>
+        </div>
+      </section>
+
+      <!-- MODULE 07 -->
+      <section id="mod-07" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">07</span>
+            <h2 class="module-title">CSS Margin & Padding</h2>
+          </div>
+        </div>
+        <h3 class="subhead">External vs Internal Spacing</h3>
+        <p><strong>Margin</strong> pushes neighboring elements away. <strong>Padding</strong> cushions content inside the border. Remember clockwise shorthand: <strong>TRouBLe</strong> (Top, Right, Bottom, Left).</p>
+
+        <h3 class="subhead">Margin Collapse Demystified</h3>
+        <div class="diagram-container">
+Element A (margin-bottom: 30px)
+       ↓ (30px larger margin wins, does NOT add to 50px!)
+Element B (margin-top: 20px)</div>
+        <div class="callout tip">
+          <span class="callout-icon">💡</span>
+          <div><strong>Margin Collapse Prevention:</strong> Margins inside Flexbox or Grid never collapse. Adding <code>1px</code> padding or <code>display: flow-root;</code> to the parent also eliminates collapse.</div>
+        </div>
+      </section>
+
+      <!-- MODULE 08 -->
+      <section id="mod-08" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">08</span>
+            <h2 class="module-title">CSS Width, Height, and Max-Width</h2>
+          </div>
+        </div>
+        <h3 class="subhead">Responsive Sizing Constraints</h3>
+        <p>Always avoid fixed heights on containers containing text to prevent text spilling over when screen sizes shrink.</p>
+        <div class="code-wrapper">
+          <div class="code-header"><span>The Golden Responsive Media Rule</span><button class="copy-btn">Copy</button></div>
+          <pre class="code-block">/* Every Hackathon needs this rule: */
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}</pre>
+        </div>
+      </section>
+
+      <!-- MODULE 09 -->
+      <section id="mod-09" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">09</span>
+            <h2 class="module-title">CSS Box Model</h2>
+          </div>
+        </div>
+        <h3 class="subhead">The 4 Sacred Layers</h3>
+        <div class="diagram-container">
+┌────────────────────────────────────────────────────────┐
+│ MARGIN (Outside space)                                 │
+│   ┌────────────────────────────────────────────────┐   │
+│   │ BORDER (Outer stroke)                          │   │
+│   │   ┌────────────────────────────────────────┐   │   │
+│   │   │ PADDING (Internal cushion)             │   │   │
+│   │   │   ┌────────────────────────────────┐   │   │   │
+│   │   │   │ CONTENT (Text, Image)          │   │   │   │
+│   │   │   │ width x height                 │   │   │   │
+│   │   │   └────────────────────────────────┘   │   │   │
+│   │   └────────────────────────────────────────┘   │   │
+│   └────────────────────────────────────────────────┘   │
+└────────────────────────────────────────────────────────┘</div>
+
+        <h3 class="subhead">The Universal Reset</h3>
+        <div class="code-wrapper">
+          <div class="code-header"><span>Universal Border-Box Reset</span><button class="copy-btn">Copy</button></div>
+          <pre class="code-block">*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}</pre>
+        </div>
+      </section>
+
+      <!-- MODULE 09b -->
+      <section id="mod-09b" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">09b</span>
+            <h2 class="module-title">CSS Outline</h2>
+          </div>
+        </div>
+        <h3 class="subhead">Border vs Outline</h3>
+        <table class="custom-table">
+          <thead><tr><th>Feature</th><th>Border</th><th>Outline</th></tr></thead>
+          <tbody>
+            <tr><td>Takes Layout Space</td><td>✅ Yes (Causes Reflow)</td><td>❌ No (Zero Layout Shift)</td></tr>
+            <tr><td>Individual Sides</td><td><code>border-top</code>, <code>border-left</code></td><td>All 4 sides only</td></tr>
+            <tr><td>Offset Control</td><td>No</td><td><code>outline-offset: 4px;</code> (Floats away)</td></tr>
+            <tr><td>A11y Purpose</td><td>Decorative boundary</td><td>Keyboard focus indicator (<code>:focus-visible</code>)</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- MODULE 11 -->
+      <section id="mod-11" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">11</span>
+            <h2 class="module-title">CSS Text</h2>
+          </div>
+        </div>
+        <h3 class="subhead">Typography Alignment & Spacing</h3>
+        <table class="custom-table">
+          <thead><tr><th>Property</th><th>Values</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td><code>text-align</code></td><td>left, right, center, justify</td><td>Horizontal text flow</td></tr>
+            <tr><td><code>text-decoration</code></td><td>none, underline, line-through</td><td>Links & strikes</td></tr>
+            <tr><td><code>text-transform</code></td><td>uppercase, lowercase, capitalize</td><td>Transform text case</td></tr>
+            <tr><td><code>line-height</code></td><td>Unitless (1.5, 1.6)</td><td>Vertical line leading</td></tr>
+            <tr><td><code>text-shadow</code></td><td>h-off v-off blur color</td><td>Glow & 3D text</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- MODULE 12 -->
+      <section id="mod-12" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">12</span>
+            <h2 class="module-title">CSS Fonts</h2>
+          </div>
+        </div>
+        <h3 class="subhead">The 5 Generic Families & Font Stacks</h3>
+        <p>1. <code>sans-serif</code> (Inter, Arial) | 2. <code>serif</code> (Georgia, Times) | 3. <code>monospace</code> (Courier) | 4. <code>cursive</code> | 5. <code>fantasy</code></p>
+        <div class="code-wrapper">
+          <div class="code-header"><span>Modern System Font Stack</span><button class="copy-btn">Copy</button></div>
+          <pre class="code-block">body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* Shorthand order: font-style font-weight font-size/line-height font-family */
+  font: 500 1rem/1.6 system-ui, sans-serif;
+}</pre>
+        </div>
+      </section>
+
+      <!-- MODULE 13 -->
+      <section id="mod-13" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">13</span>
+            <h2 class="module-title">CSS Links & Cursors</h2>
+          </div>
+        </div>
+        <h3 class="subhead">The Sacred LVHA Rule ("LoVe HAte")</h3>
+        <div class="diagram-container">
+1. :link     ──> Unvisited link
+2. :visited  ──> User has visited link
+3. :hover    ──> Pointer hovers over link
+4. :active   ──> Moment user clicks down</div>
+
+        <h3 class="subhead">Cursor Cheatsheet</h3>
+        <p><code>cursor: pointer;</code> (Buttons/Links) | <code>cursor: wait;</code> (Loading) | <code>cursor: not-allowed;</code> (Disabled) | <code>cursor: grab;</code> (Drag)</p>
+      </section>
+
+      <!-- MODULE 14 -->
+      <section id="mod-14" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">14</span>
+            <h2 class="module-title">CSS Table</h2>
+          </div>
+        </div>
+        <h3 class="subhead">Clean Modern Table Architecture</h3>
+        <p>Always apply <code>border-collapse: collapse;</code> to merge cell borders, and wrap tables in an <code>overflow-x: auto;</code> container for mobile responsiveness.</p>
+        <div class="code-wrapper">
+          <div class="code-header"><span>Zebra Table Blueprint</span><button class="copy-btn">Copy</button></div>
+          <pre class="code-block">table { width: 100%; border-collapse: collapse; }
+th, td { padding: 12px 16px; border-bottom: 1px solid #e2e8f0; }
+tbody tr:nth-child(even) { background-color: #f8fafc; }
+tbody tr:hover { background-color: #f1f5f9; }</pre>
+        </div>
+      </section>
+
+      <!-- MODULE 15 -->
+      <section id="mod-15" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">15</span>
+            <h2 class="module-title">CSS Display</h2>
+          </div>
+        </div>
+        <h3 class="subhead">Block vs Inline vs Inline-Block</h3>
+        <table class="custom-table">
+          <thead><tr><th>Value</th><th>Newline?</th><th>Width & Height?</th><th>Vertical Padding/Margin?</th></tr></thead>
+          <tbody>
+            <tr><td><code>block</code></td><td>✅ Yes</td><td>✅ Respected</td><td>✅ Respected</td></tr>
+            <tr><td><code>inline</code></td><td>❌ No</td><td>❌ Ignored</td><td>⚠️ Visual only (No push)</td></tr>
+            <tr><td><code>inline-block</code></td><td>❌ No</td><td>✅ Respected</td><td>✅ Respected</td></tr>
+            <tr><td><code>none</code></td><td>-</td><td>Removed from layout</td><td>Takes 0px space</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- MODULE 16 -->
+      <section id="mod-16" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">16</span>
+            <h2 class="module-title">CSS List</h2>
+          </div>
+        </div>
+        <h3 class="subhead">List Resets & ::marker Styling</h3>
+        <div class="code-wrapper">
+          <div class="code-header"><span>Custom Emoji Markers & Nav Reset</span><button class="copy-btn">Copy</button></div>
+          <pre class="code-block">/* Universal Nav List Reset */
+ul.nav-list { list-style: none; margin: 0; padding: 0; }
+
+/* Emoji Bullet Markers */
+ul.checklist li::marker {
+  content: "⚡ ";
+  color: #f59e0b;
+}</pre>
+        </div>
+      </section>
+
+      <!-- MODULE 17 -->
+      <section id="mod-17" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">17</span>
+            <h2 class="module-title">CSS Positions</h2>
+          </div>
+        </div>
+        <h3 class="subhead">The 5 Position Values</h3>
+        <div class="diagram-container">
+┌───────────┬───────────────────────────┬───────────────────────────────────┐
+│ Value     │ Document Flow?            │ Reference Anchor                  │
+├───────────┼───────────────────────────┼───────────────────────────────────┤
+│ static    │ ✅ In Flow (Default)      │ Offsets (top/left) HAVE NO EFFECT │
+│ relative  │ ✅ In Flow (Space kept)   │ Its OWN starting coordinates      │
+│ absolute  │ ❌ Out of Flow (0 space)  │ Nearest POSITIONED ancestor       │
+│ fixed     │ ❌ Out of Flow (0 space)  │ Browser Viewport                  │
+│ sticky    │ 🔄 Hybrid                 │ Scrolls until threshold, pins     │
+└───────────┴───────────────────────────┴───────────────────────────────────┘</div>
+
+        <div class="callout tip">
+          <span class="callout-icon">👑</span>
+          <div><strong>The Golden Pattern:</strong> Make Parent <code>position: relative;</code> and Child <code>position: absolute;</code>!</div>
+        </div>
+      </section>
+
+      <!-- MODULE 18 -->
+      <section id="mod-18" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">18</span>
+            <h2 class="module-title">CSS Combinators</h2>
+          </div>
+        </div>
+        <h3 class="subhead">The 4 DOM Relationship Operators</h3>
+        <table class="custom-table">
+          <thead><tr><th>Combinator</th><th>Syntax</th><th>Targets</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Descendant</strong></td><td><code>A B</code> (space)</td><td>Any B inside A at ANY depth</td></tr>
+            <tr><td><strong>Child</strong></td><td><code>A &gt; B</code></td><td>Direct 1st generation child B only</td></tr>
+            <tr><td><strong>Adjacent Sibling</strong></td><td><code>A + B</code></td><td>Single sibling B IMMEDIATELY following A</td></tr>
+            <tr><td><strong>General Sibling</strong></td><td><code>A ~ B</code></td><td>ANY sibling B following A under same parent</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- MODULE 19 -->
+      <section id="mod-19" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">19</span>
+            <h2 class="module-title">CSS Pseudo-Classes</h2>
+          </div>
+        </div>
+        <h3 class="subhead">Dynamic State & Index Selectors</h3>
+        <p>Pseudo-classes (single colon <code>:</code>) target elements in a specific state.</p>
+        <div class="diagram-container">
+:hover          ──> Pointer rests on element
+:focus-visible  ──> Keyboard navigation outline
+:first-child    ──> First child of parent
+:nth-child(2n)  ──> Even elements
+:nth-child(-n+3)──> First 3 elements!</div>
+      </section>
+
+      <!-- MODULE 20 -->
+      <section id="mod-20" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">20</span>
+            <h2 class="module-title">CSS Pseudo-Elements</h2>
+          </div>
+        </div>
+        <h3 class="subhead">The Power Twins: ::before & ::after</h3>
+        <div class="diagram-container">
+::before ──> [ CONTENT OF ELEMENT ] ──> ::after</div>
+        <div class="callout alert">
+          <span class="callout-icon">🚨</span>
+          <div><strong>Cardinal Rule:</strong> You MUST declare <code>content: "";</code> or the pseudo-element will NOT render!</div>
+        </div>
+
+        <div class="code-wrapper">
+          <div class="code-header"><span>Dark Overlay without extra HTML</span><button class="copy-btn">Copy</button></div>
+          <pre class="code-block">.card { position: relative; }
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+}</pre>
+        </div>
+      </section>
+
+      <!-- MODULE 21 -->
+      <section id="mod-21" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">21</span>
+            <h2 class="module-title">CSS Attribute Selectors</h2>
+          </div>
+        </div>
+        <h3 class="subhead">Regex-Style Pattern Matching</h3>
+        <div class="diagram-container">
+^ (Caret)   ──> STARTS with : a[href^="https://"] (Secure links)
+$ (Dollar)  ──> ENDS with   : a[href$=".pdf"] (PDF download icon)
+* (Asterisk)──> CONTAINS    : [class*="card-"] (Wildcard match)</div>
+      </section>
+
+      <!-- MODULE 22 -->
+      <section id="mod-22" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">22</span>
+            <h2 class="module-title">CSS Navbars</h2>
+          </div>
+        </div>
+        <h3 class="subhead">Modern Sticky Glassmorphic Navbar</h3>
+        <div class="code-wrapper">
+          <div class="code-header"><span>Sticky Glass Navbar</span><button class="copy-btn">Copy</button></div>
+          <pre class="code-block">header.nav-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #334155;
+}
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 24px;
+}</pre>
+        </div>
+      </section>
+
+      <!-- MODULE 23 -->
+      <section id="mod-23" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">23</span>
+            <h2 class="module-title">CSS Float & Clearfix</h2>
+          </div>
+        </div>
+        <h3 class="subhead">The Zero-Height Collapse Solution</h3>
+        <p>When all children are floated, parent collapses to 0px. Fix it in 1 modern line:</p>
+        <div class="code-wrapper">
+          <div class="code-header"><span>Modern Clearfix</span><button class="copy-btn">Copy</button></div>
+          <pre class="code-block">/* Modern 1-Line Solution */
+.parent { display: flow-root; }
+
+/* Classic Micro-Clearfix */
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}</pre>
+        </div>
+      </section>
+
+      <!-- MODULE 24 -->
+      <section id="mod-24" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">24</span>
+            <h2 class="module-title">CSS Dropdown</h2>
+          </div>
+        </div>
+        <h3 class="subhead">Pure CSS Dropdown Blueprint</h3>
+        <div class="code-wrapper">
+          <div class="code-header"><span>Smooth Animated Dropdown</span><button class="copy-btn">Copy</button></div>
+          <pre class="code-block">.dropdown { position: relative; }
+.dropdown-menu {
+  position: absolute;
+  top: 100%; left: 0;
+  min-width: 200px;
+  background: white;
+  border-radius: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.2s ease;
+}
+.dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}</pre>
+        </div>
+      </section>
+
+      <!-- MODULE 25 -->
+      <section id="mod-25" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">25</span>
+            <h2 class="module-title">CSS Units</h2>
+          </div>
+        </div>
+        <h3 class="subhead">The REM vs EM Compounding Trap</h3>
+        <div class="diagram-container">
+Root &lt;html&gt; = 16px
+REM: Parent (2rem = 32px)  ──> Child (1.5rem = 24px) [Always references 16px ✅]
+EM : Parent (2em = 32px)   ──> Child (2em = 64px!)   [Compounds on parent! 💥]</div>
+        <div class="callout tip">
+          <span class="callout-icon">💡</span>
+          <div><strong>Rule of Thumb:</strong> Typography & Spacing: <code>rem</code> | Full-screen hero: <code>min-height: 100vh;</code> | Borders: <code>px</code></div>
+        </div>
+      </section>
+
+      <!-- MODULE 26 -->
+      <section id="mod-26" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">26</span>
+            <h2 class="module-title">CSS Media Queries</h2>
+          </div>
+        </div>
+        <h3 class="subhead">Mobile-First Breakpoint Architecture</h3>
+        <div class="code-wrapper">
+          <div class="code-header"><span>Standard Responsive Breakpoints</span><button class="copy-btn">Copy</button></div>
+          <pre class="code-block">/* Base Mobile (320px+) */
+.grid { display: flex; flex-direction: column; }
+
+/* Tablet (768px+) */
+@media (min-width: 768px) {
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Desktop (1024px+) */
+@media (min-width: 1024px) {
+  .grid { grid-template-columns: repeat(4, 1fr); }
+}</pre>
+        </div>
+      </section>
+
+      <!-- MODULE 27 -->
+      <section id="mod-27" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">27</span>
+            <h2 class="module-title">CSS Specificity & Cascade</h2>
+          </div>
+        </div>
+        <h3 class="subhead">The (I, A, B, C) Hierarchy</h3>
+        <p>Specificity is NOT base-10! Even 100 classes <code>(0, 0, 100, 0)</code> CANNOT defeat 1 single ID <code>(0, 1, 0, 0)</code>.</p>
+        <div class="diagram-container">
+I : Inline Styles             ──> (1, 0, 0, 0)
+A : ID Selectors              ──> (0, 1, 0, 0)
+B : Classes, Pseudos, Attrs   ──> (0, 0, 1, 0)
+C : Element Selectors         ──> (0, 0, 0, 1)</div>
+      </section>
+
+      <!-- MODULE 28 -->
+      <section id="mod-28" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">28</span>
+            <h2 class="module-title">CSS 2D Transforms</h2>
+          </div>
+        </div>
+        <h3 class="subhead">Coordinate Transforms & GPU Acceleration</h3>
+        <div class="diagram-container">
+translate(x, y) ──> Moves along axes (Centering: translate(-50%, -50%))
+rotate(angle)   ──> Spins (rotate(45deg))
+scale(x, y)     ──> Zooms / Mirrors (scaleX(-1) flips horizontally)
+skew(x, y)      ──> Shears / Slants (skewX(-15deg))
+matrix(a,b,c,d,e,f) ──> Affine 2D matrix transformation</div>
+
+        <div class="code-wrapper">
+          <div class="code-header"><span>Interactive Card Hover</span><button class="copy-btn">Copy</button></div>
+          <pre class="code-block">.card {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+}</pre>
+        </div>
+      </section>
+
+      <!-- MASTER SNIPPETS -->
+      <section id="master-snippets" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">💎 READY-TO-COPY</span>
+            <h2 class="module-title">Master Hackathon UI Snippets</h2>
+          </div>
+        </div>
+
+        <h3 class="subhead">1. Responsive Grid Without Media Queries</h3>
+        <div class="code-wrapper">
+          <div class="code-header"><span>Auto-Fit Grid</span><button class="copy-btn">Copy</button></div>
+          <pre class="code-block">.auto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}</pre>
+        </div>
+
+        <h3 class="subhead">2. Multi-Line Text Truncation with Ellipsis</h3>
+        <div class="code-wrapper">
+          <div class="code-header"><span>Clamp to 2 Lines</span><button class="copy-btn">Copy</button></div>
+          <pre class="code-block">.clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}</pre>
+        </div>
+
+        <h3 class="subhead">3. Glassmorphism Card</h3>
+        <div class="code-wrapper">
+          <div class="code-header"><span>Glass Card</span><button class="copy-btn">Copy</button></div>
+          <pre class="code-block">.glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 24px;
+}</pre>
+        </div>
+      </section>
+
+      <!-- CHECKLIST -->
+      <section id="hackathon-checklist" class="module-card">
+        <div class="module-header">
+          <div class="module-title-group">
+            <span class="module-badge">🏁 CHECKLIST</span>
+            <h2 class="module-title">Hackathon Launch Checklist</h2>
+          </div>
+        </div>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; margin-top: 14px;">
+          <li>✅ <code>box-sizing: border-box</code> declared on all elements.</li>
+          <li>✅ Viewport <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code> added in HTML head.</li>
+          <li>✅ Responsive images rule active (<code>max-width: 100%; height: auto;</code>).</li>
+          <li>✅ Fonts & paddings sized using accessible <code>rem</code> units.</li>
+          <li>✅ Parent containers marked <code>position: relative;</code> for absolute badges.</li>
+          <li>✅ Pseudo-elements <code>::before</code> & <code>::after</code> contain <code>content: "";</code>.</li>
+        </ul>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" id="btn-back-top" title="Back to top">↑</button>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="copy-toast">Copied to clipboard! 📋</div>
+
+  <script>
+    // Search functionality
+    const searchInput = document.getElementById('module-search');
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+    const modules = document.querySelectorAll('.module-card');
+
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      sidebarLinks.forEach(link => {
+        const text = link.textContent.toLowerCase();
+        link.style.display = text.includes(query) ? 'flex' : 'none';
+      });
+      modules.forEach(mod => {
+        const text = mod.textContent.toLowerCase();
+        mod.style.display = text.includes(query) ? 'block' : 'none';
+      });
+    });
+
+    // Theme Toggle
+    const themeBtn = document.getElementById('theme-toggle');
+    themeBtn.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const target = current === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', target);
+      localStorage.setItem('css-guide-theme', target);
+    });
+
+    // Copy to Clipboard
+    const copyBtns = document.querySelectorAll('.copy-btn');
+    const toast = document.getElementById('copy-toast');
+    copyBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const code = btn.closest('.code-wrapper').querySelector('pre').textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          toast.classList.add('show');
+          setTimeout(() => toast.classList.remove('show'), 2000);
+        });
+      });
+    });
+
+    // Back to top
+    const backTopBtn = document.getElementById('btn-back-top');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 400) {
+        backTopBtn.classList.add('show');
+      } else {
+        backTopBtn.classList.remove('show');
+      }
+    });
+    backTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Interactive Box Model Playground
+    const ctrlSizing = document.getElementById('ctrl-box-sizing');
+    const ctrlPadding = document.getElementById('ctrl-padding');
+    const ctrlBorder = document.getElementById('ctrl-border');
+    const ctrlMargin = document.getElementById('ctrl-margin');
+    const valPadding = document.getElementById('val-padding');
+    const valBorder = document.getElementById('val-border');
+    const valMargin = document.getElementById('val-margin');
+    const demoOuter = document.getElementById('box-demo-outer');
+    const demoBorder = document.getElementById('box-demo-border');
+    const demoPadding = document.getElementById('box-demo-padding');
+    const computedWidthDisplay = document.getElementById('computed-box-width');
+
+    function updateBoxModel() {
+      const pad = parseInt(ctrlPadding.value);
+      const bdr = parseInt(ctrlBorder.value);
+      const mar = parseInt(ctrlMargin.value);
+      const mode = ctrlSizing.value;
+
+      valPadding.textContent = pad + 'px';
+      valBorder.textContent = bdr + 'px';
+      valMargin.textContent = mar + 'px';
+
+      demoOuter.style.padding = mar + 'px';
+      demoBorder.style.borderWidth = bdr + 'px';
+      demoPadding.style.padding = pad + 'px';
+
+      const contentW = 200;
+      let totalW = contentW;
+      if (mode === 'content-box') {
+        totalW = contentW + (pad * 2) + (bdr * 2);
+      }
+      computedWidthDisplay.textContent = totalW + 'px (' + mode + ')';
+    }
+
+    [ctrlSizing, ctrlPadding, ctrlBorder, ctrlMargin].forEach(el => {
+      el.addEventListener('input', updateBoxModel);
+    });
+    updateBoxModel();
+
+    // Specificity Calculator
+    const specInput = document.getElementById('spec-input');
+    const specInline = document.getElementById('spec-inline');
+    const specId = document.getElementById('spec-id');
+    const specClass = document.getElementById('spec-class');
+    const specElement = document.getElementById('spec-element');
+    const specVerdict = document.getElementById('spec-verdict');
+
+    function calculateSpecificity(selector) {
+      let ids = 0, classes = 0, elements = 0;
+      // IDs
+      const idMatches = selector.match(/#[a-zA-Z0-9_-]+/g);
+      if (idMatches) ids = idMatches.length;
+
+      // Classes & Attributes & Pseudo-classes
+      const classMatches = selector.match(/\.[a-zA-Z0-9_-]+/g);
+      const attrMatches = selector.match(/\[[^\]]+\]/g);
+      const pseudoMatches = selector.match(/:[a-zA-Z0-9_-]+/g);
+      classes = (classMatches ? classMatches.length : 0) +
+                (attrMatches ? attrMatches.length : 0) +
+                (pseudoMatches ? pseudoMatches.length : 0);
+
+      // Elements
+      const clean = selector.replace(/#[a-zA-Z0-9_-]+/g, '')
+                            .replace(/\.[a-zA-Z0-9_-]+/g, '')
+                            .replace(/\[[^\]]+\]/g, '')
+                            .replace(/:[a-zA-Z0-9_-]+/g, '')
+                            .replace(/[>+~*]/g, ' ');
+      const words = clean.split(/\s+/).filter(w => w.length > 0 && /^[a-zA-Z]/.test(w));
+      elements = words.length;
+
+      return { ids, classes, elements };
+    }
+
+    specInput.addEventListener('input', () => {
+      const val = specInput.value.trim();
+      const res = calculateSpecificity(val);
+      specInline.textContent = '0';
+      specId.textContent = res.ids;
+      specClass.textContent = res.classes;
+      specElement.textContent = res.elements;
+      specVerdict.textContent = `Calculated Specificity: (0, ${res.ids}, ${res.classes}, ${res.elements})`;
+    });
+
+    // 2D Transform Playground
+    const ctrlRot = document.getElementById('ctrl-rot');
+    const ctrlScale = document.getElementById('ctrl-scale');
+    const ctrlSkew = document.getElementById('ctrl-skew');
+    const ctrlTx = document.getElementById('ctrl-tx');
+    const valRot = document.getElementById('val-rot');
+    const valScale = document.getElementById('val-scale');
+    const valSkew = document.getElementById('val-skew');
+    const valTx = document.getElementById('val-tx');
+    const targetBox = document.getElementById('transform-target-box');
+    const transformCode = document.getElementById('transform-code-display');
+
+    function updateTransform() {
+      const r = ctrlRot.value;
+      const s = ctrlScale.value;
+      const sk = ctrlSkew.value;
+      const tx = ctrlTx.value;
+
+      valRot.textContent = r + 'deg';
+      valScale.textContent = s;
+      valSkew.textContent = sk + 'deg';
+      valTx.textContent = tx + 'px';
+
+      const transformStr = `rotate(${r}deg) scale(${s}) skewX(${sk}deg) translateX(${tx}px)`;
+      targetBox.style.transform = transformStr;
+      transformCode.textContent = `transform: ${transformStr};`;
+    }
+
+    [ctrlRot, ctrlScale, ctrlSkew, ctrlTx].forEach(el => {
+      el.addEventListener('input', updateTransform);
+    });
+    updateTransform();
+  </script>
+</body>
+</html>
